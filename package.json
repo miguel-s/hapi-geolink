@@ -1,0 +1,30 @@
+{
+  "name": "hapi-ibc",
+  "version": "0.0.1",
+  "description": "Ibc plugin for hapi-server.",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "js:clean": "rm -rf public/js/*",
+    "js:compile": "babel src/js -d public/js",
+    "js:uglify": "uglifyjs-folder public/js/ test-folder -eo public/js/",
+    "build:js": "npm run js:clean && npm run js:compile && npm run js:uglify",
+    "css:clean": "rm -rf public/css/*",
+    "css:compile": "node-sass src/sass/ -o public/css/ --output-style compressed",
+    "css:rename": "renamer \"public/css/*\" --find \".css\" --replace \".min.css\"",
+    "css:autoprefix": "postcss -r public/css/* -u autoprefixer",
+    "build:css": "npm run css:clean && npm run css:compile && npm run css:rename && npm run css:autoprefix",
+    "build": "npm run build:js && npm run build:css"
+  },
+  "author": "Miguel Serrano",
+  "license": "ISC",
+  "devDependencies": {
+    "autoprefixer": "^6.3.6",
+    "babel-cli": "^6.9.0",
+    "babel-preset-es2015": "^6.9.0",
+    "node-sass": "^3.7.0",
+    "postcss-cli": "^2.5.2",
+    "renamer": "^0.5.7",
+    "uglifyjs-folder": "^0.2.1"
+  }
+}

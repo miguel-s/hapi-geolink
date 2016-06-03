@@ -1,0 +1,13 @@
+extends ./layouts/base.jade
+
+append head
+  title IBC
+  link(rel="stylesheet" href="/css/index.min.css")
+
+block header
+  +header('margin-bottom')
+
+block content
+  div.row
+    div.small-10.large-10.column
+      p Hello, world!

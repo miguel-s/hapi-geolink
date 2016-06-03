@@ -1,0 +1,28 @@
+extends ./layouts/base.jade
+
+append head
+  title WANTit
+  link(rel="stylesheet" href="/css/login.min.css")
+
+block content
+  div.row.align-center.align-middle
+    div.small-10.large-6.column
+      h1
+        span.fa.fa-sign-in
+        |  Login
+      if message
+        div.callout.alert= message
+      form(action="/login" method="post")
+        label Email
+          input(type="text" name="email" placeholder='Email' value=email)
+        label Password
+          input(type="password" name="password" placeholder='Password')
+        button(type="submit").button Login
+      hr
+      p Need an account?
+        | #{space}
+        a(href="/signup") Signup
+      p Or go
+        | #{space}
+        a(href="/") home
+        | .

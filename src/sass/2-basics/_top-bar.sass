@@ -1,0 +1,26 @@
+.top-bar
+  background: white;
+  border-bottom: 1px solid #ea7b67;
+  z-index: 10;
+  ul, li, a
+    background: transparent;
+  ul
+    justify-content: flex-end;
+  .menu-text
+    color: #ea7b67;
+  &.fixed
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+  &.transparent
+    background: transparent;
+    border-bottom: 0;
+    .menu-text
+      color: white;
+    .menu a
+      color: white;
+  &.margin-bottom
+    margin-bottom: 1.875em;
+  &.transition
+    transition: all 0.2s ease-in-out;

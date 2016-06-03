@@ -1,0 +1,10 @@
+mixin header(classes)
+  - var items = ['Dashboard', 'Profile', 'Logout']
+  div(id="main-menu" class=classes).top-bar
+    div.top-bar-title
+      a.menu-text(href="/") WANTit
+    div.top-bar-right
+      ul.menu
+        each item, index in items
+          li
+            a(href="/#{item.toLowerCase()}")= item
