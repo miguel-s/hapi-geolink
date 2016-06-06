@@ -126,7 +126,7 @@
           '<ul class="menu">';
 
         // Add first color
-        item += `<li><a href="#" class="${colorName}"><div class="color-container">`;
+        item += `<li><a href="#" class="color-name ${colorName}"><div class="color-container">`;
         item += color.map(c => `<i style="background:${c}" class="color"></i>`).join('');
         item += '</div></a></li>';
       } else if (colorName === 'Purples') {
@@ -139,12 +139,12 @@
           '<a href="#">Single hue</a>' +
           '<ul class="menu">';
         // Add first color
-        item += `<li><a href="#" class="${colorName}"><div class="color-container">`;
+        item += `<li><a href="#" class="color-name ${colorName}"><div class="color-container">`;
         item += color.map(c => `<i style="background:${c}" class="color"></i>`).join('');
         item += '</div></a></li>';
       } else {
         // Add other colors
-        item += `<li><a href="#" class="${colorName}"><div class="color-container">`;
+        item += `<li><a href="#" class="color-name ${colorName}"><div class="color-container">`;
         item += color.map(c => `<i style="background:${c}" class="color"></i>`).join('');
         item += '</div></a></li>';
       }
@@ -241,13 +241,13 @@
     // make more efficient
     const maxClasses = Math.max(...Object.keys(colorbrewer[colorOptions.color]));
     const offset = 2;
-    dropdowns.classes.find('ul').children().each((index, element) => {
-      const li = $(element);
+    dropdowns.classes.find('.color-classes').each((index, element) => {
+      const a = $(element).find('a');
 
       if (index + offset + 1 <= maxClasses) {
-        li.removeClass('disabled');
+        a.removeClass('disabled');
       } else {
-        li.addClass('disabled');
+        a.addClass('disabled');
       }
     });
   }
@@ -355,110 +355,115 @@
   //   topoLayer.addTo(map);
   // }
 
-  fetch('./api/v1.0/ccaa')
-  .then(
-    (response) => {
-      if (response.status !== 200) return;
-      response.json().then((data) => {
-        mapData.ccaa = data;
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.ccaa,
-          variable: VariablesEnum.population,
+  fetch('./api/v1/token', { credentials: 'same-origin' })
+  .then(response => response.text())
+  .then((token) => {
+    console.log(token)
+    fetch(`./api/v1/ccaa?token=${token}`)
+    .then(
+      (response) => {
+        if (response.status !== 200) return;
+        response.json().then((data) => {
+          mapData.ccaa = data;
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.ccaa,
+            variable: VariablesEnum.population,
+          });
+
+          $.each(dropdowns, (key, value) => {
+            value.find('button').removeClass('disabled');
+          });
+
+          dropdowns.granularity
+            .find('.ca')
+            .on('click', (event) => {
+              changeTopoJsonLayer({
+                granularity: GranularityEnum.ccaa,
+                variable: currentVariable,
+              });
+            }).removeClass('disabled');
         });
+      }
+    );
 
-        $.each(dropdowns, (key, value) => {
-          value.find('button').removeClass('disabled');
+    fetch(`./api/v1/provincias?token=${token}`)
+    .then(
+      (response) => {
+        if (response.status !== 200) return;
+        response.json().then((data) => {
+          mapData.provincias = data;
+
+          dropdowns.granularity
+            .find('.pv')
+            .on('click', (event) => {
+              changeTopoJsonLayer({
+                granularity: GranularityEnum.provincias,
+                variable: currentVariable,
+              });
+            }).removeClass('disabled');
         });
+      }
+    );
 
-        dropdowns.granularity
-          .find('.ca')
-          .on('click', (event) => {
-            changeTopoJsonLayer({
-              granularity: GranularityEnum.ccaa,
-              variable: currentVariable,
-            });
-          }).removeClass('disabled');
-      });
-    }
-  );
+    fetch(`./api/v1/barrios_madrid?token=${token}`)
+    .then(
+      (response) => {
+        if (response.status !== 200) return;
+        response.json().then((data) => {
+          mapData.neighbourhoods = data;
 
-  fetch('./api/v1.0/provincias')
-  .then(
-    (response) => {
-      if (response.status !== 200) return;
-      response.json().then((data) => {
-        mapData.provincias = data;
-
-        dropdowns.granularity
-          .find('.pv')
-          .on('click', (event) => {
-            changeTopoJsonLayer({
-              granularity: GranularityEnum.provincias,
-              variable: currentVariable,
-            });
-          }).removeClass('disabled');
-      });
-    }
-  );
-
-  fetch('./api/v1.0/barrios_madrid')
-  .then(
-    (response) => {
-      if (response.status !== 200) return;
-      response.json().then((data) => {
-        mapData.neighbourhoods = data;
-
-        dropdowns.granularity
-          .find('.nh')
-          .on('click', (event) => {
-            changeTopoJsonLayer({
-              granularity: GranularityEnum.neighbourhoods,
-              variable: currentVariable,
-            });
-          }).removeClass('disabled');
-      });
-    }
-  );
-
-  fetch('./api/v1.0/secciones_censales_madrid')
-  .then(
-    (response) => {
-      if (response.status !== 200) return;
-      response.json().then((data) => {
-        mapData.censussections = data;
-
-        dropdowns.granularity
-          .find('.cs')
-          .on('click', (event) => {
-            changeTopoJsonLayer({
-              granularity: GranularityEnum.censussections,
-              variable: currentVariable,
-            });
-          })
-          .removeClass('disabled');
-      });
-    }
-  );
-
-  fetch('./api/v1.0/horeca')
-  .then(
-    (response) => {
-      if (response.status !== 200) return;
-      response.json().then((data) => {
-        markerLayer = L.markerClusterGroup({
-          disableClusteringAtZoom: 17,
+          dropdowns.granularity
+            .find('.nh')
+            .on('click', (event) => {
+              changeTopoJsonLayer({
+                granularity: GranularityEnum.neighbourhoods,
+                variable: currentVariable,
+              });
+            }).removeClass('disabled');
         });
+      }
+    );
 
-        data.forEach((item) => {
-          L.marker([item.lat, item.lon])
-            .addTo(markerLayer)
-            .bindPopup(item.ds_pdv);
+    fetch(`./api/v1/secciones_censales_madrid?token=${token}`)
+    .then(
+      (response) => {
+        if (response.status !== 200) return;
+        response.json().then((data) => {
+          mapData.censussections = data;
+
+          dropdowns.granularity
+            .find('.cs')
+            .on('click', (event) => {
+              changeTopoJsonLayer({
+                granularity: GranularityEnum.censussections,
+                variable: currentVariable,
+              });
+            })
+            .removeClass('disabled');
         });
+      }
+    );
 
-        map.addLayer(markerLayer);
-      });
-    }
-  );
+    fetch(`./api/v1/horeca?token=${token}`)
+    .then(
+      (response) => {
+        if (response.status !== 200) return;
+        response.json().then((data) => {
+          markerLayer = L.markerClusterGroup({
+            disableClusteringAtZoom: 17,
+          });
+
+          data.forEach((item) => {
+            L.marker([item.lat, item.lon])
+              .addTo(markerLayer)
+              .bindPopup(item.ds_pdv);
+          });
+
+          map.addLayer(markerLayer);
+        });
+      }
+    );
+  });
 
   // UI
 
@@ -506,38 +511,40 @@
     });
 
   dropdowns.types
-    .on('click', 'li', (event) => {
+    .on('click', '.color-type', (event) => {
       // FIXME:
       // escape value for security
       colorOptions.type = event.target.firstChild.nodeValue.toLowerCase();
-      dropdowns.colors.find('ul').html(getColorPalettes()).foundation();
+      dropdowns.colors.html(getColorPalettes()).foundation();
     });
 
   dropdowns.colors
-    .on('click', 'li', (event) => {
-      // TODO:
-      // validate new color
-      // FIXME:
-      // escape value for security
-      const newColor = event.currentTarget.firstChild.className;
-      const maxClasses = Math.max(...Object.keys(colorbrewer[newColor]));
-      colorOptions.color = newColor;
-      colorOptions.classes = colorOptions.classes > maxClasses ? maxClasses : colorOptions.classes;
+    .on('click', '.color-name', (event) => {
+        // TODO:
+        // validate new color
+        // FIXME:
+        // escape value for security
+        const newColor = event.currentTarget.className.replace('color-name ', '');
+        const maxClasses = Math.max(...Object.keys(colorbrewer[newColor]));
+        colorOptions.color = newColor;
+        colorOptions.classes = colorOptions.classes > maxClasses ? maxClasses : colorOptions.classes;
 
-      changeTopoJsonLayer({
-        granularity: currentGranularity,
-        variable: currentVariable,
-      });
+        changeTopoJsonLayer({
+          granularity: currentGranularity,
+          variable: currentVariable,
+        });
     });
 
   dropdowns.classes
-    .on('click', 'li', (event) => {
+    .on('click', '.color-classes', (event) => {
       // FIXME:
       // escape value for security
-      colorOptions.classes = event.target.firstChild.nodeValue;
-      changeTopoJsonLayer({
-        granularity: currentGranularity,
-        variable: currentVariable,
-      });
+      if (!$(event.currentTarget.firstChild).hasClass('disabled')) {
+        colorOptions.classes = event.target.firstChild.nodeValue;
+        changeTopoJsonLayer({
+          granularity: currentGranularity,
+          variable: currentVariable,
+        });
+      }
     });
 }(L, topojson, $, colorbrewer));

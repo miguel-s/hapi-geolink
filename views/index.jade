@@ -19,39 +19,39 @@ block content
           a(href="#") Granularity
           ul.menu
             li.no
-              a(href="#") Empty
+              a(href="#" class="button") Empty
             li.ca
-              a(href="#") CCAA
+              a(href="#" class="button") CCAA
             li.pv
-              a(href="#") Provincias
+              a(href="#" class="button") Provincias
             li.nh
-              a(href="#") Barrios
+              a(href="#" class="button") Barrios
             li.cs
-              a(href="#") Sección Censal
+              a(href="#" class="button") Sección Censal
     div.small-1.large-1.column.variables
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
           a(href="#") Variable
           ul.menu
             li.no
-              a(href="#") Empty
+              a(href="#" class="button") Empty
             li.po
-              a(href="#") Population
+              a(href="#" class="button") Population
             li.pm
-              a(href="#") % Men
+              a(href="#" class="button") % Men
             li.pf
-              a(href="#") % Foreigners
+              a(href="#" class="button") % Foreigners
     div.small-1.large-1.column.types
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
           a(href="#") Type
           ul.menu
-            li.sq
-              a(href="#") Sequential
-            li.dv
-              a(href="#") Diverging
-            li.ql
-              a(href="#") Qualitative
+            li.color-type.sq
+              a(href="#" class="button") Sequential
+            li.color-type.dv
+              a(href="#" class="button") Diverging
+            li.color-type.ql
+              a(href="#" class="button") Qualitative
     div.small-1.large-1.column.colors
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
@@ -62,8 +62,8 @@ block content
           a(href="#") Classes
           ul.menu
             each num in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
-              li
-                a(href="#")= num
+              li.color-classes
+                a(href="#" class="button")= num
 
 block scripts
   script(src="/libs/jquery/jquery-2.2.0.min.js")

@@ -114,7 +114,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         item += '' + '<li class="is-dropdown-submenu-parent">' + '<a href="#">Multi-hue</a>' + '<ul class="menu">';
 
         // Add first color
-        item += '<li><a href="#" class="' + colorName + '"><div class="color-container">';
+        item += '<li><a href="#" class="color-name ' + colorName + '"><div class="color-container">';
         item += color.map(function (c) {
           return '<i style="background:' + c + '" class="color"></i>';
         }).join('');
@@ -126,14 +126,14 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
         // Create dropdown submenu
         item += '' + '<li class="is-dropdown-submenu-parent">' + '<a href="#">Single hue</a>' + '<ul class="menu">';
         // Add first color
-        item += '<li><a href="#" class="' + colorName + '"><div class="color-container">';
+        item += '<li><a href="#" class="color-name ' + colorName + '"><div class="color-container">';
         item += color.map(function (c) {
           return '<i style="background:' + c + '" class="color"></i>';
         }).join('');
         item += '</div></a></li>';
       } else {
         // Add other colors
-        item += '<li><a href="#" class="' + colorName + '"><div class="color-container">';
+        item += '<li><a href="#" class="color-name ' + colorName + '"><div class="color-container">';
         item += color.map(function (c) {
           return '<i style="background:' + c + '" class="color"></i>';
         }).join('');
@@ -231,13 +231,13 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     // make more efficient
     var maxClasses = Math.max.apply(Math, _toConsumableArray(Object.keys(colorbrewer[colorOptions.color])));
     var offset = 2;
-    dropdowns.classes.find('ul').children().each(function (index, element) {
-      var li = $(element);
+    dropdowns.classes.find('.color-classes').each(function (index, element) {
+      var a = $(element).find('a');
 
       if (index + offset + 1 <= maxClasses) {
-        li.removeClass('disabled');
+        a.removeClass('disabled');
       } else {
-        li.addClass('disabled');
+        a.addClass('disabled');
       }
     });
   }
@@ -341,82 +341,87 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   //   topoLayer.addTo(map);
   // }
 
-  fetch('./api/v1.0/ccaa').then(function (response) {
-    if (response.status !== 200) return;
-    response.json().then(function (data) {
-      mapData.ccaa = data;
-      changeTopoJsonLayer({
-        granularity: GranularityEnum.ccaa,
-        variable: VariablesEnum.population
-      });
-
-      $.each(dropdowns, function (key, value) {
-        value.find('button').removeClass('disabled');
-      });
-
-      dropdowns.granularity.find('.ca').on('click', function (event) {
+  fetch('./api/v1/token', { credentials: 'same-origin' }).then(function (response) {
+    return response.text();
+  }).then(function (token) {
+    console.log(token);
+    fetch('./api/v1/ccaa?token=' + token).then(function (response) {
+      if (response.status !== 200) return;
+      response.json().then(function (data) {
+        mapData.ccaa = data;
         changeTopoJsonLayer({
           granularity: GranularityEnum.ccaa,
-          variable: currentVariable
+          variable: VariablesEnum.population
         });
-      }).removeClass('disabled');
-    });
-  });
 
-  fetch('./api/v1.0/provincias').then(function (response) {
-    if (response.status !== 200) return;
-    response.json().then(function (data) {
-      mapData.provincias = data;
-
-      dropdowns.granularity.find('.pv').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.provincias,
-          variable: currentVariable
+        $.each(dropdowns, function (key, value) {
+          value.find('button').removeClass('disabled');
         });
-      }).removeClass('disabled');
-    });
-  });
 
-  fetch('./api/v1.0/barrios_madrid').then(function (response) {
-    if (response.status !== 200) return;
-    response.json().then(function (data) {
-      mapData.neighbourhoods = data;
-
-      dropdowns.granularity.find('.nh').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.neighbourhoods,
-          variable: currentVariable
-        });
-      }).removeClass('disabled');
-    });
-  });
-
-  fetch('./api/v1.0/secciones_censales_madrid').then(function (response) {
-    if (response.status !== 200) return;
-    response.json().then(function (data) {
-      mapData.censussections = data;
-
-      dropdowns.granularity.find('.cs').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.censussections,
-          variable: currentVariable
-        });
-      }).removeClass('disabled');
-    });
-  });
-
-  fetch('./api/v1.0/horeca').then(function (response) {
-    if (response.status !== 200) return;
-    response.json().then(function (data) {
-      markerLayer = L.markerClusterGroup({
-        disableClusteringAtZoom: 17
+        dropdowns.granularity.find('.ca').on('click', function (event) {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.ccaa,
+            variable: currentVariable
+          });
+        }).removeClass('disabled');
       });
+    });
 
-      data.forEach(function (item) {
-        L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup(item.ds_pdv);
+    fetch('./api/v1/provincias?token=' + token).then(function (response) {
+      if (response.status !== 200) return;
+      response.json().then(function (data) {
+        mapData.provincias = data;
+
+        dropdowns.granularity.find('.pv').on('click', function (event) {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.provincias,
+            variable: currentVariable
+          });
+        }).removeClass('disabled');
       });
+    });
 
-      map.addLayer(markerLayer);
+    fetch('./api/v1/barrios_madrid?token=' + token).then(function (response) {
+      if (response.status !== 200) return;
+      response.json().then(function (data) {
+        mapData.neighbourhoods = data;
+
+        dropdowns.granularity.find('.nh').on('click', function (event) {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.neighbourhoods,
+            variable: currentVariable
+          });
+        }).removeClass('disabled');
+      });
+    });
+
+    fetch('./api/v1/secciones_censales_madrid?token=' + token).then(function (response) {
+      if (response.status !== 200) return;
+      response.json().then(function (data) {
+        mapData.censussections = data;
+
+        dropdowns.granularity.find('.cs').on('click', function (event) {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.censussections,
+            variable: currentVariable
+          });
+        }).removeClass('disabled');
+      });
+    });
+
+    fetch('./api/v1/horeca?token=' + token).then(function (response) {
+      if (response.status !== 200) return;
+      response.json().then(function (data) {
+        markerLayer = L.markerClusterGroup({
+          disableClusteringAtZoom: 17
+        });
+
+        data.forEach(function (item) {
+          L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup(item.ds_pdv);
+        });
+
+        map.addLayer(markerLayer);
+      });
     });
   });
 
@@ -460,19 +465,19 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     });
   });
 
-  dropdowns.types.on('click', 'li', function (event) {
+  dropdowns.types.on('click', '.color-type', function (event) {
     // FIXME:
     // escape value for security
     colorOptions.type = event.target.firstChild.nodeValue.toLowerCase();
-    dropdowns.colors.find('ul').html(getColorPalettes()).foundation();
+    dropdowns.colors.html(getColorPalettes()).foundation();
   });
 
-  dropdowns.colors.on('click', 'li', function (event) {
+  dropdowns.colors.on('click', '.color-name', function (event) {
     // TODO:
     // validate new color
     // FIXME:
     // escape value for security
-    var newColor = event.currentTarget.firstChild.className;
+    var newColor = event.currentTarget.className.replace('color-name ', '');
     var maxClasses = Math.max.apply(Math, _toConsumableArray(Object.keys(colorbrewer[newColor])));
     colorOptions.color = newColor;
     colorOptions.classes = colorOptions.classes > maxClasses ? maxClasses : colorOptions.classes;
@@ -483,13 +488,15 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     });
   });
 
-  dropdowns.classes.on('click', 'li', function (event) {
+  dropdowns.classes.on('click', '.color-classes', function (event) {
     // FIXME:
     // escape value for security
-    colorOptions.classes = event.target.firstChild.nodeValue;
-    changeTopoJsonLayer({
-      granularity: currentGranularity,
-      variable: currentVariable
-    });
+    if (!$(event.currentTarget.firstChild).hasClass('disabled')) {
+      colorOptions.classes = event.target.firstChild.nodeValue;
+      changeTopoJsonLayer({
+        granularity: currentGranularity,
+        variable: currentVariable
+      });
+    }
   });
 })(L, topojson, $, colorbrewer);
