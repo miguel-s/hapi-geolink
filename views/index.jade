@@ -1,13 +1,75 @@
 extends ./layouts/base.jade
 
 append head
-  title IBC
+  title Geolink
+  link(rel="stylesheet" href="/libs/leaflet/leaflet.css")
+  link(rel="stylesheet" href="/libs/leaflet.markercluster/MarkerCluster.css")
+  link(rel="stylesheet" href="/libs/leaflet.markercluster/MarkerCluster.Default.css")
   link(rel="stylesheet" href="/css/index.min.css")
 
 block header
-  +header('margin-bottom')
+  +header('fixed opaque border-bottom')
 
 block content
-  div.row
-    div.small-10.large-10.column
-      p Hello, world!
+  div(id="map")
+  div.row.expanded.align-center.controls
+    div.small-1.large-1.column.granularity
+      ul(data-dropdown-menu).menu.dropdown.align-center
+        li.is-dropdown-submenu-parent
+          a(href="#") Granularity
+          ul.menu
+            li.no
+              a(href="#") Empty
+            li.ca
+              a(href="#") CCAA
+            li.pv
+              a(href="#") Provincias
+            li.nh
+              a(href="#") Barrios
+            li.cs
+              a(href="#") Sección Censal
+    div.small-1.large-1.column.variables
+      ul(data-dropdown-menu).menu.dropdown.align-center
+        li.is-dropdown-submenu-parent
+          a(href="#") Variable
+          ul.menu
+            li.no
+              a(href="#") Empty
+            li.po
+              a(href="#") Population
+            li.pm
+              a(href="#") % Men
+            li.pf
+              a(href="#") % Foreigners
+    div.small-1.large-1.column.types
+      ul(data-dropdown-menu).menu.dropdown.align-center
+        li.is-dropdown-submenu-parent
+          a(href="#") Type
+          ul.menu
+            li.sq
+              a(href="#") Sequential
+            li.dv
+              a(href="#") Diverging
+            li.ql
+              a(href="#") Qualitative
+    div.small-1.large-1.column.colors
+      ul(data-dropdown-menu).menu.dropdown.align-center
+        li.is-dropdown-submenu-parent
+          a(href="#") Colors
+    div.small-1.large-1.column.classes
+      ul(data-dropdown-menu).menu.dropdown.align-center
+        li.is-dropdown-submenu-parent
+          a(href="#") Classes
+          ul.menu
+            each num in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
+              li
+                a(href="#")= num
+
+block scripts
+  script(src="/libs/jquery/jquery-2.2.0.min.js")
+  script(src="/libs/foundation/js/foundation.min.js")
+  script(src="/libs/colorbrewer/colorbrewer.js")
+  script(src="/libs/leaflet/leaflet.js")
+  script(src="/libs/leaflet.markercluster/leaflet.markercluster.min.js")
+  script(src="/libs/d3/topojson.v1.min.js")
+  script(src="/js/map.js")
