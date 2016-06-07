@@ -17,7 +17,6 @@ exports.options = internals.options = {
   cookie: 'ibc-sid',
   redirectTo: '/ibc/login',
   isSecure: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'),
-  isHttpOnly: false,
   requestDecoratorName: 'cookieAuthIbc',
 };
 
@@ -30,7 +29,6 @@ internals.after = (server, next) => {
     cookie: internals.options.cookie,
     redirectTo: internals.options.redirectTo,
     isSecure: internals.options.isSecure,
-    isHttpOnly: internals.options.isHttpOnly,
     requestDecoratorName: internals.options.requestDecoratorName,
     validateFunc: (request, session, callback) => {
       server.app.cache.get(session.sid, (err, cached) => {
