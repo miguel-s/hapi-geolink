@@ -344,7 +344,6 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   fetch('./api/v1/token', { credentials: 'same-origin' }).then(function (response) {
     return response.text();
   }).then(function (token) {
-    console.log(token);
     fetch('./api/v1/ccaa?token=' + token).then(function (response) {
       if (response.status !== 200) return;
       response.json().then(function (data) {
@@ -368,60 +367,66 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     });
 
     fetch('./api/v1/provincias?token=' + token).then(function (response) {
-      if (response.status !== 200) return;
-      response.json().then(function (data) {
-        mapData.provincias = data;
+      return response.json();
+    }).then(function (data) {
+      mapData.provincias = data;
 
-        dropdowns.granularity.find('.pv').on('click', function (event) {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.provincias,
-            variable: currentVariable
-          });
-        }).removeClass('disabled');
-      });
+      dropdowns.granularity.find('.pv').on('click', function (event) {
+        changeTopoJsonLayer({
+          granularity: GranularityEnum.provincias,
+          variable: currentVariable
+        });
+      }).removeClass('disabled');
+    }).catch(function (err) {
+      return console.log(err);
     });
 
     fetch('./api/v1/barrios_madrid?token=' + token).then(function (response) {
-      if (response.status !== 200) return;
-      response.json().then(function (data) {
-        mapData.neighbourhoods = data;
+      return response.json();
+    }).then(function (data) {
+      mapData.neighbourhoods = data;
 
-        dropdowns.granularity.find('.nh').on('click', function (event) {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.neighbourhoods,
-            variable: currentVariable
-          });
-        }).removeClass('disabled');
-      });
+      dropdowns.granularity.find('.nh').on('click', function (event) {
+        changeTopoJsonLayer({
+          granularity: GranularityEnum.neighbourhoods,
+          variable: currentVariable
+        });
+      }).removeClass('disabled');
+    }).catch(function (err) {
+      return console.log(err);
     });
 
     fetch('./api/v1/secciones_censales_madrid?token=' + token).then(function (response) {
-      if (response.status !== 200) return;
-      response.json().then(function (data) {
-        mapData.censussections = data;
+      return response.json();
+    }).then(function (data) {
+      mapData.censussections = data;
 
-        dropdowns.granularity.find('.cs').on('click', function (event) {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.censussections,
-            variable: currentVariable
-          });
-        }).removeClass('disabled');
-      });
+      dropdowns.granularity.find('.cs').on('click', function (event) {
+        changeTopoJsonLayer({
+          granularity: GranularityEnum.censussections,
+          variable: currentVariable
+        });
+      }).removeClass('disabled');
+    }).catch(function (err) {
+      return console.log(err);
     });
 
     fetch('./api/v1/horeca?token=' + token).then(function (response) {
-      if (response.status !== 200) return;
-      response.json().then(function (data) {
-        markerLayer = L.markerClusterGroup({
-          disableClusteringAtZoom: 17
-        });
-
-        data.forEach(function (item) {
-          L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup(item.ds_pdv);
-        });
-
-        map.addLayer(markerLayer);
+      return response.json();
+    }).then(function (data) {
+      markerLayer = L.markerClusterGroup({
+        disableClusteringAtZoom: 17
       });
+
+      data.filter(function (item) {
+        return item.lat && item.lon;
+      }).forEach(function (item) {
+        L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup(item.ds_pdv);
+      });
+
+      map.addLayer(markerLayer);
+    }).catch(function (err) {
+      return console.log(err);
     });
   });
 

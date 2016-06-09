@@ -358,7 +358,6 @@
   fetch('./api/v1/token', { credentials: 'same-origin' })
   .then(response => response.text())
   .then((token) => {
-    console.log(token)
     fetch(`./api/v1/ccaa?token=${token}`)
     .then(
       (response) => {
@@ -387,82 +386,71 @@
     );
 
     fetch(`./api/v1/provincias?token=${token}`)
-    .then(
-      (response) => {
-        if (response.status !== 200) return;
-        response.json().then((data) => {
-          mapData.provincias = data;
+    .then(response => response.json())
+    .then((data) => {
+      mapData.provincias = data;
 
-          dropdowns.granularity
-            .find('.pv')
-            .on('click', (event) => {
-              changeTopoJsonLayer({
-                granularity: GranularityEnum.provincias,
-                variable: currentVariable,
-              });
-            }).removeClass('disabled');
-        });
-      }
-    );
+      dropdowns.granularity
+        .find('.pv')
+        .on('click', (event) => {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.provincias,
+            variable: currentVariable,
+          });
+        }).removeClass('disabled');
+    })
+    .catch(err => console.log(err));
 
     fetch(`./api/v1/barrios_madrid?token=${token}`)
-    .then(
-      (response) => {
-        if (response.status !== 200) return;
-        response.json().then((data) => {
-          mapData.neighbourhoods = data;
+    .then(response => response.json())
+    .then((data) => {
+      mapData.neighbourhoods = data;
 
-          dropdowns.granularity
-            .find('.nh')
-            .on('click', (event) => {
-              changeTopoJsonLayer({
-                granularity: GranularityEnum.neighbourhoods,
-                variable: currentVariable,
-              });
-            }).removeClass('disabled');
-        });
-      }
-    );
+      dropdowns.granularity
+        .find('.nh')
+        .on('click', (event) => {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.neighbourhoods,
+            variable: currentVariable,
+          });
+        }).removeClass('disabled');
+    })
+    .catch(err => console.log(err));
 
     fetch(`./api/v1/secciones_censales_madrid?token=${token}`)
-    .then(
-      (response) => {
-        if (response.status !== 200) return;
-        response.json().then((data) => {
-          mapData.censussections = data;
+    .then(response => response.json())
+    .then((data) => {
+      mapData.censussections = data;
 
-          dropdowns.granularity
-            .find('.cs')
-            .on('click', (event) => {
-              changeTopoJsonLayer({
-                granularity: GranularityEnum.censussections,
-                variable: currentVariable,
-              });
-            })
-            .removeClass('disabled');
-        });
-      }
-    );
+      dropdowns.granularity
+        .find('.cs')
+        .on('click', (event) => {
+          changeTopoJsonLayer({
+            granularity: GranularityEnum.censussections,
+            variable: currentVariable,
+          });
+        })
+        .removeClass('disabled');
+    })
+    .catch(err => console.log(err));
 
     fetch(`./api/v1/horeca?token=${token}`)
-    .then(
-      (response) => {
-        if (response.status !== 200) return;
-        response.json().then((data) => {
-          markerLayer = L.markerClusterGroup({
-            disableClusteringAtZoom: 17,
-          });
+    .then(response => response.json())
+    .then((data) => {
+      markerLayer = L.markerClusterGroup({
+        disableClusteringAtZoom: 17,
+      });
 
-          data.forEach((item) => {
+      data.filter(item => item.lat && item.lon)
+          .forEach((item) => {
             L.marker([item.lat, item.lon])
               .addTo(markerLayer)
               .bindPopup(item.ds_pdv);
           });
 
-          map.addLayer(markerLayer);
-        });
-      }
-    );
+      map.addLayer(markerLayer);
+    })
+    .catch(err => console.log(err));
   });
 
   // UI
@@ -524,12 +512,12 @@
         // validate new color
         // FIXME:
         // escape value for security
-        const newColor = event.currentTarget.className.replace('color-name ', '');
-        const maxClasses = Math.max(...Object.keys(colorbrewer[newColor]));
-        colorOptions.color = newColor;
-        colorOptions.classes = colorOptions.classes > maxClasses ? maxClasses : colorOptions.classes;
+      const newColor = event.currentTarget.className.replace('color-name ', '');
+      const maxClasses = Math.max(...Object.keys(colorbrewer[newColor]));
+      colorOptions.color = newColor;
+      colorOptions.classes = colorOptions.classes > maxClasses ? maxClasses : colorOptions.classes;
 
-        changeTopoJsonLayer({
+      changeTopoJsonLayer({
           granularity: currentGranularity,
           variable: currentVariable,
         });

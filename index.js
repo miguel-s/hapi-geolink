@@ -5,6 +5,7 @@ const internals = {};
 exports.register = (server, options, next) => {
   server.register(
     [
+      require('./database-csa.js'),
       require('./auth-cookie'),
       require('./auth-jwt'),
       require('./static'),
