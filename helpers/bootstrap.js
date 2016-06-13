@@ -24,9 +24,6 @@ function bootstrap() {
         madrid: {},
       },
     },
-    venues: {
-      horeca: {},
-    },
   };
 
   data.map.ccaa = loadDataSync('maps/spain_ccaa.topojson');
@@ -38,8 +35,6 @@ function bootstrap() {
   data.demographic.provincias = loadDataSync('demographic/spain_provincias.json');
   data.demographic.barrios.madrid = loadDataSync('demographic/spain_barrios_madrid.json');
   data.demographic.secciones.madrid = loadDataSync('demographic/spain_secciones_censales_madrid.json');
-
-  data.venues.horeca = loadDataSync('venues/horeca.json');
 
   return data;
 }
