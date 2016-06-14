@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const _ = require('lodash');
 const fetch = require('node-fetch');
 
@@ -19,9 +20,9 @@ const apiConfig = {
 
 // Set up input data
 
-const centroidesCodCensal = JSON.parse(fs.readFileSync('./input/centroides_cod_censal.json'));
-const centroidesCodPostal = JSON.parse(fs.readFileSync('./input/centroides_cod_postal.json'));
-const centroidesMunicipio = JSON.parse(fs.readFileSync('./input/centroides_municipio.json'));
+const centroidesCodCensal = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_cod_censal.json')));
+const centroidesCodPostal = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_cod_postal.json')));
+const centroidesMunicipio = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_municipio.json')));
 
 const input = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
   .map((item) => Object.assign(item, {

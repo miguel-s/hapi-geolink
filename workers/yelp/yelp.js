@@ -1,6 +1,7 @@
 'use strict';
 
 const fs = require('fs');
+const path = require('path');
 const _ = require('lodash');
 const Yelp = require('yelp');
 
@@ -20,7 +21,7 @@ const apiConfig = {
 
 // Set up input data
 
-const input = JSON.parse(fs.readFileSync('./input/centroides.json'))
+const input = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides.json')))
   .map((item) => Object.assign({ latlon: item }, {
     name: item,
     cluster: item,

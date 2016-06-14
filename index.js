@@ -6,11 +6,12 @@ exports.register = (server, options, next) => {
   server.register(
     [
       require('./database-csa.js'),
-      require('./auth-cookie'),
-      require('./auth-jwt'),
-      require('./static'),
-      require('./web'),
-      require('./api.v1'),
+      require('./auth-cookie.js'),
+      require('./auth-jwt.js'),
+      require('./static.js'),
+      require('./web.js'),
+      require('./api.v1.js'),
+      require('./socketio.js'),
     ],
     (err) => {
       if (err) return next(err);
