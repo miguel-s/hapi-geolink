@@ -8,17 +8,21 @@ block header
   +header('margin-bottom')
 
 block content
-  div.row.align-center
-    div.small-10.large-6.column
-      h3
+  div.row
+    div.small-12.medium-12.large-12.columns
+      p.user
+        span.fa.fa-hashtag
+        strong  id:
+        span.content  #{user.id}
+      p.name
         span.fa.fa-user
-        |  Profile
-      p
-        strong id
-        | : #{user.id}
-        br
-        strong email
-        | : #{user.email}
-        br
-        strong token
-        | : #{user.token}
+        strong  user:
+        span.content  #{user.username}
+      p.email
+        span.fa.fa-envelope
+        strong  email:
+        span.content  #{user.email}
+      p.token
+        span.fa.fa-asterisk
+        strong  token:
+        span.content  #{user.token}
