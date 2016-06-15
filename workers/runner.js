@@ -71,10 +71,13 @@ function makeGenerator({ config, data, handlers }) {
         done.push(...inserted);
         retries = 0;
         message = 'Getting';
-        progress = Math.floor(done.length / input.length * 100);
+        const newProgress = Math.floor(done.length / input.length * 100);
 
         if (!process.send) process.stdout.write(` -> results: ${results.length} -> OK`);
-        if (process.send) process.send({ [`${name}_progress`]: progress });
+        if (newProgress > progress) {
+          progress = newProgress;
+          if (process.send) process.send({ [`${name}_progress`]: progress });
+        }
       } catch (e) {
         if (!process.send) process.stdout.write(' -> ERROR\n');
         if (!process.send) console.error(e);
