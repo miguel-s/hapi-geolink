@@ -43,11 +43,12 @@ function handleGet({ latlon, section }) {
 
 function handleResponse(item, response, done) {
   const { cluster, section } = item;
+  const datetime = new Date().toISOString();
 
   if (response.meta.code === 200) {
     return response.response.groups[0].items
       .map(row => row.venue)
-      .map((row, index) => _.merge({}, model, row, { cluster, section, index }))
+      .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
       .filter(row => done.indexOf(row.id) === -1);
   }
 

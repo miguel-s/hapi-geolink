@@ -46,10 +46,11 @@ function handleGet({ latlon, section }) {
 
 function handleResponse(item, response, done) {
   const { cluster, section } = item;
+  const datetime = new Date().toISOString();
 
   if (!response.statusCode) {
     return response.businesses
-      .map((row, index) => _.merge({}, model, row, { cluster, section, index }))
+      .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
       .filter(row => done.indexOf(row.id) === -1);
   }
 

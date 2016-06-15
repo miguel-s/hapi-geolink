@@ -98,4 +98,5 @@ module.exports = {
   cluster: null,
   section: null,
   index: null,
+  datetime: null,
 };
