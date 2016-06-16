@@ -15,7 +15,7 @@ exports.options = internals.options = {
   cacheOptions: { segment: 'ibc-sessions', expiresIn: 3 * 24 * 60 * 60 * 1000 },
   password: process.env.COOKIE_SECRET,
   cookie: 'ibc-sid',
-  redirectTo: '/ibc/login',
+  redirectTo: '/login',
   isSecure: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'),
   requestDecoratorName: 'cookieAuthIbc',
 };
