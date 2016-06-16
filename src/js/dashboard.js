@@ -1,3 +1,5 @@
+'use strict';
+
 (function iife($, io) {
   function setButtonState(buttons) {
     buttons.forEach(button => (

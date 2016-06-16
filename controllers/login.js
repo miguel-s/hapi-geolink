@@ -61,11 +61,9 @@ module.exports = function handler(request, reply, source, error) {
 
           request.cookieAuthIbc.set({ sid });
 
-          if (account.scope.indexOf('admin') !== -1) {
-            return reply.redirect('/');
-          }
-
-          return reply.redirect('/');
+          const next = request.payload.next || '/';
+          if (account.scope.indexOf('admin') !== -1) return reply.redirect(next);
+          return reply.redirect(next);
         });
       });
     }

@@ -17,6 +17,7 @@ block content
           input(type="text" name="email" placeholder='Email' value=email)
         label Password
           input(type="password" name="password" placeholder='Password')
+        input(type="hidden" name="next" value="")
         button(type="submit").button Login
       hr
       p Need an account?
@@ -26,3 +27,6 @@ block content
         | #{space}
         a(href="/") home
         | .
+
+block scripts
+  script(src="/js/login.min.js")

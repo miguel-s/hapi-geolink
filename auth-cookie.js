@@ -16,6 +16,7 @@ exports.options = internals.options = {
   password: process.env.COOKIE_SECRET,
   cookie: 'ibc-sid',
   redirectTo: '/login',
+  appendNext: true,
   isSecure: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'),
   requestDecoratorName: 'cookieAuthIbc',
 };
@@ -28,6 +29,7 @@ internals.after = (server, next) => {
     password: internals.options.password, // must be length 32 hapi v13 requirement.
     cookie: internals.options.cookie,
     redirectTo: internals.options.redirectTo,
+    appendNext: internals.options.appendNext,
     isSecure: internals.options.isSecure,
     requestDecoratorName: internals.options.requestDecoratorName,
     validateFunc: (request, session, callback) => {

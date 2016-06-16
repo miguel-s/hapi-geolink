@@ -1,3 +1,5 @@
+'use strict';
+
 (function iife(L, topojson, $, colorbrewer) {
   // INIT FOUNDATION
 
