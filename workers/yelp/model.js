@@ -35,6 +35,7 @@ module.exports = {
     address: [
       null,
       null,
+      null,
     ],
     coordinate: {
       latitude: null,
