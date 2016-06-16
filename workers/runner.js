@@ -87,14 +87,14 @@ function makeGenerator({ config, data, handlers }) {
           todo.unshift(item);
         } else {
           if (!process.send) process.stdout.write('Reached maximum number of retry attempts.\n');
-          if (process.send) process.send(`${name}_error`);
+          if (process.send) process.send({ [`${name}_error`]: e });
           break;
         }
       }
     }
 
     if (!process.send) process.stdout.write(`Done: ${name}`);
-    if (process.send) process.send(`${name}_done`);
+    if (process.send) process.send(`${name}_stop`);
   };
 }
 

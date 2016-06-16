@@ -23,8 +23,14 @@ module.exports = function sockets(io) {
   io.on('connection', (socket) => {
     console.log(`User connected: ${socket.decoded_token.id}`);
 
-    if (foursquare.active) socket.emit('foursquare_progress', foursquare.progress);
-    if (yelp.active) socket.emit('yelp_progress', yelp.progress);
+    if (foursquare.active) {
+      socket.emit('foursquare_start');
+      socket.emit('foursquare_progress', foursquare.progress);
+    }
+    if (yelp.active) {
+      socket.emit('yelp_start');
+      socket.emit('yelp_progress', yelp.progress);
+    }
 
     socket.on('disconnect', () => {
       console.log(`User disconnected: ${socket.decoded_token.id}`);
@@ -36,12 +42,18 @@ module.exports = function sockets(io) {
         foursquare.active = !foursquare.active;
         io.sockets.emit('foursquare_start');
         foursquare.worker = fork(path.join(__dirname, '../workers/foursquare/foursquare.js'));
+        console.log('Foursquare worker started');
         foursquare.worker.on('message', (m) => {
-          if (m === 'foursquare_done') {
-            io.sockets.emit('foursquare_done');
+          if (m === 'foursquare_stop') {
+            io.sockets.emit('foursquare_stop');
           } else {
-            foursquare.progress = m.foursquare_progress;
-            io.sockets.emit('foursquare_progress', foursquare.progress);
+            if (m.foursquare_progress) {
+              foursquare.progress = m.foursquare_progress;
+              io.sockets.emit('foursquare_progress', foursquare.progress);
+            }
+            if (m.foursquare_error) {
+              console.log(m.foursquare_error);
+            }
           }
         });
         foursquare.worker.on('disconnect', () => {
@@ -50,10 +62,10 @@ module.exports = function sockets(io) {
         });
       }
     });
-    socket.on('foursquare_pause', () => {
-      if (foursquare.active) {
-        if (foursquare.worker.kill) foursquare.worker.kill();
-        io.sockets.emit('foursquare_pause');
+    socket.on('foursquare_stop', () => {
+      if (foursquare.active && foursquare.worker.kill) {
+        foursquare.worker.kill();
+        io.sockets.emit('foursquare_stop');
       }
     });
 
@@ -63,12 +75,18 @@ module.exports = function sockets(io) {
         yelp.active = !yelp.active;
         io.sockets.emit('yelp_start');
         yelp.worker = fork(path.join(__dirname, '../workers/yelp/yelp.js'));
+        console.log('Yelp worker started');
         yelp.worker.on('message', (m) => {
-          if (m === 'yelp_done') {
-            io.sockets.emit('yelp_done');
+          if (m === 'yelp_stop') {
+            io.sockets.emit('yelp_stop');
           } else {
-            yelp.progress = m.yelp_progress;
-            io.sockets.emit('yelp_progress', yelp.progress);
+            if (m.yelp_progress) {
+              yelp.progress = m.yelp_progress;
+              io.sockets.emit('yelp_progress', yelp.progress);
+            }
+            if (m.yelp_error) {
+              console.log(m.yelp_error);
+            }
           }
         });
         yelp.worker.on('disconnect', () => {
@@ -77,10 +95,10 @@ module.exports = function sockets(io) {
         });
       }
     });
-    socket.on('yelp_pause', () => {
-      if (yelp.active) {
-        if (yelp.worker.kill) yelp.worker.kill();
-        io.sockets.emit('yelp_pause');
+    socket.on('yelp_stop', () => {
+      if (yelp.active && yelp.worker.kill) {
+        yelp.worker.kill();
+        io.sockets.emit('yelp_stop');
       }
     });
   });
