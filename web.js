@@ -120,11 +120,7 @@ internals.after = (server, next) => {
         description: 'Returns the dashboard page',
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
-        handler: {
-          view: {
-            template: 'dashboard',
-          },
-        },
+        handler: require('./controllers/dashboard.js'),
       },
     },
 

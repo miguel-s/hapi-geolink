@@ -50,6 +50,11 @@ function handleResponse(item, response, done) {
 
   if (!response.statusCode) {
     return response.businesses
+      .map((row) => {
+        // last opoortunity to modify response objects
+        const newRow = row;
+        return newRow;
+      })
       .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
       .filter(row => done.indexOf(row.id) === -1);
   }

@@ -48,6 +48,15 @@ function handleResponse(item, response, done) {
   if (response.meta.code === 200) {
     return response.response.groups[0].items
       .map(row => row.venue)
+      .map((row) => {
+        // last opoortunity to modify response objects
+        const newRow = row;
+
+         // only save event ids
+        if (newRow.events && newRow.events.items) newRow.events.items = row.events.items.map(event => event.id);
+
+        return newRow;
+      })
       .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
       .filter(row => done.indexOf(row.id) === -1);
   }

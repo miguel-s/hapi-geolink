@@ -94,6 +94,13 @@ module.exports = {
   events: {
     count: null,
     summary: null,
+    items: [
+      null,
+      null,
+      null,
+      null,
+      null,
+    ],
   },
   cluster: null,
   section: null,

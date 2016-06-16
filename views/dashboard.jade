@@ -17,13 +17,10 @@ block content
             span  Foursquare
           p
             strong nº venues
-            span : test
+            span : #{foursquare.distinct_id}
           p
             strong last update
-            span : test
-          p
-            strong total time
-            span : test
+            span : #{foursquare.max_datetime}
         div.action
           div.button-group.small.align-center
             button.button.update Update
@@ -41,13 +38,10 @@ block content
           div
             p
               strong nº venues
-              span : test
+              span : #{yelp.distinct_id}
             p
               strong last update
-              span : test
-            p
-              strong total time
-              span : test
+              span : #{yelp.max_datetime}
         div.action
           div.button-group.small.align-center
             button.button.update Update
