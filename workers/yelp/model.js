@@ -22,8 +22,14 @@ module.exports = {
       null,
       null,
       null,
+      null,
     ],
     geo_accuracy: null,
+    neighborhoods: [
+      null,
+      null,
+      null,
+    ],
     postal_code: null,
     country_code: null,
     address: [
