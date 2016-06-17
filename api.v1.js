@@ -1,11 +1,9 @@
 'use strict';
 
+const Joi = require('joi');
 const Boom = require('boom');
 const jwt = require('jsonwebtoken');
 const aguid = require('aguid');
-
-const addPropsToMap = require('./helpers/funcs.js').addPropsToMap;
-const data = require('./helpers/bootstrap.js')();
 
 const internals = {};
 
@@ -47,54 +45,37 @@ internals.after = (server, next) => {
       },
     },
 
-    // Ccaa route
+    // Map route
     {
       method: 'GET',
-      path: `${internals.options.prefix}/ccaa`,
+      path: `${internals.options.prefix}/map`,
       config: {
         description: 'Returns a topojson object with map and demographic data',
         auth: { strategy: 'ibc-token', mode: 'required' },
-        handler(request, reply) {
-          return reply(addPropsToMap(data.map.ccaa, data.demographic.ccaa, 'CA'));
+        validate: {
+          query: {
+            country: Joi.string().min(3).max(10).required(),
+            region: Joi.string().min(3).max(10).required(),
+            city: Joi.string().min(3).max(10).required(),
+            granularity: Joi.string().min(3).max(10).required(),
+            q: Joi.string().length(4).required(),
+            sp: Joi.string().min(3).max(5).required(),
+            token: Joi.string().length(224).required(),
+          },
         },
-      },
-    },
-
-    // Provincias route
-    {
-      method: 'GET',
-      path: `${internals.options.prefix}/provincias`,
-      config: {
-        description: 'Returns a topojson object with map and demographic data',
-        auth: { strategy: 'ibc-token', mode: 'required' },
         handler(request, reply) {
-          return reply(addPropsToMap(data.map.provincias, data.demographic.provincias, 'CP'));
-        },
-      },
-    },
-
-    // Barrios madrid route
-    {
-      method: 'GET',
-      path: `${internals.options.prefix}/barrios_madrid`,
-      config: {
-        description: 'Returns a topojson object with map and demographic data',
-        auth: { strategy: 'ibc-token', mode: 'required' },
-        handler(request, reply) {
-          return reply(addPropsToMap(data.map.barrios.madrid, data.demographic.barrios.madrid, 'codbar'));
-        },
-      },
-    },
-
-    // Secciones censales madrid route
-    {
-      method: 'GET',
-      path: `${internals.options.prefix}/secciones_censales_madrid`,
-      config: {
-        description: 'Returns a topojson object with map and demographic data',
-        auth: { strategy: 'ibc-token', mode: 'required' },
-        handler(request, reply) {
-          return reply(addPropsToMap(data.map.secciones.madrid, data.demographic.secciones.madrid, 'CUSEC'));
+          request.server.app.minsaitdb.query`
+            SELECT topojson
+            FROM ibc_seg.DM_SOURCE_MAPS
+            WHERE country = ${request.query.country}
+                  AND region = ${request.query.region}
+                  AND city = ${request.query.city}
+                  AND granularity = ${request.query.granularity}
+                  AND q = ${request.query.q}
+                  AND sp = ${request.query.sp}`
+          .then(recordset => JSON.parse(recordset[0].topojson))
+          .then(map => reply(map))
+          .catch(err => reply(err));
         },
       },
     },
@@ -102,7 +83,7 @@ internals.after = (server, next) => {
     // Horeca route
     {
       method: 'GET',
-      path: `${internals.options.prefix}/horeca`,
+      path: `${internals.options.prefix}/venues`,
       config: {
         description: 'Returns a json object with venue data',
         auth: { strategy: 'ibc-token', mode: 'required' },

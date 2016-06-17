@@ -344,7 +344,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
   fetch('./api/v1/token', { credentials: 'same-origin' }).then(function (response) {
     return response.text();
   }).then(function (token) {
-    fetch('./api/v1/ccaa?token=' + token).then(function (response) {
+    fetch('./api/v1/map?country=spain&region=all&city=all&granularity=ccaa&q=q1e4&sp=sp100&token=' + token).then(function (response) {
       if (response.status !== 200) return;
       response.json().then(function (data) {
         mapData.ccaa = data;
@@ -366,7 +366,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
     });
 
-    fetch('./api/v1/provincias?token=' + token).then(function (response) {
+    fetch('./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=' + token).then(function (response) {
       return response.json();
     }).then(function (data) {
       mapData.provincias = data;
@@ -381,7 +381,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return console.log(err);
     });
 
-    fetch('./api/v1/barrios_madrid?token=' + token).then(function (response) {
+    fetch('./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=' + token).then(function (response) {
       return response.json();
     }).then(function (data) {
       mapData.neighbourhoods = data;
@@ -396,7 +396,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return console.log(err);
     });
 
-    fetch('./api/v1/secciones_censales_madrid?token=' + token).then(function (response) {
+    fetch('./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=' + token).then(function (response) {
       return response.json();
     }).then(function (data) {
       mapData.censussections = data;
@@ -411,7 +411,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       return console.log(err);
     });
 
-    fetch('./api/v1/horeca?token=' + token).then(function (response) {
+    fetch('./api/v1/venues?token=' + token).then(function (response) {
       return response.json();
     }).then(function (data) {
       markerLayer = L.markerClusterGroup({

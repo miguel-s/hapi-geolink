@@ -360,7 +360,7 @@
   fetch('./api/v1/token', { credentials: 'same-origin' })
   .then(response => response.text())
   .then((token) => {
-    fetch(`./api/v1/ccaa?token=${token}`)
+    fetch(`./api/v1/map?country=spain&region=all&city=all&granularity=ccaa&q=q1e4&sp=sp100&token=${token}`)
     .then(
       (response) => {
         if (response.status !== 200) return;
@@ -387,7 +387,7 @@
       }
     );
 
-    fetch(`./api/v1/provincias?token=${token}`)
+    fetch(`./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=${token}`)
     .then(response => response.json())
     .then((data) => {
       mapData.provincias = data;
@@ -403,7 +403,7 @@
     })
     .catch(err => console.log(err));
 
-    fetch(`./api/v1/barrios_madrid?token=${token}`)
+    fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=${token}`)
     .then(response => response.json())
     .then((data) => {
       mapData.neighbourhoods = data;
@@ -419,7 +419,7 @@
     })
     .catch(err => console.log(err));
 
-    fetch(`./api/v1/secciones_censales_madrid?token=${token}`)
+    fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=${token}`)
     .then(response => response.json())
     .then((data) => {
       mapData.censussections = data;
@@ -436,7 +436,7 @@
     })
     .catch(err => console.log(err));
 
-    fetch(`./api/v1/horeca?token=${token}`)
+    fetch(`./api/v1/venues?token=${token}`)
     .then(response => response.json())
     .then((data) => {
       markerLayer = L.markerClusterGroup({
