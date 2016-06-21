@@ -11,7 +11,7 @@ const model = require('./model.js');
 // Set up config objects
 
 const name = 'yelp';
-const tableName = 'ibc_seg.DM_SOURCE_YELP_RAW';
+const tableName = 'ibc_seg.DM_SOURCE_YELP_VENUES_RAW';
 const apiConfig = {
   consumer_key: process.env.YELP_CONSUMER_KEY,
   consumer_secret: process.env.YELP_CONSUMER_SECRET,

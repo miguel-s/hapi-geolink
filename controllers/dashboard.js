@@ -6,22 +6,22 @@ module.exports = function handler(request, reply) {
   const pFoursquare = request.server.app.minsaitdb.query`
     SELECT	COUNT(distinct [id]) as distinct_id,
             MAX(CAST([datetime] as datetime)) as max_datetime
-    FROM ibc_seg.DM_SOURCE_FOURSQUARE_RAW`;
+    FROM ibc_seg.DM_SOURCE_FOURSQUARE_VENUES_RAW`;
 
   const pYelp = request.server.app.minsaitdb.query`
     SELECT	COUNT(distinct [id]) as distinct_id,
             MAX(CAST([datetime] as datetime)) as max_datetime
-    FROM ibc_seg.DM_SOURCE_YELP_RAW`;
+    FROM ibc_seg.DM_SOURCE_YELP_VENUES_RAW`;
 
   const pTwitter = request.server.app.minsaitdb.query`
     SELECT	COUNT(distinct [id]) as distinct_id,
             MAX(CAST([datetime] as datetime)) as max_datetime
-    FROM ibc_seg.DM_SOURCE_TWITTER_RAW`;
+    FROM ibc_seg.DM_SOURCE_TWITTER_VENUES_RAW`;
 
   const pFacebook = request.server.app.minsaitdb.query`
     SELECT	COUNT(distinct [id]) as distinct_id,
             MAX(CAST([datetime] as datetime)) as max_datetime
-    FROM ibc_seg.DM_SOURCE_FACEBOOK_RAW`;
+    FROM ibc_seg.DM_SOURCE_FACEBOOK_VENUES_RAW`;
 
   Promise.all([pFoursquare, pYelp, pTwitter, pFacebook])
   .then((values) => {

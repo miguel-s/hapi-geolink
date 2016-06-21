@@ -11,7 +11,7 @@ const model = require('./model.js');
 // Set up config
 
 const name = 'facebook';
-const tableName = 'ibc_seg.DM_SOURCE_FACEBOOK_RAW';
+const tableName = 'ibc_seg.DM_SOURCE_FACEBOOK_VENUES_RAW';
 const apiConfig = {
   accessToken: process.env.FACEBOOK_ACCESS_TOKEN,
   api: 'https://graph.facebook.com/v2.6',
