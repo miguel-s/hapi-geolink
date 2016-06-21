@@ -19,39 +19,39 @@ block content
           a(href="#") Granularity
           ul.menu
             li.no
-              a(href="#" class="button") Empty
+              a(href="#") Empty
             li.ca
-              a(href="#" class="button") CCAA
+              a(href="#") CCAA
             li.pv
-              a(href="#" class="button") Provincias
+              a(href="#") Provincias
             li.nh
-              a(href="#" class="button") Barrios
+              a(href="#") Barrios
             li.cs
-              a(href="#" class="button") Sección Censal
+              a(href="#") Sección Censal
     div.small-1.large-1.column.variables
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
           a(href="#") Variable
           ul.menu
             li.no
-              a(href="#" class="button") Empty
+              a(href="#") Empty
             li.po
-              a(href="#" class="button") Population
+              a(href="#") Population
             li.pm
-              a(href="#" class="button") % Men
+              a(href="#") % Men
             li.pf
-              a(href="#" class="button") % Foreigners
+              a(href="#") % Foreigners
     div.small-1.large-1.column.types
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
           a(href="#") Type
           ul.menu
             li.color-type.sq
-              a(href="#" class="button") Sequential
+              a(href="#") Sequential
             li.color-type.dv
-              a(href="#" class="button") Diverging
+              a(href="#") Diverging
             li.color-type.ql
-              a(href="#" class="button") Qualitative
+              a(href="#") Qualitative
     div.small-1.large-1.column.colors
       ul(data-dropdown-menu).menu.dropdown.align-center
         li.is-dropdown-submenu-parent
@@ -63,7 +63,7 @@ block content
           ul.menu
             each num in [3, 4, 5, 6, 7, 8, 9, 10, 11, 12]
               li.color-classes
-                a(href="#" class="button")= num
+                a(href="#")= num
 
 block scripts
   script(src="/libs/jquery/jquery-2.2.0.min.js")
@@ -71,5 +71,6 @@ block scripts
   script(src="/libs/colorbrewer/colorbrewer.js")
   script(src="/libs/leaflet/leaflet.js")
   script(src="/libs/leaflet.markercluster/leaflet.markercluster.min.js")
+  script(src="/libs/leaflet.heat/leaflet.heat.min.js")
   script(src="/libs/d3/topojson.v1.min.js")
   script(src="/js/map.js")
