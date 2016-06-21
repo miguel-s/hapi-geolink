@@ -63,7 +63,7 @@ while (total.length) {
   chunks.push(total.splice(0, 99));
 }
 const input = chunks
-  .map((chunk, index) => Object.assign({}, {
+  .map((chunk, index) => Object.assign({ chunk }, {
     name: `Chunk ${index}: `,
     cluster: chunk.join(','),
     section: null,
