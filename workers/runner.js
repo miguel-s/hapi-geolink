@@ -59,14 +59,14 @@ function makeGenerator({ config, data, handlers }) {
         if (!process.send) process.stdout.write(`\n${message} ${item.name}`);
 
         const response = yield handleGet(item);
-        if (response.error) throw response.error;
+        if (response.source) throw response;
 
         const results = yield handleResponse(item, response, done);
-        if (results.error) throw results.error;
+        if (results.source) throw results;
 
         const table = prepareTable(tableName, database, Object.keys(flatten(model)));
         const inserted = yield handleSave(table, results);
-        if (inserted.error) throw inserted.error;
+        if (inserted.source) throw inserted;
 
         done.push(...inserted);
         retries = 0;
@@ -80,7 +80,7 @@ function makeGenerator({ config, data, handlers }) {
         }
       } catch (e) {
         if (!process.send) process.stdout.write(' -> ERROR\n');
-        if (!process.send) console.error(e);
+        if (!process.send) console.log(e);
         if (retries < maxRetries) {
           retries += 1;
           message = `Retrying (attempt ${retries})`;
@@ -154,7 +154,7 @@ function runner({ config, data, handlers }) {
 
     run({ config, data, handlers });
   })
-  .catch(err => console.error(err));
+  .catch(err => console.log(err));
 }
 
 module.exports = runner;

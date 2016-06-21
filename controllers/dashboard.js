@@ -18,12 +18,18 @@ module.exports = function handler(request, reply) {
             MAX(CAST([datetime] as datetime)) as max_datetime
     FROM ibc_seg.DM_SOURCE_TWITTER_RAW`;
 
-  Promise.all([pFoursquare, pYelp, pTwitter])
+  const pFacebook = request.server.app.minsaitdb.query`
+    SELECT	COUNT(distinct [id]) as distinct_id,
+            MAX(CAST([datetime] as datetime)) as max_datetime
+    FROM ibc_seg.DM_SOURCE_FACEBOOK_RAW`;
+
+  Promise.all([pFoursquare, pYelp, pTwitter, pFacebook])
   .then((values) => {
     const foursquare = values[0][0];
     const yelp = values[1][0];
     const twitter = values[2][0];
-    return reply.view('dashboard', { foursquare, yelp, twitter });
+    const facebook = values[3][0];
+    return reply.view('dashboard', { foursquare, yelp, twitter, facebook });
   })
   .catch(error => reply(Boom.badImplementation()));
 };

@@ -50,7 +50,7 @@ block content
           div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
             span.progress-meter
               p.progress-meter-text 0%
-     div.small-12.medium-6.large-4.columns.twitter
+    div.small-12.medium-6.large-4.columns.twitter
       div.card
         div.content
           div.title
@@ -63,6 +63,27 @@ block content
             p
               strong last update
               span : #{twitter.max_datetime.toUTCString()}
+        div.action
+          div.button-group.small.align-center
+            button.button.update Update
+            button.button.stop(class="disabled") Stop
+            a.button.download(href="#") Download
+          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+            span.progress-meter
+              p.progress-meter-text 0%
+    div.small-12.medium-6.large-4.columns.facebook
+      div.card
+        div.content
+          div.title
+            span.fa(class="fa-facebook")
+            span  Facebook
+          div
+            p
+              strong nº venues
+              span : #{facebook.distinct_id}
+            p
+              strong last update
+              span : #{facebook.max_datetime.toUTCString()}
         div.action
           div.button-group.small.align-center
             button.button.update Update

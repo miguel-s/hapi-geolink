@@ -19,6 +19,11 @@ const twitter = {
   active: false,
   progress: 0,
 };
+const facebook = {
+  worker: null,
+  active: false,
+  progress: 0,
+};
 
 module.exports = function sockets(io) {
   io.use(socketioJwt.authorize({
@@ -39,6 +44,10 @@ module.exports = function sockets(io) {
     if (twitter.active) {
       socket.emit('twitter_start');
       socket.emit('twitter_progress', twitter.progress);
+    }
+    if (facebook.active) {
+      socket.emit('facebook_start');
+      socket.emit('facebook_progress', facebook.progress);
     }
 
     socket.on('disconnect', () => {
@@ -141,6 +150,39 @@ module.exports = function sockets(io) {
       if (twitter.active && twitter.worker.kill) {
         twitter.worker.kill();
         io.sockets.emit('twitter_stop');
+      }
+    });
+
+    // FACEBOOK
+    socket.on('facebook_start', () => {
+      if (!facebook.active) {
+        facebook.active = !facebook.active;
+        io.sockets.emit('facebook_start');
+        facebook.worker = fork(path.join(__dirname, '../workers/facebook/facebook.js'));
+        console.log('Facebook worker started');
+        facebook.worker.on('message', (m) => {
+          if (m === 'facebook_stop') {
+            io.sockets.emit('facebook_stop');
+          } else {
+            if (m.facebook_progress) {
+              facebook.progress = m.facebook_progress;
+              io.sockets.emit('facebook_progress', facebook.progress);
+            }
+            if (m.facebook_error) {
+              console.log(m.facebook_error);
+            }
+          }
+        });
+        facebook.worker.on('disconnect', () => {
+          facebook.active = !facebook.active;
+          console.log('Facebook worker exited');
+        });
+      }
+    });
+    socket.on('facebook_stop', () => {
+      if (facebook.active && facebook.worker.kill) {
+        facebook.worker.kill();
+        io.sockets.emit('facebook_stop');
       }
     });
   });

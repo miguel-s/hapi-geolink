@@ -120,6 +120,39 @@
       socket.on('twitter_progress', (data) => {
         setProgressState(progressTwitter, data);
       });
+
+      // FACEBOOK
+      const updateFacebook = $('.facebook .update');
+      const stopFacebook = $('.facebook .stop');
+      const progressFacebook = $('.facebook .progress');
+      const downloadFacebook = $('.facebook .download');
+
+      updateFacebook.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('facebook_start');
+      });
+      stopFacebook.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('facebook_stop');
+      });
+
+      socket.on('facebook_start', () => {
+        setButtonState([
+          { element: updateFacebook, state: 'disabled' },
+          { element: stopFacebook, state: '' },
+          { element: downloadFacebook, state: 'disabled' },
+        ]);
+      });
+      socket.on('facebook_stop', () => {
+        setButtonState([
+          { element: updateFacebook, state: '' },
+          { element: stopFacebook, state: 'disabled' },
+          { element: downloadFacebook, state: '' },
+        ]);
+      });
+      socket.on('facebook_progress', (data) => {
+        setProgressState(progressFacebook, data);
+      });
     });
   });
 }($, io));
