@@ -51,7 +51,7 @@ function handleResponse(item, response, done) {
   if (!response.statusCode) {
     return response.businesses
       .map((row) => {
-        // last opoortunity to modify response objects
+        // last opportunity to modify response objects
         const newRow = row;
         return newRow;
       })

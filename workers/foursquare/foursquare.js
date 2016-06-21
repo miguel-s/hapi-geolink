@@ -49,7 +49,7 @@ function handleResponse(item, response, done) {
     return response.response.groups[0].items
       .map(row => row.venue)
       .map((row) => {
-        // last opoortunity to modify response objects
+        // last opportunity to modify response objects
         const newRow = row;
 
          // only save event ids

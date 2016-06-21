@@ -91,7 +91,7 @@ function handleResponse(item, response, done) {
   if (response.statusCode === 200) {
     return response.body
       .map((row) => {
-        // last opoortunity to modify response objects
+        // last opportunity to modify response objects
         const newRow = row;
         newRow.status = {
           created_at: newRow.created_at,
