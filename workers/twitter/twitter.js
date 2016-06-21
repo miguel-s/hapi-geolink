@@ -111,7 +111,7 @@ function handleResponse(item, response, done) {
         return newRow;
       })
       .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
-      .filter(row => done.indexOf(row.id) === -1);
+      .filter(row => done.indexOf(row.id.toString()) === -1);
   }
 
   return { error: response, source: 'handleResponse' };

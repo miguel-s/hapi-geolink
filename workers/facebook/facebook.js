@@ -65,7 +65,7 @@ function handleResponse(item, response, done) {
   // last opportunity to modify response object
 
   result = _.merge({}, model, result, { cluster, section, datetime });
-  if (done.indexOf(result.id) === -1) return [result];
+  if (done.indexOf(result.id.toString()) === -1) return [result];
   return [];
 }
 
