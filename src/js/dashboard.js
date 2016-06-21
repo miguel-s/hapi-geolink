@@ -26,7 +26,6 @@
       const updateFoursquare = $('.foursquare .update');
       const stopFoursquare = $('.foursquare .stop');
       const progressFoursquare = $('.foursquare .progress');
-      const downloadFoursquare = $('.foursquare .download');
 
       updateFoursquare.on('click', (e) => {
         e.preventDefault();
@@ -41,14 +40,12 @@
         setButtonState([
           { element: updateFoursquare, state: 'disabled' },
           { element: stopFoursquare, state: '' },
-          { element: downloadFoursquare, state: 'disabled' },
         ]);
       });
       socket.on('foursquare_stop', () => {
         setButtonState([
           { element: updateFoursquare, state: '' },
           { element: stopFoursquare, state: 'disabled' },
-          { element: downloadFoursquare, state: '' },
         ]);
       });
       socket.on('foursquare_progress', (data) => {
@@ -59,7 +56,6 @@
       const updateYelp = $('.yelp .update');
       const stopYelp = $('.yelp .stop');
       const progressYelp = $('.yelp .progress');
-      const downloadYelp = $('.yelp .download');
 
       updateYelp.on('click', (e) => {
         e.preventDefault();
@@ -74,14 +70,12 @@
         setButtonState([
           { element: updateYelp, state: 'disabled' },
           { element: stopYelp, state: '' },
-          { element: downloadYelp, state: 'disabled' },
         ]);
       });
       socket.on('yelp_stop', () => {
         setButtonState([
           { element: updateYelp, state: '' },
           { element: stopYelp, state: 'disabled' },
-          { element: downloadYelp, state: '' },
         ]);
       });
       socket.on('yelp_progress', (data) => {
@@ -92,7 +86,6 @@
       const updateTwitter = $('.twitter .update');
       const stopTwitter = $('.twitter .stop');
       const progressTwitter = $('.twitter .progress');
-      const downloadTwitter = $('.twitter .download');
 
       updateTwitter.on('click', (e) => {
         e.preventDefault();
@@ -107,14 +100,12 @@
         setButtonState([
           { element: updateTwitter, state: 'disabled' },
           { element: stopTwitter, state: '' },
-          { element: downloadTwitter, state: 'disabled' },
         ]);
       });
       socket.on('twitter_stop', () => {
         setButtonState([
           { element: updateTwitter, state: '' },
           { element: stopTwitter, state: 'disabled' },
-          { element: downloadTwitter, state: '' },
         ]);
       });
       socket.on('twitter_progress', (data) => {
@@ -125,7 +116,6 @@
       const updateFacebook = $('.facebook .update');
       const stopFacebook = $('.facebook .stop');
       const progressFacebook = $('.facebook .progress');
-      const downloadFacebook = $('.facebook .download');
 
       updateFacebook.on('click', (e) => {
         e.preventDefault();
@@ -140,14 +130,12 @@
         setButtonState([
           { element: updateFacebook, state: 'disabled' },
           { element: stopFacebook, state: '' },
-          { element: downloadFacebook, state: 'disabled' },
         ]);
       });
       socket.on('facebook_stop', () => {
         setButtonState([
           { element: updateFacebook, state: '' },
           { element: stopFacebook, state: 'disabled' },
-          { element: downloadFacebook, state: '' },
         ]);
       });
       socket.on('facebook_progress', (data) => {
