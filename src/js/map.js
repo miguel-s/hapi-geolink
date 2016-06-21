@@ -387,70 +387,77 @@
       }
     );
 
-    fetch(`./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=${token}`)
-    .then(response => response.json())
-    .then((data) => {
-      mapData.provincias = data;
+    // fetch(`./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.provincias = data;
 
-      dropdowns.granularity
-        .find('.pv')
-        .on('click', (event) => {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.provincias,
-            variable: currentVariable,
-          });
-        }).removeClass('disabled');
-    })
-    .catch(err => console.log(err));
+    //   dropdowns.granularity
+    //     .find('.pv')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.provincias,
+    //         variable: currentVariable,
+    //       });
+    //     }).removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
-    fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=${token}`)
-    .then(response => response.json())
-    .then((data) => {
-      mapData.neighbourhoods = data;
+    // fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.neighbourhoods = data;
 
-      dropdowns.granularity
-        .find('.nh')
-        .on('click', (event) => {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.neighbourhoods,
-            variable: currentVariable,
-          });
-        }).removeClass('disabled');
-    })
-    .catch(err => console.log(err));
+    //   dropdowns.granularity
+    //     .find('.nh')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.neighbourhoods,
+    //         variable: currentVariable,
+    //       });
+    //     }).removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
-    fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=${token}`)
-    .then(response => response.json())
-    .then((data) => {
-      mapData.censussections = data;
+    // fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.censussections = data;
 
-      dropdowns.granularity
-        .find('.cs')
-        .on('click', (event) => {
-          changeTopoJsonLayer({
-            granularity: GranularityEnum.censussections,
-            variable: currentVariable,
-          });
-        })
-        .removeClass('disabled');
-    })
-    .catch(err => console.log(err));
+    //   dropdowns.granularity
+    //     .find('.cs')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.censussections,
+    //         variable: currentVariable,
+    //       });
+    //     })
+    //     .removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
     fetch(`./api/v1/venues?token=${token}`)
     .then(response => response.json())
     .then((data) => {
       markerLayer = L.markerClusterGroup({
-        disableClusteringAtZoom: 17,
+        disableClusteringAtZoom: 18,
       });
 
       data.filter(item => item.lat && item.lon)
           .forEach((item) => {
             L.marker([item.lat, item.lon])
               .addTo(markerLayer)
-              .bindPopup(item.ds_pdv);
+              .bindPopup(`<div>${item.ds_pdv}<br>${item.twitter_statuses || 0}<br>${item.foursquare_usercount || 0}</div>`);
           });
-
       map.addLayer(markerLayer);
+
+      const max = Math.max(...data.map(item => item.foursquare_usercount));
+      const heatLayer = L.heatLayer(
+        data.filter(item => item.lat && item.lon && item.foursquare_usercount)
+            .map(item => [item.lat, item.lon, parseInt(item.foursquare_usercount, 10)]),
+        { radius: 25, max }
+      );
+      map.addLayer(heatLayer);
     })
     .catch(err => console.log(err));
   });

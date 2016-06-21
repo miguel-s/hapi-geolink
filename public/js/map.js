@@ -366,65 +366,78 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
       });
     });
 
-    fetch('./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=' + token).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      mapData.provincias = data;
+    // fetch(`./api/v1/map?country=spain&region=all&city=all&granularity=provincias&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.provincias = data;
 
-      dropdowns.granularity.find('.pv').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.provincias,
-          variable: currentVariable
-        });
-      }).removeClass('disabled');
-    }).catch(function (err) {
-      return console.log(err);
-    });
+    //   dropdowns.granularity
+    //     .find('.pv')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.provincias,
+    //         variable: currentVariable,
+    //       });
+    //     }).removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
-    fetch('./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=' + token).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      mapData.neighbourhoods = data;
+    // fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=barrios&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.neighbourhoods = data;
 
-      dropdowns.granularity.find('.nh').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.neighbourhoods,
-          variable: currentVariable
-        });
-      }).removeClass('disabled');
-    }).catch(function (err) {
-      return console.log(err);
-    });
+    //   dropdowns.granularity
+    //     .find('.nh')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.neighbourhoods,
+    //         variable: currentVariable,
+    //       });
+    //     }).removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
-    fetch('./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=' + token).then(function (response) {
-      return response.json();
-    }).then(function (data) {
-      mapData.censussections = data;
+    // fetch(`./api/v1/map?country=spain&region=madrid&city=madrid&granularity=seccens&q=q1e4&sp=sp100&token=${token}`)
+    // .then(response => response.json())
+    // .then((data) => {
+    //   mapData.censussections = data;
 
-      dropdowns.granularity.find('.cs').on('click', function (event) {
-        changeTopoJsonLayer({
-          granularity: GranularityEnum.censussections,
-          variable: currentVariable
-        });
-      }).removeClass('disabled');
-    }).catch(function (err) {
-      return console.log(err);
-    });
+    //   dropdowns.granularity
+    //     .find('.cs')
+    //     .on('click', (event) => {
+    //       changeTopoJsonLayer({
+    //         granularity: GranularityEnum.censussections,
+    //         variable: currentVariable,
+    //       });
+    //     })
+    //     .removeClass('disabled');
+    // })
+    // .catch(err => console.log(err));
 
     fetch('./api/v1/venues?token=' + token).then(function (response) {
       return response.json();
     }).then(function (data) {
       markerLayer = L.markerClusterGroup({
-        disableClusteringAtZoom: 17
+        disableClusteringAtZoom: 18
       });
 
       data.filter(function (item) {
         return item.lat && item.lon;
       }).forEach(function (item) {
-        L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup(item.ds_pdv);
+        L.marker([item.lat, item.lon]).addTo(markerLayer).bindPopup('<div>' + item.ds_pdv + '<br>' + (item.twitter_statuses || 0) + '<br>' + (item.foursquare_usercount || 0) + '</div>');
       });
-
       map.addLayer(markerLayer);
+
+      var max = Math.max.apply(Math, _toConsumableArray(data.map(function (item) {
+        return item.foursquare_usercount;
+      })));
+      var heatLayer = L.heatLayer(data.filter(function (item) {
+        return item.lat && item.lon && item.foursquare_usercount;
+      }).map(function (item) {
+        return [item.lat, item.lon, parseInt(item.foursquare_usercount, 10)];
+      }), { radius: 25, max: max });
+      map.addLayer(heatLayer);
     }).catch(function (err) {
       return console.log(err);
     });

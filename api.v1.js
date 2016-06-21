@@ -89,16 +89,24 @@ internals.after = (server, next) => {
         auth: { strategy: 'ibc-token', mode: 'required' },
         handler(request, reply) {
           request.server.app.minsaitdb.query`
-            SELECT	a.TargetID as cd_pdv,
-                    a.TargetName as ds_pdv,
-                    b.lat as lat,
-                    b.lon as lon,
-                    c.ESPECIALIDAD_IBC as segmento
-            FROM ibc_seg.DM_MANPOWER_OUTPUT as a
-            left join ibc_seg.DM_MANPOWER_OUTPUT_LATLON as b
-            on a.CallID = b.CallID
-            left join ibc_seg.DM_MANPOWER_OUTPUT_ESPECIALIDAD_IBC as c
-            on a.CallID = c.CallID`
+            SELECT	a.TargetID AS cd_pdv,
+                    a.TargetName AS ds_pdv,
+                    b.lat AS lat,
+                    b.lon AS lon,
+                    c.ESPECIALIDAD_IBC AS segmento,
+                    e.statuses AS twitter_statuses,
+					          f.usersCount AS foursquare_usercount
+            FROM ibc_seg.DM_MANPOWER_OUTPUT AS a
+            LEFT JOIN ibc_seg.DM_MANPOWER_OUTPUT_LATLON AS b
+            ON a.CallID = b.CallID
+            LEFT JOIN ibc_seg.DM_MANPOWER_OUTPUT_ESPECIALIDAD_IBC AS c
+            ON a.CallID = c.CallID
+            LEFT JOIN ibc_seg.DM_PIVOTE_CRUZADOS_SOURCE AS d
+            ON a.CallID = d.CallID
+            LEFT JOIN ibc_seg.DM_SOURCE_TWITTER_LIST AS e
+            ON d.idTwitter = e.screen_name
+            LEFT JOIN ibc_seg.DM_SOURCE_FOURSQUARE_LIST as f
+            ON d.id4Square = f.id`
           .then(recordset => reply(recordset))
           .catch(err => reply(err));
         },
