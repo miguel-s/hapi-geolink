@@ -14,6 +14,11 @@ const yelp = {
   active: false,
   progress: 0,
 };
+const twitter = {
+  worker: null,
+  active: false,
+  progress: 0,
+};
 
 module.exports = function sockets(io) {
   io.use(socketioJwt.authorize({
@@ -30,6 +35,10 @@ module.exports = function sockets(io) {
     if (yelp.active) {
       socket.emit('yelp_start');
       socket.emit('yelp_progress', yelp.progress);
+    }
+    if (twitter.active) {
+      socket.emit('twitter_start');
+      socket.emit('twitter_progress', twitter.progress);
     }
 
     socket.on('disconnect', () => {
@@ -99,6 +108,39 @@ module.exports = function sockets(io) {
       if (yelp.active && yelp.worker.kill) {
         yelp.worker.kill();
         io.sockets.emit('yelp_stop');
+      }
+    });
+
+    // TWITTER
+    socket.on('twitter_start', () => {
+      if (!twitter.active) {
+        twitter.active = !twitter.active;
+        io.sockets.emit('twitter_start');
+        twitter.worker = fork(path.join(__dirname, '../workers/twitter/twitter.js'));
+        console.log('Twitter worker started');
+        twitter.worker.on('message', (m) => {
+          if (m === 'twitter_stop') {
+            io.sockets.emit('twitter_stop');
+          } else {
+            if (m.twitter_progress) {
+              twitter.progress = Math.floor(m.twitter_progress / 100); // dive by 100 as a lazy quick fix for chunk length
+              io.sockets.emit('twitter_progress', twitter.progress);
+            }
+            if (m.twitter_error) {
+              console.log(m.twitter_error);
+            }
+          }
+        });
+        twitter.worker.on('disconnect', () => {
+          twitter.active = !twitter.active;
+          console.log('Twitter worker exited');
+        });
+      }
+    });
+    socket.on('twitter_stop', () => {
+      if (twitter.active && twitter.worker.kill) {
+        twitter.worker.kill();
+        io.sockets.emit('twitter_stop');
       }
     });
   });

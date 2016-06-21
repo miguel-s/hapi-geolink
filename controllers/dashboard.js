@@ -13,11 +13,17 @@ module.exports = function handler(request, reply) {
             MAX(CAST([datetime] as datetime)) as max_datetime
     FROM ibc_seg.DM_SOURCE_YELP_RAW`;
 
-  Promise.all([pFoursquare, pYelp])
+  const pTwitter = request.server.app.minsaitdb.query`
+    SELECT	COUNT(distinct [id]) as distinct_id,
+            MAX(CAST([datetime] as datetime)) as max_datetime
+    FROM ibc_seg.DM_SOURCE_TWITTER_RAW`;
+
+  Promise.all([pFoursquare, pYelp, pTwitter])
   .then((values) => {
     const foursquare = values[0][0];
     const yelp = values[1][0];
-    return reply.view('dashboard', { foursquare, yelp });
+    const twitter = values[2][0];
+    return reply.view('dashboard', { foursquare, yelp, twitter });
   })
   .catch(error => reply(Boom.badImplementation()));
 };

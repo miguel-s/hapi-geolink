@@ -87,6 +87,39 @@
       socket.on('yelp_progress', (data) => {
         setProgressState(progressYelp, data);
       });
+
+      // TWITTER
+      const updateTwitter = $('.twitter .update');
+      const stopTwitter = $('.twitter .stop');
+      const progressTwitter = $('.twitter .progress');
+      const downloadTwitter = $('.twitter .download');
+
+      updateTwitter.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('twitter_start');
+      });
+      stopTwitter.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('twitter_stop');
+      });
+
+      socket.on('twitter_start', () => {
+        setButtonState([
+          { element: updateTwitter, state: 'disabled' },
+          { element: stopTwitter, state: '' },
+          { element: downloadTwitter, state: 'disabled' },
+        ]);
+      });
+      socket.on('twitter_stop', () => {
+        setButtonState([
+          { element: updateTwitter, state: '' },
+          { element: stopTwitter, state: 'disabled' },
+          { element: downloadTwitter, state: '' },
+        ]);
+      });
+      socket.on('twitter_progress', (data) => {
+        setProgressState(progressTwitter, data);
+      });
     });
   });
 }($, io));

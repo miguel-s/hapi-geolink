@@ -69,6 +69,31 @@
       socket.on('yelp_progress', function (data) {
         setProgressState(progressYelp, data);
       });
+
+      // TWITTER
+      var updateTwitter = $('.twitter .update');
+      var stopTwitter = $('.twitter .stop');
+      var progressTwitter = $('.twitter .progress');
+      var downloadTwitter = $('.twitter .download');
+
+      updateTwitter.on('click', function (e) {
+        e.preventDefault();
+        socket.emit('twitter_start');
+      });
+      stopTwitter.on('click', function (e) {
+        e.preventDefault();
+        socket.emit('twitter_stop');
+      });
+
+      socket.on('twitter_start', function () {
+        setButtonState([{ element: updateTwitter, state: 'disabled' }, { element: stopTwitter, state: '' }, { element: downloadTwitter, state: 'disabled' }]);
+      });
+      socket.on('twitter_stop', function () {
+        setButtonState([{ element: updateTwitter, state: '' }, { element: stopTwitter, state: 'disabled' }, { element: downloadTwitter, state: '' }]);
+      });
+      socket.on('twitter_progress', function (data) {
+        setProgressState(progressTwitter, data);
+      });
     });
   });
 })($, io);
