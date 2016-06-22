@@ -5,24 +5,44 @@ const fork = require('child_process').fork;
 const socketioJwt = require('socketio-jwt');
 
 const foursquare = {
-  worker: null,
-  active: false,
-  progress: 0,
+  venues: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
 };
 const yelp = {
-  worker: null,
-  active: false,
-  progress: 0,
+  venues: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
 };
 const twitter = {
-  worker: null,
-  active: false,
-  progress: 0,
+  venues: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
 };
 const facebook = {
-  worker: null,
-  active: false,
-  progress: 0,
+  venues: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
+};
+const tripadvisor = {
+  list: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
+  venues: {
+    worker: null,
+    active: false,
+    progress: 0,
+  },
 };
 
 module.exports = function sockets(io) {
@@ -33,21 +53,29 @@ module.exports = function sockets(io) {
   io.on('connection', (socket) => {
     console.log(`User connected: ${socket.decoded_token.id}`);
 
-    if (foursquare.active) {
+    if (foursquare.venues.active) {
       socket.emit('foursquare_start');
-      socket.emit('foursquare_progress', foursquare.progress);
+      socket.emit('foursquare_progress', foursquare.venues.progress);
     }
-    if (yelp.active) {
+    if (yelp.venues.active) {
       socket.emit('yelp_start');
-      socket.emit('yelp_progress', yelp.progress);
+      socket.emit('yelp_progress', yelp.venues.progress);
     }
-    if (twitter.active) {
+    if (twitter.venues.active) {
       socket.emit('twitter_start');
-      socket.emit('twitter_progress', twitter.progress);
+      socket.emit('twitter_progress', twitter.venues.progress);
     }
-    if (facebook.active) {
+    if (facebook.venues.active) {
       socket.emit('facebook_start');
-      socket.emit('facebook_progress', facebook.progress);
+      socket.emit('facebook_progress', facebook.venues.progress);
+    }
+    if (tripadvisor.list.active) {
+      socket.emit('tripadvisor_list_start');
+      socket.emit('tripadvisor_list_progress', tripadvisor.list.progress);
+    }
+    if (tripadvisor.venues.active) {
+      socket.emit('tripadvisor_start');
+      socket.emit('tripadvisor_progress', tripadvisor.venues.progress);
     }
 
     socket.on('disconnect', () => {
@@ -56,133 +84,198 @@ module.exports = function sockets(io) {
 
     // FOURSQUARE
     socket.on('foursquare_start', () => {
-      if (!foursquare.active) {
-        foursquare.active = !foursquare.active;
+      if (!foursquare.venues.active) {
+        foursquare.venues.active = !foursquare.venues.active;
         io.sockets.emit('foursquare_start');
-        foursquare.worker = fork(path.join(__dirname, '../workers/foursquare/foursquare.js'));
+        foursquare.venuesworker = fork(path.join(__dirname, '../workers/foursquare/foursquare.js'));
         console.log('Foursquare worker started');
-        foursquare.worker.on('message', (m) => {
+        foursquare.venuesworker.on('message', (m) => {
           if (m === 'foursquare_stop') {
             io.sockets.emit('foursquare_stop');
           } else {
             if (m.foursquare_progress) {
-              foursquare.progress = m.foursquare_progress;
-              io.sockets.emit('foursquare_progress', foursquare.progress);
+              foursquare.venuesprogress = m.foursquare_progress;
+              io.sockets.emit('foursquare_progress', foursquare.venuesprogress);
             }
             if (m.foursquare_error) {
               console.log(m.foursquare_error);
             }
           }
         });
-        foursquare.worker.on('disconnect', () => {
-          foursquare.active = !foursquare.active;
+        foursquare.venuesworker.on('disconnect', () => {
+          foursquare.venues.active = !foursquare.venues.active;
           console.log('Foursquare worker exited');
         });
       }
     });
     socket.on('foursquare_stop', () => {
-      if (foursquare.active && foursquare.worker.kill) {
-        foursquare.worker.kill();
+      if (foursquare.venues.active && foursquare.venuesworker.kill) {
+        foursquare.venuesworker.kill();
         io.sockets.emit('foursquare_stop');
       }
     });
 
     // YELP
     socket.on('yelp_start', () => {
-      if (!yelp.active) {
-        yelp.active = !yelp.active;
+      if (!yelp.venues.active) {
+        yelp.venues.active = !yelp.venues.active;
         io.sockets.emit('yelp_start');
-        yelp.worker = fork(path.join(__dirname, '../workers/yelp/yelp.js'));
+        yelp.venues.worker = fork(path.join(__dirname, '../workers/yelp/yelp.js'));
         console.log('Yelp worker started');
-        yelp.worker.on('message', (m) => {
+        yelp.venues.worker.on('message', (m) => {
           if (m === 'yelp_stop') {
             io.sockets.emit('yelp_stop');
           } else {
             if (m.yelp_progress) {
-              yelp.progress = m.yelp_progress;
-              io.sockets.emit('yelp_progress', yelp.progress);
+              yelp.venues.progress = m.yelp_progress;
+              io.sockets.emit('yelp_progress', yelp.venues.progress);
             }
             if (m.yelp_error) {
               console.log(m.yelp_error);
             }
           }
         });
-        yelp.worker.on('disconnect', () => {
-          yelp.active = !yelp.active;
+        yelp.venues.worker.on('disconnect', () => {
+          yelp.venues.active = !yelp.venues.active;
           console.log('Yelp worker exited');
         });
       }
     });
     socket.on('yelp_stop', () => {
-      if (yelp.active && yelp.worker.kill) {
-        yelp.worker.kill();
+      if (yelp.venues.active && yelp.venues.worker.kill) {
+        yelp.venues.worker.kill();
         io.sockets.emit('yelp_stop');
       }
     });
 
     // TWITTER
     socket.on('twitter_start', () => {
-      if (!twitter.active) {
-        twitter.active = !twitter.active;
+      if (!twitter.venues.active) {
+        twitter.venues.active = !twitter.venues.active;
         io.sockets.emit('twitter_start');
-        twitter.worker = fork(path.join(__dirname, '../workers/twitter/twitter.js'));
+        twitter.venues.worker = fork(path.join(__dirname, '../workers/twitter/twitter.js'));
         console.log('Twitter worker started');
-        twitter.worker.on('message', (m) => {
+        twitter.venues.worker.on('message', (m) => {
           if (m === 'twitter_stop') {
             io.sockets.emit('twitter_stop');
           } else {
             if (m.twitter_progress) {
-              twitter.progress = Math.floor(m.twitter_progress / 100); // dive by 100 as a lazy quick fix for chunk length
-              io.sockets.emit('twitter_progress', twitter.progress);
+              twitter.venues.progress = Math.floor(m.twitter_progress / 100); // dive by 100 as a lazy quick fix for chunk length
+              io.sockets.emit('twitter_progress', twitter.venues.progress);
             }
             if (m.twitter_error) {
               console.log(m.twitter_error);
             }
           }
         });
-        twitter.worker.on('disconnect', () => {
-          twitter.active = !twitter.active;
+        twitter.venues.worker.on('disconnect', () => {
+          twitter.venues.active = !twitter.venues.active;
           console.log('Twitter worker exited');
         });
       }
     });
     socket.on('twitter_stop', () => {
-      if (twitter.active && twitter.worker.kill) {
-        twitter.worker.kill();
+      if (twitter.venues.active && twitter.venues.worker.kill) {
+        twitter.venues.worker.kill();
         io.sockets.emit('twitter_stop');
       }
     });
 
     // FACEBOOK
     socket.on('facebook_start', () => {
-      if (!facebook.active) {
-        facebook.active = !facebook.active;
+      if (!facebook.venues.active) {
+        facebook.venues.active = !facebook.venues.active;
         io.sockets.emit('facebook_start');
-        facebook.worker = fork(path.join(__dirname, '../workers/facebook/facebook.js'));
+        facebook.venues.worker = fork(path.join(__dirname, '../workers/facebook/facebook.js'));
         console.log('Facebook worker started');
-        facebook.worker.on('message', (m) => {
+        facebook.venues.worker.on('message', (m) => {
           if (m === 'facebook_stop') {
             io.sockets.emit('facebook_stop');
           } else {
             if (m.facebook_progress) {
-              facebook.progress = m.facebook_progress;
-              io.sockets.emit('facebook_progress', facebook.progress);
+              facebook.venues.progress = m.facebook_progress;
+              io.sockets.emit('facebook_progress', facebook.venues.progress);
             }
             if (m.facebook_error) {
               console.log(m.facebook_error);
             }
           }
         });
-        facebook.worker.on('disconnect', () => {
-          facebook.active = !facebook.active;
+        facebook.venues.worker.on('disconnect', () => {
+          facebook.venues.active = !facebook.venues.active;
           console.log('Facebook worker exited');
         });
       }
     });
     socket.on('facebook_stop', () => {
-      if (facebook.active && facebook.worker.kill) {
-        facebook.worker.kill();
+      if (facebook.venues.active && facebook.venues.worker.kill) {
+        facebook.venues.worker.kill();
         io.sockets.emit('facebook_stop');
+      }
+    });
+
+    // TRIPADVISOR
+    socket.on('tripadvisor_list_start', () => {
+      if (!tripadvisor.list.active && !tripadvisor.venues.active) {
+        tripadvisor.list.active = !tripadvisor.list.active;
+        io.sockets.emit('tripadvisor_list_start');
+        tripadvisor.list.worker = fork(path.join(__dirname, '../workers/tripadvisor/tripadvisor_list.js'));
+        console.log('Tripadvisor List worker started');
+        tripadvisor.list.worker.on('message', (m) => {
+          if (m === 'tripadvisor_list_stop') {
+            io.sockets.emit('tripadvisor_list_stop');
+          } else {
+            if (m.tripadvisor_progress) {
+              tripadvisor.list.progress = m.tripadvisor_progress;
+              io.sockets.emit('tripadvisor_list_progress', tripadvisor.list.progress);
+            }
+            if (m.tripadvisor_error) {
+              console.log(m.tripadvisor_error);
+            }
+          }
+        });
+        tripadvisor.list.worker.on('disconnect', () => {
+          tripadvisor.list.active = !tripadvisor.list.active;
+          console.log('Tripadvisor List worker exited');
+        });
+      }
+    });
+    socket.on('tripadvisor_list_stop', () => {
+      if (tripadvisor.list.active && tripadvisor.list.worker.kill) {
+        tripadvisor.list.worker.kill();
+        io.sockets.emit('tripadvisor_list_stop');
+      }
+    });
+
+    socket.on('tripadvisor_start', () => {
+      if (!tripadvisor.venues.active && !tripadvisor.list.active) {
+        tripadvisor.venues.active = !tripadvisor.venues.active;
+        io.sockets.emit('tripadvisor_start');
+        tripadvisor.venues.worker = fork(path.join(__dirname, '../workers/tripadvisor/tripadvisor.js'));
+        console.log('Tripadvisor worker started');
+        tripadvisor.venues.worker.on('message', (m) => {
+          if (m === 'tripadvisor_stop') {
+            io.sockets.emit('tripadvisor_stop');
+          } else {
+            if (m.tripadvisor_progress) {
+              tripadvisor.venues.progress = m.tripadvisor_progress;
+              io.sockets.emit('tripadvisor_progress', tripadvisor.venues.progress);
+            }
+            if (m.tripadvisor_error) {
+              console.log(m.tripadvisor_error);
+            }
+          }
+        });
+        tripadvisor.venues.worker.on('disconnect', () => {
+          tripadvisor.venues.active = !tripadvisor.venues.active;
+          console.log('Tripadvisor worker exited');
+        });
+      }
+    });
+    socket.on('tripadvisor_stop', () => {
+      if (tripadvisor.venues.active && tripadvisor.venues.worker.kill) {
+        tripadvisor.venues.worker.kill();
+        io.sockets.emit('tripadvisor_stop');
       }
     });
   });

@@ -141,6 +141,65 @@
       socket.on('facebook_progress', (data) => {
         setProgressState(progressFacebook, data);
       });
+
+      // TRIPADVISOR
+      const updateTripadvisorList = $('.tripadvisor .list .update');
+      const stopTripadvisorList = $('.tripadvisor .list .stop');
+      const progressTripadvisorList = $('.tripadvisor .list .progress');
+
+      updateTripadvisorList.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('tripadvisor_list_start');
+      });
+      stopTripadvisorList.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('tripadvisor_list_stop');
+      });
+
+      socket.on('tripadvisor_list_start', () => {
+        setButtonState([
+          { element: updateTripadvisorList, state: 'disabled' },
+          { element: stopTripadvisorList, state: '' },
+        ]);
+      });
+      socket.on('tripadvisor_list_stop', () => {
+        setButtonState([
+          { element: updateTripadvisorList, state: '' },
+          { element: stopTripadvisorList, state: 'disabled' },
+        ]);
+      });
+      socket.on('tripadvisor_list_progress', (data) => {
+        setProgressState(progressTripadvisorList, data);
+      });
+
+      const updateTripadvisor = $('.tripadvisor .venues .update');
+      const stopTripadvisor = $('.tripadvisor .venues .stop');
+      const progressTripadvisor = $('.tripadvisor .venues .progress');
+
+      updateTripadvisor.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('tripadvisor_start');
+      });
+      stopTripadvisor.on('click', (e) => {
+        e.preventDefault();
+        socket.emit('tripadvisor_stop');
+      });
+
+      socket.on('tripadvisor_start', () => {
+        setButtonState([
+          { element: updateTripadvisor, state: 'disabled' },
+          { element: stopTripadvisor, state: '' },
+        ]);
+      });
+      socket.on('tripadvisor_stop', () => {
+        setButtonState([
+          { element: updateTripadvisor, state: '' },
+          { element: stopTripadvisor, state: 'disabled' },
+        ]);
+      });
+      socket.on('tripadvisor_progress', (data) => {
+        setProgressState(progressTripadvisor, data);
+      });
     });
   });
 }($, io));
