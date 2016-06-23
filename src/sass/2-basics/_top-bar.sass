@@ -1,3 +1,17 @@
+.title-bar
+  position: relative;
+  z-index: 100;
+  background: transparent;
+  color: #ea7b67;
+  height: 41px;
+  .menu-icon
+    &:after
+      background: #ea7b67;
+      box-shadow: 0 7px 0 #ea7b67,0 14px 0 #ea7b67;
+  &.fixed
+    position: fixed;
+    top: 0;
+    right: 0;
 .top-bar
   background: white;
   border-bottom: 1px solid #ea7b67;
@@ -33,3 +47,10 @@
     border-bottom: 1px solid #ea7b67;
   &.transition
     transition: all 0.2s ease-in-out;
+.no-js
+  @media screen and (max-width: 40em)
+    .top-bar
+      display: none;
+  @media screen and (min-width: 40em)
+    .title-bar
+      display: none;

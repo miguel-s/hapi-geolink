@@ -1,10 +1,13 @@
 mixin header(classes)
   - var items = ['Dashboard', 'Profile', 'Logout']
+  div.title-bar(data-responsive-toggle="sub-menu" data-hide-for="medium" class=classes)
+    button.menu-icon(type="button" data-toggle)
   div(id="main-menu" class=classes).top-bar
-    div.top-bar-title
-      a.menu-text(href="/") Geolink
+    div.top-bar-left
+      div.top-bar-title
+        a.menu-text(href="/") Geolink
     div.top-bar-right
-      ul.menu
+      ul(id="sub-menu").menu.vertical.medium-horizontal
         each item, index in items
           li
             a(href="/#{item.toLowerCase()}")= item

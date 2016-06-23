@@ -1,6 +1,9 @@
 'use strict';
 
 (function iife($, io) {
+  // init foundation
+  $(document).foundation();
+
   function setButtonState(buttons) {
     buttons.forEach(button => (
       button.state === 'disabled' ?

@@ -5,7 +5,7 @@ append head
   link(rel="stylesheet" href="/css/profile.min.css")
 
 block header
-  +header('margin-bottom')
+  +header('fixed')
 
 block content
   div.row
@@ -26,3 +26,6 @@ block content
         span.fa.fa-asterisk
         strong  token:
         span.content  #{user.token}
+
+append scripts
+  script(src="/js/profile.min.js")
