@@ -9,52 +9,11 @@ block header
 
 block content
   div.row
-    div.small-12.medium-6.large-4.columns.foursquare
-      div.card
-        div.content
-          div.title
-            span.fa(class="fa-foursquare")
-            span  Foursquare
-          p
-            strong nº venues
-            span : #{foursquare.distinct_id || 0}
-          p
-            strong last update
-            span : #{foursquare.max_datetime ? foursquare.max_datetime.toUTCString() : '-'}
-        div.action
-          div.venues
-            div.button-group.small.align-center
-              button.button.update Update
-              button.button.stop(class="disabled") Stop
-            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-              span.progress-meter
-                p.progress-meter-text 0%
-    div.small-12.medium-6.large-4.columns.yelp
-      div.card
-        div.content
-          div.title
-            span.fa(class="fa-yelp")
-            span  Yelp
-          div
-            p
-              strong nº venues
-              span : #{yelp.distinct_id || 0}
-            p
-              strong last update
-              span : #{yelp.max_datetime ? yelp.max_datetime.toUTCString() : '-'}
-        div.action
-          div.venues
-            div.button-group.small.align-center
-              button.button.update Update
-              button.button.stop(class="disabled") Stop
-            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-              span.progress-meter
-                p.progress-meter-text 0%
     div.small-12.medium-6.large-4.columns.twitter
       div.card
         div.content
           div.title
-            span.fa(class="fa-twitter")
+            span.fa.fa-twitter
             span  Twitter
           div
             p
@@ -67,7 +26,7 @@ block content
           div.venues
             div.button-group.small.align-center
               button.button.update Update
-              button.button.stop(class="disabled") Stop
+              button.button.stop.disabled Stop
             div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
               span.progress-meter
                 p.progress-meter-text 0%
@@ -75,7 +34,7 @@ block content
       div.card
         div.content
           div.title
-            span.fa(class="fa-facebook")
+            span.fa.fa-facebook
             span  Facebook
           div
             p
@@ -88,7 +47,48 @@ block content
           div.venues
             div.button-group.small.align-center
               button.button.update Update
-              button.button.stop(class="disabled") Stop
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+    div.small-12.medium-6.large-4.columns.foursquare
+      div.card
+        div.content
+          div.title
+            span.fa.fa-foursquare
+            span  Foursquare
+          p
+            strong nº venues
+            span : #{foursquare.distinct_id || 0}
+          p
+            strong last update
+            span : #{foursquare.max_datetime ? foursquare.max_datetime.toUTCString() : '-'}
+        div.action
+          div.venues
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+    div.small-12.medium-6.large-4.columns.yelp
+      div.card
+        div.content
+          div.title
+            span.fa.fa-yelp
+            span  Yelp
+          div
+            p
+              strong nº venues
+              span : #{yelp.distinct_id || 0}
+            p
+              strong last update
+              span : #{yelp.max_datetime ? yelp.max_datetime.toUTCString() : '-'}
+        div.action
+          div.venues
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
             div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
               span.progress-meter
                 p.progress-meter-text 0%
@@ -96,7 +96,7 @@ block content
       div.card
         div.content
           div.title
-            span.fa(class="fa-tripadvisor")
+            span.fa.fa-tripadvisor
             span  Tripadvisor
           div
             p
@@ -109,14 +109,77 @@ block content
           div.list
             div.button-group.small.align-center
               button.button.update Update
-              button.button.stop(class="disabled") Stop
+              button.button.stop.disabled Stop
             div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
               span.progress-meter
                 p.progress-meter-text 0%
           div.venues
             div.button-group.small.align-center
               button.button.update Update
-              button.button.stop(class="disabled") Stop
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+    div.small-12.medium-6.large-4.columns.michelin
+      div.card
+        div.content
+          div.title
+            span.fa.fa-cutlery
+            span  Michelin
+          div
+            p
+              strong nº venues
+              span : #{michelin.distinct_id || 0}
+            p
+              strong last update
+              span : #{michelin.max_datetime ? michelin.max_datetime.toUTCString() : '-'}
+        div.action
+          div.list
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+          div.venues
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+    div.small-12.medium-6.large-4.columns.repsol
+      div.card
+        div.content
+          div.title
+            span.fa.fa-cutlery
+            span  Repsol
+          div
+            p
+              strong nº venues
+              span : #{repsol.distinct_id || 0}
+            p
+              strong last update
+              span : #{repsol.max_datetime ? michelin.max_datetime.toUTCString() : '-'}
+        div.action
+          div.list-pages
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+          div.list-restaurants
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
+            div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+              span.progress-meter
+                p.progress-meter-text 0%
+          div.venues
+            div.button-group.small.align-center
+              button.button.update Update
+              button.button.stop.disabled Stop
             div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
               span.progress-meter
                 p.progress-meter-text 0%

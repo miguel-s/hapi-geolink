@@ -94,7 +94,7 @@ function makeGenerator({ config, data, handlers }) {
       }
     }
 
-    if (!process.send) process.stdout.write(`Done: ${name}`);
+    if (!process.send) process.stdout.write(`\nDone: ${name}`);
     if (process.send) process.send(`${name}_stop`);
   };
 }

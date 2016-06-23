@@ -9,7 +9,7 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'tripadvisor_list';
+const name = 'tripadvisor';
 const tableName = 'ibc_seg.DM_SOURCE_TRIPADVISOR_VENUES_RAW';
 
 // Set up input data
@@ -23,8 +23,7 @@ const dbConfig = {
 database.connect(dbConfig)
 .then(() => database.query`
   SELECT *
-  FROM ibc_seg.DM_SOURCE_TRIPADVISOR_LIST_RAW
-  WHERE id NOT IN (SELECT distinct id FROM ibc_seg.DM_SOURCE_TRIPADVISOR_VENUES_RAW)`)
+  FROM ibc_seg.DM_SOURCE_TRIPADVISOR_LIST_RAW`)
 .then((rows) => {
   const input = rows
     .map((item) => Object.assign(item, {
