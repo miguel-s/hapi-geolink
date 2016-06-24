@@ -143,7 +143,6 @@
   $('.control-heatmaps .submit').on('click', (e) => {
     e.preventDefault();
     const savedVenueIds = venues.saved.map(v => v.cd_pdv);
-    const activeVenueIds = venues.active.map(v => v.cd_pdv);
     const city = $('.control-heatmaps .city').val().toLowerCase();
     const variable = $('.control-heatmaps .variable').val().toLowerCase();
     if (!city || !variable) return;
