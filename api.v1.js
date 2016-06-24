@@ -87,6 +87,14 @@ internals.after = (server, next) => {
       config: {
         description: 'Returns a json object with venue data',
         auth: { strategy: 'ibc-token', mode: 'required' },
+        validate: {
+          query: {
+            country: Joi.string().min(1).max(10).optional(),
+            region: Joi.string().min(1).max(10).optional(),
+            city: Joi.string().min(1).max(10).required(),
+            token: Joi.string().length(224).required(),
+          },
+        },
         handler(request, reply) {
           request.server.app.minsaitdb.query`
             SELECT	a.TargetID AS cd_pdv,
@@ -95,7 +103,9 @@ internals.after = (server, next) => {
                     b.lon AS lon,
                     c.ESPECIALIDAD_IBC AS segmento,
                     e.statuses AS twitter_statuses,
-					          f.usersCount AS foursquare_usercount
+					          f.usersCount AS foursquare_usercount,
+                    a.targetProvincia AS region,
+                    a.targetMunicipio AS city
             FROM ibc_seg.DM_MANPOWER_OUTPUT AS a
             LEFT JOIN ibc_seg.DM_MANPOWER_OUTPUT_LATLON AS b
             ON a.CallID = b.CallID
@@ -106,7 +116,8 @@ internals.after = (server, next) => {
             LEFT JOIN ibc_seg.DM_SOURCE_TWITTER_LIST AS e
             ON d.idTwitter = e.screen_name
             LEFT JOIN ibc_seg.DM_SOURCE_FOURSQUARE_LIST as f
-            ON d.id4Square = f.id`
+            ON d.id4Square = f.id
+            WHERE a.targetMunicipio = ${request.query.city.toUpperCase()}`
           .then(recordset => reply(recordset))
           .catch(err => reply(err));
         },
