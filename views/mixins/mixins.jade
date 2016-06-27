@@ -8,6 +8,11 @@ mixin header(classes)
         a(href="/").menu-text Geolink
     div.top-bar-right
       ul(id="sub-menu").menu.vertical.medium-horizontal
-        each item, index in items
-          li
-            a(href="/#{item.toLowerCase()}")= item
+        li
+          a(href="/") Map
+        li
+          a(href="/dashboard") Dashboard
+        li
+          a(href="/profile") Profile
+        li
+          a(href="/logout") Logout
