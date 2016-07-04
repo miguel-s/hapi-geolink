@@ -1,0 +1,31 @@
+.radio-group
+  display: flex;
+  flex-direction: row;
+  &.small .radio-button label
+    font-size: .75rem;
+  &.tiny .radio-button label
+    font-size: .6rem;
+  .radio-button
+    flex: 1;
+    &:first-child label
+      border: 1px solid #ea7b67;
+    label
+      width: 100%;
+      margin: 0;
+      line-height: 1;
+      color: #ea7b67;
+      padding: .85em 1em;
+      text-align: center;
+      border-top: 1px solid #ea7b67;
+      border-bottom: 1px solid #ea7b67;
+      border-right: 1px solid #ea7b67;
+      transition: background-color .25s ease-out,color .25s ease-out;
+    input[type="radio"]
+      display: none;
+      &:checked + label, &:hover + label
+        background-color: #ea7b67;
+        color: #fefefe;
+        border: 1px solid transparent;
+      &[disabled] + label
+        opacity: 0.25;
+        cursor: not-allowed;
