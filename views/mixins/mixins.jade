@@ -1,5 +1,4 @@
-mixin header(classes)
-  - var items = ['Dashboard', 'Profile', 'Logout']
+mixin top-bar(classes)
   div(data-responsive-toggle="sub-menu" data-hide-for="medium" class=classes).title-bar
     button(type="button" data-toggle).menu-icon
   div(id="main-menu" class=classes).top-bar
@@ -7,7 +6,7 @@ mixin header(classes)
       div.top-bar-title
         a(href="/").menu-text Geolink
     div.top-bar-right
-      ul(id="sub-menu").menu.vertical.medium-horizontal
+      ul(id="sub-menu" data-dropdown-menu).menu.vertical.medium-horizontal
         li
           a(href="/") Map
         li
@@ -16,3 +15,21 @@ mixin header(classes)
           a(href="/profile") Profile
         li
           a(href="/logout") Logout
+
+mixin top-bar-burger(classes)
+  div.top-burger.left
+    div.title
+      a(href="/") Geolink
+  div.top-burger.right
+    ul(id="sub-menu" data-dropdown-menu).menu.vertical
+      li.is-dropdown-submenu-parent
+        a(href="#").burger
+        ul.menu
+          li
+            a(href="/") Map
+          li
+            a(href="/dashboard") Dashboard
+          li
+            a(href="/profile") Profile
+          li
+            a(href="/logout") Logout

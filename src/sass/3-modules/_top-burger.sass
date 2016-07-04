@@ -1,0 +1,41 @@
+.top-burger
+  position: relative;
+  display: flex;
+  z-index: 100;
+  padding: .5rem;
+  &.left
+    float: left;
+  &.right
+    float: right;
+  .submenu
+    background: rgba(255,255,255,0.8);
+  .title
+    color: #ea7b67;
+    font-weight: 700;
+    line-height: 1;
+    padding-top: 0;
+    padding-bottom: 0;
+    padding: .2rem 1rem;
+    @media screen and (min-width: 40em)
+      padding-top: .7rem
+      padding-bottom: .7rem
+  .burger
+    position: relative;
+    display: inline-block;
+    vertical-align: middle;
+    cursor: pointer;
+    width: 20px;
+    height: 16px;
+    padding: 0 !important;
+    margin-left: .25rem;
+    margin-right: .5rem;
+  .burger:after
+    content: '';
+    position: absolute;
+    display: block;
+    width: 100%;
+    height: 2px;
+    top: 0;
+    left: 0;
+    background: #ea7b67;
+    box-shadow: 0 7px 0 #ea7b67,0 14px 0 #ea7b67;
