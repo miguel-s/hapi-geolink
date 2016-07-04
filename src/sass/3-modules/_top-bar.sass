@@ -13,6 +13,7 @@
     top: 0;
     right: 0;
 .top-bar
+  position: relative;
   background: white;
   border-bottom: 1px solid #ea7b67;
   z-index: 100;
@@ -30,17 +31,19 @@
   &.transparent
     background: transparent;
     border-bottom: 0;
-    .menu-text
-      color: white;
-    .menu a
-      color: white;
   &.opaque
     background: rgba(255, 255, 255, 0.8);
     border-bottom: 0;
+  &.text-primary
     .menu-text
       color: #ea7b67;
     .menu a
       color: #ea7b67;
+  &.text-white
+    .menu-text
+      color: white;
+    .menu a
+      color: white;
   &.margin-bottom
     margin-bottom: 1.875em;
   &.border-bottom
