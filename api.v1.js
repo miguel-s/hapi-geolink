@@ -54,27 +54,28 @@ internals.after = (server, next) => {
         auth: { strategy: 'ibc-token', mode: 'required' },
         validate: {
           query: {
-            country: Joi.string().min(3).max(10).required(),
-            region: Joi.string().min(3).max(10).required(),
-            city: Joi.string().min(3).max(10).required(),
-            granularity: Joi.string().min(3).max(10).required(),
-            q: Joi.string().length(4).required(),
-            sp: Joi.string().min(3).max(5).required(),
+            area: Joi.string().min(1).max(10).required(),
+            name: Joi.string().min(1).max(10).required(),
+            gran: Joi.string().min(1).max(10).required(),
             token: Joi.string().length(224).required(),
           },
         },
         handler(request, reply) {
-          request.server.app.minsaitdb.query`
+          const sql = request.server.app.minsaitdb;
+
+          sql.query`
             SELECT topojson
             FROM ibc_seg.DM_SOURCE_MAPS
-            WHERE country = ${request.query.country}
-                  AND region = ${request.query.region}
-                  AND city = ${request.query.city}
-                  AND granularity = ${request.query.granularity}
-                  AND q = ${request.query.q}
-                  AND sp = ${request.query.sp}`
-          .then(recordset => JSON.parse(recordset[0].topojson))
-          .then(map => reply(map))
+            WHERE area = ${request.query.area}
+                  AND name = ${request.query.name}
+                  AND gran = ${request.query.gran}
+                  AND q = 'q1e4'
+                  AND sp = 'sp25'`
+          .then(recordset => {
+            if (recordset.length === 0) return reply(Boom.notFound());
+            if (recordset.length > 1) return reply(Boom.badRequest());
+            return reply(JSON.parse(recordset[0].topojson));
+          })
           .catch(err => reply(err));
         },
       },
@@ -89,22 +90,41 @@ internals.after = (server, next) => {
         auth: { strategy: 'ibc-token', mode: 'required' },
         validate: {
           query: {
-            country: Joi.string().min(1).max(10).optional(),
-            region: Joi.string().min(1).max(10).optional(),
-            city: Joi.string().min(1).max(10).required(),
+            area: Joi.string().min(1).max(10).required(),
+            name: Joi.string().min(1).max(10).required(),
             token: Joi.string().length(224).required(),
           },
         },
         handler(request, reply) {
-          request.server.app.minsaitdb.query`
+          const sql = request.server.app.minsaitdb;
+          let area = '';
+          switch (request.query.area) {
+            case 'ccaa': {
+              break;
+            }
+            case 'province': {
+              area = 'a.targetProvincia';
+              break;
+            }
+            case 'city': {
+              area = 'a.targetMunicipio';
+              break;
+            }
+            default: {
+              break;
+            }
+          }
+          if (!area) return reply(Boom.badRequest());
+
+          const query = `
             SELECT	a.TargetID AS cd_pdv,
                     a.TargetName AS ds_pdv,
                     b.lat AS lat,
                     b.lon AS lon,
                     c.ESPECIALIDAD_IBC AS segmento,
                     e.statuses AS twitter_statuses,
-					          f.usersCount AS foursquare_usercount,
-                    a.targetProvincia AS region,
+                    f.usersCount AS foursquare_usercount,
+                    a.targetProvincia AS province,
                     a.targetMunicipio AS city
             FROM ibc_seg.DM_MANPOWER_OUTPUT AS a
             LEFT JOIN ibc_seg.DM_MANPOWER_OUTPUT_LATLON AS b
@@ -117,9 +137,16 @@ internals.after = (server, next) => {
             ON d.idTwitter = e.screen_name
             LEFT JOIN ibc_seg.DM_SOURCE_FOURSQUARE_LIST as f
             ON d.id4Square = f.id
-            WHERE a.targetMunicipio = ${request.query.city.toUpperCase()}`
-          .then(recordset => reply(recordset))
-          .catch(err => reply(err));
+            WHERE ${area} = @name_param`;
+
+          new sql.Request()
+            .input('name_param', sql.NVarChar, request.query.name.toUpperCase())
+            .query(query)
+            .then(recordset => {
+              if (recordset.length) reply(recordset);
+              else reply(Boom.notFound());
+            })
+            .catch(err => reply(err));
         },
       },
     },
