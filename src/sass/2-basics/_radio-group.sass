@@ -1,6 +1,7 @@
 .radio-group
   display: flex;
   flex-direction: row;
+  margin: 0 0 1.0rem 0;
   &.small .radio-button label
     font-size: .75rem;
   &.tiny .radio-button label
@@ -20,9 +21,13 @@
       border-bottom: 1px solid #ea7b67;
       border-right: 1px solid #ea7b67;
       transition: background-color .25s ease-out,color .25s ease-out;
+    &:hover input[type="radio"] + label
+        background-color: #ea7b67;
+        color: #fefefe;
+        border: 1px solid transparent;
     input[type="radio"]
       display: none;
-      &:checked + label, &:hover + label
+      &:checked + label
         background-color: #ea7b67;
         color: #fefefe;
         border: 1px solid transparent;
