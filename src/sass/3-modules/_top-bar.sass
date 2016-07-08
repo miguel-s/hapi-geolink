@@ -2,7 +2,7 @@
   position: relative;
   z-index: 1000;
   background: transparent;
-  color: #ea7b67;
+  color: #555;
   height: 41px;
   .menu-icon
     &:after
@@ -22,7 +22,14 @@
   ul
     justify-content: flex-end;
   .menu-text
-    color: #ea7b67;
+    color: #555;
+  .logo
+    height: 2.5em;
+    width: 2.5em;
+    margin-right: .5em;
+    @media screen and (max-width: 40em)
+      height: 1.5em;
+      width: 1.5em;
   &.fixed
     position: fixed;
     top: 0;
