@@ -38,7 +38,7 @@ module.exports = function handler(request, reply) {
             MAX(CAST([datetime] as datetime)) as max_datetime
     FROM ibc_seg.DM_SOURCE_Repsol_VENUES_RAW`;
 
-  Promise.all([pFoursquare, pYelp, pTwitter, pFacebook, pTripadvisor, pMichelin, pRepsol])
+  Promise.all([pTwitter, pFacebook, pFoursquare, pYelp, pTripadvisor, pMichelin, pRepsol])
   .then((values) => {
     const twitter = values[0][0];
     const facebook = values[1][0];
