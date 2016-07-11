@@ -6,7 +6,7 @@ const _ = require('lodash');
 const Twitter = require('twitter-node-client').Twitter;
 
 const run = require('../runner.js');
-const model = require('./model.js');
+const model = require('./model_venues.js');
 
 // modify behaviour of the doRequest method, only console.log when not child process
 Twitter.prototype.doRequest = function doRequest(url, error, success) {

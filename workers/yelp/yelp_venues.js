@@ -6,7 +6,7 @@ const _ = require('lodash');
 const Yelp = require('yelp');
 
 const run = require('../runner.js');
-const model = require('./model.js');
+const model = require('./model_venues.js');
 
 // Set up config objects
 

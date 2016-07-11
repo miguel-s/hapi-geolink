@@ -6,7 +6,7 @@ const _ = require('lodash');
 const fetch = require('node-fetch');
 
 const run = require('../runner.js');
-const model = require('./model.js');
+const model = require('./model_venues.js');
 
 // Set up config
 
