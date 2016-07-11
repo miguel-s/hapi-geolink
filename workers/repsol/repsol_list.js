@@ -23,7 +23,7 @@ const dbConfig = {
 database.connect(dbConfig)
 .then(() => database.query`
   SELECT *
-  FROM ibc_seg.DM_SOURCE_REPSOL_LIST_PAGES_RAW
+  FROM ibc_seg.DM_SOURCE_REPSOL_PAGES_RAW
   ORDER BY CAST(cluster AS INT)`)
 .then((rows) => {
   const input = rows
