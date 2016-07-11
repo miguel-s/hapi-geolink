@@ -8,8 +8,8 @@ const model = require('./model_pages.js');
 
 // Set up config
 
-const name = 'repsol_pages';
-const tableName = 'ibc_seg.DM_SOURCE_REPSOL_PAGES_RAW';
+const origin = 'repsol';
+const list = 'pages';
 
 // Set up input data
 
@@ -65,7 +65,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { name, tableName },
+  config: { origin, list },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

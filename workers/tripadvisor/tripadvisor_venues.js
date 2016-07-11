@@ -9,8 +9,8 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'tripadvisor';
-const tableName = 'ibc_seg.DM_SOURCE_TRIPADVISOR_VENUES_RAW';
+const origin = 'tripadvisor';
+const list = 'venues';
 
 // Set up input data
 
@@ -120,7 +120,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { name, tableName },
+    config: { origin, list },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

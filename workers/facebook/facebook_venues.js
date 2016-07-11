@@ -10,8 +10,8 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'facebook_venues';
-const tableName = 'ibc_seg.DM_SOURCE_FACEBOOK_VENUES_RAW';
+const origin = 'facebook';
+const list = 'venues';
 const apiConfig = {
   accessToken: process.env.FACEBOOK_ACCESS_TOKEN,
   api: 'https://graph.facebook.com/v2.6',
@@ -72,7 +72,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { name, tableName },
+  config: { origin, list },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

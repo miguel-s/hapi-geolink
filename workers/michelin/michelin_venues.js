@@ -9,8 +9,8 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'michelin_venues';
-const tableName = 'ibc_seg.DM_SOURCE_MICHELIN_VENUES_RAW';
+const origin = 'michelin';
+const list = 'venues';
 
 // Set up input data
 
@@ -100,7 +100,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { name, tableName },
+    config: { origin, list },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

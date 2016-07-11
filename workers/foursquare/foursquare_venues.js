@@ -10,8 +10,8 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'foursquare_venues';
-const tableName = 'ibc_seg.DM_SOURCE_FOURSQUARE_VENUES_RAW';
+const origin = 'foursquare';
+const list = 'venues';
 const apiConfig = {
   api: process.env.FOURSQUARE_API,
   id: process.env.FOURSQUARE_ID,
@@ -67,7 +67,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { name, tableName },
+  config: { origin, list },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

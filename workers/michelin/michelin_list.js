@@ -8,8 +8,8 @@ const model = require('./model_list.js');
 
 // Set up config
 
-const name = 'michelin_list';
-const tableName = 'ibc_seg.DM_SOURCE_MICHELIN_LIST_RAW';
+const origin = 'michelin';
+const list = 'list';
 
 // Set up input data
 
@@ -65,7 +65,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { name, tableName },
+  config: { origin, list },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

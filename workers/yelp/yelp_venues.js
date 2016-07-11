@@ -10,8 +10,8 @@ const model = require('./model.js');
 
 // Set up config objects
 
-const name = 'yelp_venues';
-const tableName = 'ibc_seg.DM_SOURCE_YELP_VENUES_RAW';
+const origin = 'yelp';
+const list = 'venues';
 const apiConfig = {
   consumer_key: process.env.YELP_CONSUMER_KEY,
   consumer_secret: process.env.YELP_CONSUMER_SECRET,
@@ -65,7 +65,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { name, tableName },
+  config: { origin, list },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

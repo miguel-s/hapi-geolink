@@ -9,8 +9,8 @@ const model = require('./model_list.js');
 
 // Set up config
 
-const name = 'repsol_lst';
-const tableName = 'ibc_seg.DM_SOURCE_REPSOL_LIST_RAW';
+const origin = 'repsol';
+const list = 'list';
 
 // Set up input data
 
@@ -77,7 +77,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { name, tableName },
+    config: { origin, list },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

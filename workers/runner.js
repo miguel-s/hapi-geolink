@@ -118,8 +118,9 @@ function run({ config, data, handlers }) {
 }
 
 function runner({ config, data, handlers }) {
-  const { tableName } = config;
+  const { origin, list } = config;
   const { input, model } = data;
+  const tableName = `ibc_seg.DM_SOURCE_${origin}_${list}_RAW`;
 
   connection
 
