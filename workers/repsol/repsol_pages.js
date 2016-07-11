@@ -4,7 +4,7 @@ const _ = require('lodash');
 const xray = require('x-ray');
 
 const run = require('../runner.js');
-const model = require('./model_list_pages.js');
+const model = require('./model_pages.js');
 
 // Set up config
 

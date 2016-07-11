@@ -5,12 +5,12 @@ const _ = require('lodash');
 const xray = require('x-ray');
 
 const run = require('../runner.js');
-const model = require('./model_list_restaurants.js');
+const model = require('./model_restaurants.js');
 
 // Set up config
 
-const name = 'repsol_restaurants';
-const tableName = 'ibc_seg.DM_SOURCE_REPSOL_RESTAURANTS_RAW';
+const name = 'repsol_lst';
+const tableName = 'ibc_seg.DM_SOURCE_REPSOL_LIST_RAW';
 
 // Set up input data
 
