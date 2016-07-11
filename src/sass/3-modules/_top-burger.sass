@@ -1,24 +1,33 @@
 .top-burger
   position: relative;
+  align-items: center;
   display: flex;
   z-index: 100;
   padding: .5rem;
   &.left
-    float: left;
+    position: absolute;
+    top: 0;
+    left: 0;
   &.right
-    float: right;
-  .submenu
-    background: rgba(255, 255, 255, 1.0);
+    position: absolute;
+    top: 0;
+    right: 0;
   .title
-    color: #ea7b67;
+    color: #555;
     font-weight: 700;
     line-height: 1;
-    padding-top: 0;
-    padding-bottom: 0;
-    padding: .2rem 1rem;
-    @media screen and (min-width: 40em)
+    height: 2.5em;
+    vertical-align: middle;
+    @media screen and (min-width: 28em)
       padding-top: .7rem
       padding-bottom: .7rem
+  .logo
+    height: 2.5em;
+    width: 2.5em;
+    margin-right: .5em;
+    @media screen and (max-width: 40em)
+      height: 1.5em;
+      width: 1.5em;
   .burger
     position: relative;
     display: inline-block;
@@ -39,6 +48,9 @@
     left: 0;
     background: #ea7b67;
     box-shadow: 0 7px 0 #ea7b67,0 14px 0 #ea7b67;
-.no-js
-  .submenu
-    display: none;
+  #burger-dropdown
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    top: 30px !important;
+    left: -110px !important;
+    width: auto !important;
