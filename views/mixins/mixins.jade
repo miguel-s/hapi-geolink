@@ -4,7 +4,9 @@ mixin top-bar(classes)
   div(id="main-menu" class=classes).top-bar
     div.top-bar-left
       div.top-bar-title
-        a(href="/").menu-text Geolink
+        a(href="/").menu-text
+          img(src="img/logo.png").logo
+          span.title Geolink
     div.top-bar-right
       ul(id="sub-menu" data-dropdown-menu).menu.vertical.medium-horizontal
         li
@@ -16,20 +18,19 @@ mixin top-bar(classes)
         li
           a(href="/logout") Logout
 
-mixin top-bar-burger(classes)
+mixin top-burger(classes)
   div.top-burger.left
-    div.title
-      a(href="/") Geolink
+    a(href="/")
+      img(src="img/logo.png").logo
+      span.title Geolink
   div.top-burger.right
-    ul(id="menu" data-dropdown-menu).menu.vertical
-      li.is-dropdown-submenu-parent
-        a(href="#").burger
-        ul.menu.submenu
-          li
-            a(href="/") Map
-          li
-            a(href="/dashboard") Dashboard
-          li
-            a(href="/profile") Profile
-          li
-            a(href="/logout") Logout
+    button(data-toggle="burger-dropdown").burger
+    ul(id="burger-dropdown" data-dropdown).dropdown-pane.menu
+      li
+        a(href="/") Map
+      li
+        a(href="/dashboard") Dashboard
+      li
+        a(href="/profile") Profile
+      li
+        a(href="/logout") Logout
