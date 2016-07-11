@@ -5,7 +5,7 @@ const _ = require('lodash');
 const xray = require('x-ray');
 
 const run = require('../runner.js');
-const model = require('./model_restaurants.js');
+const model = require('./model_list.js');
 
 // Set up config
 
