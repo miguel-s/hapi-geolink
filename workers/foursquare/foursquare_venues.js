@@ -10,7 +10,7 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'foursquare';
+const name = 'foursquare_venues';
 const tableName = 'ibc_seg.DM_SOURCE_FOURSQUARE_VENUES_RAW';
 const apiConfig = {
   api: process.env.FOURSQUARE_API,

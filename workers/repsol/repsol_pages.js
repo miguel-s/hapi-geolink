@@ -8,8 +8,8 @@ const model = require('./model_list_pages.js');
 
 // Set up config
 
-const name = 'repsol_list_pages';
-const tableName = 'ibc_seg.DM_SOURCE_REPSOL_LIST_PAGES_RAW';
+const name = 'repsol_pages';
+const tableName = 'ibc_seg.DM_SOURCE_REPSOL_PAGES_RAW';
 
 // Set up input data
 

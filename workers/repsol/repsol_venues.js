@@ -9,7 +9,7 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'repsol';
+const name = 'repsol_venues';
 const tableName = 'ibc_seg.DM_SOURCE_REPSOL_VENUES_RAW';
 
 // Set up input data

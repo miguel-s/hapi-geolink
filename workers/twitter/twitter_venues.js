@@ -39,7 +39,7 @@ Twitter.prototype.getUsers = function getUsers(params, error, success) {
 
 // Set up config objects
 
-const name = 'twitter';
+const name = 'twitter_venues';
 const tableName = 'ibc_seg.DM_SOURCE_TWITTER_VENUES_RAW';
 const apiConfig = {
   consumerKey: process.env.TWITTER_CONSUMER_KEY,

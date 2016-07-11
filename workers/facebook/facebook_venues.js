@@ -10,7 +10,7 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'facebook';
+const name = 'facebook_venues';
 const tableName = 'ibc_seg.DM_SOURCE_FACEBOOK_VENUES_RAW';
 const apiConfig = {
   accessToken: process.env.FACEBOOK_ACCESS_TOKEN,

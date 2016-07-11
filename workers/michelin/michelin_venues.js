@@ -9,7 +9,7 @@ const model = require('./model.js');
 
 // Set up config
 
-const name = 'michelin';
+const name = 'michelin_venues';
 const tableName = 'ibc_seg.DM_SOURCE_MICHELIN_VENUES_RAW';
 
 // Set up input data

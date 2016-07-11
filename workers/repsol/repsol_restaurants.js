@@ -9,8 +9,8 @@ const model = require('./model_list_restaurants.js');
 
 // Set up config
 
-const name = 'repsol_list_restaurants';
-const tableName = 'ibc_seg.DM_SOURCE_REPSOL_LIST_RESTAURANTS_RAW';
+const name = 'repsol_restaurants';
+const tableName = 'ibc_seg.DM_SOURCE_REPSOL_RESTAURANTS_RAW';
 
 // Set up input data
 
