@@ -8,45 +8,112 @@ append head
   link(rel="stylesheet" href="/css/index.min.css")
 
 block header
-  +header('fixed opaque border-bottom')
+  +top-bar('fixed')
+  +top-burger()
 
 block content
-  div.loading
+  div(style="display:none").loading
     img(src="/img/spinner.svg" alt="loading" height="50" width="50").spinner
-  div.map-controls
-    button.button.toggle
-      span.fa.fa-arrow-right
-    div.container
-      ul.vertical.menu
-        li.control-active
-          a(href="#") Active
-          ul.menu.vertical.nested
-      ul(data-accordion-menu).vertical.menu
-        li.control-markers
-          a(href="#") Markers
-          ul.menu.vertical.nested
-            form
-              label City
-                input.city(type="text" name="city" placeholder='City')
-              button.button.submit Add
-        li.control-heatmaps
-          a(href="#") Heatmaps
-          ul.menu.vertical.nested
-            form
-              label City
-                input.city(type="text" name="city" placeholder='City')
-              label Variable
-                input.variable(type="text" name="variable" placeholder='Variable')
-              button.button.submit Add
-        li.control-geometry
-          a(href="#") Geometry
-          ul.menu.vertical.nested
-            form
-              label City
-                input.city(type="text" name="city" placeholder='City')
-              label Variable
-                input.variable(type="text" name="variable" placeholder='Variable')
-              button.button.submit Add
+  div.controls
+    div.select
+      button.button.markers
+        span.fa.fa-map-marker
+        |  Markers
+      button.button.heatmaps
+        spa.fa.fa-fire
+        |  Heatmaps
+      button.button.geometry
+        span.fa.fa-globe
+        |  Geometry
+    div.
+    div.control
+      div.item.markers
+        form
+          label Area
+            div.radio-group.small
+              div.radio-button
+                input(type="radio" name="area" id="marker-country" value="country")
+                label(for="marker-country") Country
+              div.radio-button
+                input(type="radio" name="area" id="marker-ccaa" value="ccaa")
+                label(for="marker-ccaa") CCAA
+              div.radio-button
+                input(type="radio" name="area" id="marker-province" value="province")
+                label(for="marker-province") Province
+              div.radio-button
+                input(type="radio" name="area" id="marker-city" value="city" checked)
+                label(for="marker-city") City
+          label Name
+            input.name(type="text" name="name" list="marker-datalist" placeholder='eg. Barcelona')
+            datalist(id="marker-datalist")
+          button.advanced more
+          hr
+          div.button-group.small
+            button(type="submit").button.secondary.cancel Cancel
+            button(type="submit").button.add Add
+      div.item.heatmaps
+        form
+          label Area
+            div.radio-group.small
+              div.radio-button
+                input(type="radio" name="area" id="heatmap-country" value="country")
+                label(for="heatmap-country") Country
+              div.radio-button
+                input(type="radio" name="area" id="heatmap-ccaa" value="ccaa")
+                label(for="heatmap-ccaa") CCAA
+              div.radio-button
+                input(type="radio" name="area" id="heatmap-province" value="province")
+                label(for="heatmap-province") Province
+              div.radio-button
+                input(type="radio" name="area" id="heatmap-city" value="city" checked)
+                label(for="heatmap-city") City
+          label Name
+            input.name(type="text" name="name" placeholder='eg. Barcelona')
+          label Variable
+            select(name="variable").variable
+              option(disabled selected value) -- select an option --
+              option(value="twitter_statuses") Twitter - Statuses
+              option(value="foursquare_usercount") Foursquare - User Count
+          button.advanced more
+          hr
+          div.button-group.small
+            button(type="submit").button.secondary.cancel Cancel
+            button(type="submit").button.add Add
+      div.item.geometry
+        form
+          label Area
+            div.radio-group.small
+              div.radio-button
+                input(type="radio" name="area" id="geometry-country" value="country")
+                label(for="geometry-country") Country
+              div.radio-button
+                input(type="radio" name="area" id="geometry-ccaa" value="ccaa")
+                label(for="geometry-ccaa") CCAA
+              div.radio-button
+                input(type="radio" name="area" id="geometry-province" value="province")
+                label(for="geometry-province") Province
+              div.radio-button
+                input(type="radio" name="area" id="geometry-city" value="city" checked)
+                label(for="geometry-city") City
+          label Name
+            input.name(type="text" name="name" placeholder='eg. Barcelona')
+          label Granularity
+            select(name="granularity").gran
+              option(disabled selected value) -- select an option --
+              option(value="ccaa") CCAA
+              option(value="barrios") Barrios
+              option(value="seccens") Secciones Censales
+          label Variable
+            select(name="variable").variable
+              option(disabled selected value) -- select an option --
+              option(value="population") Population
+          button.advanced more
+          hr
+          div.button-group.small
+            button(type="submit").button.secondary.cancel Cancel
+            button(type="submit").button.add Add
+    div.layers
+      ul
   div(id="map")
 
 append scripts

@@ -1,49 +1,79 @@
 html, body
   position: relative;
-.loading
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  position: absolute;
-  top: 41px;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: 1000;
-  background: rgba(255, 255, 255, 0.7);
-  @media screen and (min-width: 40em)
-    top: 55px;
+  overflow: hidden;
+.top-bar
+  display: none;
+  @media screen and (max-width: 28em)
+    display: flex;
+.top-burger
+  display: none;
+  @media screen and (min-width: 28em)
+    display: flex;
 .delete
   cursor: pointer;
-.map-controls
+.advanced
+  font-size: .75rem;
+  color: #999;
+.controls
   position: absolute;
-  top: 41px;
-  left: -300px;
-  bottom: 0;
+  top: 75px;
+  left: 10px;
   z-index: 10;
-  width: 300px;
-  background: rgba(255, 255, 255, 0.7);
-  transition: left 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
-  .container
-    overflow-x: hidden;
-    overflow-y: scroll;
-    position: absolute;
-    top: 0;
+  width: 20em;
+  @media screen and (max-width: 28em)
+    top: 55px;
     left: 0;
     right: 0;
-    bottom: 0;
-  &.open
-    left: 0;
-    .toggle
-      span
-        transform: rotate(180deg);
-  @media screen and (min-width: 40em)
-    top: 55px;
-  .toggle
-    position: absolute;
-    left: 300px;
-    span
-      transition: transform 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
+    width: auto;
+    margin: 0 1.0em;
+  .select
+    display: flex;
+    justify-content: space-around;
+    & button
+      flex: 1;
+      margin-right: 2px;
+      font-size: .75em;
+      padding: .5em 1.0em;
+      color: #999 !important;
+      background: white !important;
+      box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+      border: 1px solid #ddd;
+      font-weight: bold;
+      &:last-of-type
+        margin-right: 0;
+      &.active
+        color: white !important;
+        background: #ea7b67 !important;
+        border: 1px solid #ea7b67;
+        border-bottom: 1px solid #d06e5c;
+        box-shadow: 0 1px 0 0 #d06e5c;
+  .control
+    display: none;
+    background: white !important;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    padding: 1.0em 1.0em 0 1.0em;
+    max-height: 60vh;
+    overflow-y: auto;
+    &.active
+      display: block;
+    & .item
+      display: none;
+    & .item.active
+      display: block;
+    .enabled
+      background: #ddd;
+  form
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    hr
+      width: 100%;
+      margin: 1.0rem auto;
+    & .advanced
+      align-self: flex-end;
+    & .button-group
+      justify-content: flex-end;
 #map
   position: absolute;
   top: 0;
@@ -51,28 +81,29 @@ html, body
   right: 0;
   bottom: 0;
   z-index: 0;
-  .submenu
-    background: rgba(255, 255, 255, 0.7);
   .leaflet-top
-    margin-top: 41px;
-    top: 41px;
-    @media screen and (min-width: 40em)
-      top: 55px;
-  .leaflet-left
-    transition: left 0.5s cubic-bezier(0.65, 0.05, 0.36, 1);
-    &.open
-      left: 300px;
+    top: 55px;
+  .leaflet-control-zoom
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    border-radius: 0;
+    @media screen and (max-width: 28em)
+      margin-bottom: 40px;
+    .leaflet-control-zoom-in, .leaflet-control-zoom-out
+      color: #999;
+      border-radius: 0;
   .info
-    padding: 6px 8px;
-    font: 14px/16px Arial, Helvetica, sans-serif;
+    padding: 8px;
     background: white;
-    background: rgba(255,255,255,0.8);
-    box-shadow: 0 0 15px rgba(0,0,0,0.2);
-    border-radius: 5px;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
     h4
-      margin: 0 0 5px;
       color: #777;
   .legend
+    padding: 8px;
+    background: white;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
     line-height: 18px;
     color: #555;
     i
@@ -81,13 +112,3 @@ html, body
       float: left;
       margin-right: 8px;
       opacity: 0.7;
-  .color-container
-    border: 1px solid WhiteSmoke;
-    height: 20px;
-    width: 100%;
-    .color
-      display: inline-block;
-      width: 20%;
-      height: 100%;
-      opacity: 0.7;
-      margin: 0;
