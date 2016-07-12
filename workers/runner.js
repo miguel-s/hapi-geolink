@@ -51,16 +51,17 @@ function makeGenerator({ config, data, handlers }) {
   let progress = Math.floor(done.length / input.length * 100);
 
   return function *gen() {
-    if (!process.send) process.stdout.write(`Start: ${origin}_${list}\n`);
-    if (!process.send) process.stdout.write(`Remaining: ${todo.length}\n`);
     if (process.send) process.send({ type: 'start', origin, list });
+    if (!process.send) {
+      console.log(`Start: ${origin}_${list}`);
+      console.log(`Remaining: ${todo.length}`);
+    }
 
     while (todo.length) {
       const item = todo.shift();
+      if (!process.send) process.stdout.write(`${message} ${item.name}`);
 
       try {
-        if (!process.send) process.stdout.write(`\n${message} ${item.name}`);
-
         const response = yield handleGet(item);
         if (response.source) throw response;
 
@@ -76,28 +77,30 @@ function makeGenerator({ config, data, handlers }) {
         message = 'Getting';
         const newProgress = Math.floor(done.length / input.length * 100);
 
-        if (!process.send) process.stdout.write(` -> results: ${results.length} -> OK`);
+        if (!process.send) console.log(` -> results: ${results.length} -> OK`);
         if (newProgress > progress) {
           progress = newProgress;
           if (process.send) process.send({ type: 'progress', data: progress, origin, list });
         }
       } catch (error) {
-        if (!process.send) process.stdout.write(' -> ERROR\n');
-        if (!process.send) console.log(error);
+        if (!process.send) {
+          console.log(' -> ERROR');
+          console.log(error);
+        }
         if (retries < maxRetries) {
           retries += 1;
           message = `Retrying (attempt ${retries})`;
           todo.unshift(item);
         } else {
-          if (!process.send) process.stdout.write('Reached maximum number of retry attempts.\n');
           if (process.send) process.send({ type: 'error', data: error, origin, list });
+          if (!process.send) console.log('Reached maximum number of retry attempts.');
           break;
         }
       }
     }
 
-    if (!process.send) process.stdout.write(`\nDone: ${name}`);
     if (process.send) process.send({ type: 'stop', origin, list });
+    if (!process.send) console.log(`Done: ${name}`);
   };
 }
 
@@ -134,10 +137,14 @@ function runner({ config, data, handlers }) {
     // FIXME:
     // if centroide has 0 unique values no records will be saved and
     // we won't know that it has already been done
-    const pClusters = new database.Request()
-      .query(`SELECT distinct cluster FROM ${tableName}`);
-    const pIds = new database.Request()
-      .query(`SELECT distinct id FROM ${tableName}`);
+    const pClusters = database.query`
+      SELECT distinct cluster
+      FROM ${tableName}
+      WHERE 1 = 1`;
+    const pIds = database.query`
+      SELECT distinct id
+      FROM ${tableName}
+      WHERE 1 = 1`;
 
     return Promise.all([pClusters, pIds]);
   })
@@ -146,9 +153,7 @@ function runner({ config, data, handlers }) {
   .then((values) => {
     const clustersDone = values[0].map(item => item.cluster);
     const idsDone = values[1].map(venue => venue.id);
-
-    const clustersTodo = input
-      .filter(item => clustersDone.indexOf(item.cluster) === -1);
+    const clustersTodo = input.filter(item => clustersDone.indexOf(item.cluster) === -1);
 
     data.done = idsDone;
     data.todo = clustersTodo;
