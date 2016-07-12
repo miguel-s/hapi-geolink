@@ -40,18 +40,20 @@ function handleSave(table, data) {
 }
 
 function makeGenerator({ config, data, handlers }) {
-  const { name, tableName } = config;
+  const { origin, list } = config;
   const { input, model, todo, done } = data;
   const { handleGet, handleResponse } = handlers;
 
+  const tableName = `ibc_seg.DM_SOURCE_${origin}_${list}_RAW`;
   const maxRetries = 3;
   let retries = 0;
   let message = 'Getting';
   let progress = Math.floor(done.length / input.length * 100);
 
   return function *gen() {
-    if (!process.send) process.stdout.write(`Start: ${name}\n`);
+    if (!process.send) process.stdout.write(`Start: ${origin}_${list}\n`);
     if (!process.send) process.stdout.write(`Remaining: ${todo.length}\n`);
+    if (process.send) process.send({ type: 'start', origin, list });
 
     while (todo.length) {
       const item = todo.shift();
@@ -77,31 +79,28 @@ function makeGenerator({ config, data, handlers }) {
         if (!process.send) process.stdout.write(` -> results: ${results.length} -> OK`);
         if (newProgress > progress) {
           progress = newProgress;
-          if (process.send) process.send({ [`${name}_progress`]: progress });
+          if (process.send) process.send({ type: 'progress', data: progress, origin, list });
         }
-      } catch (e) {
+      } catch (error) {
         if (!process.send) process.stdout.write(' -> ERROR\n');
-        if (!process.send) console.log(e);
+        if (!process.send) console.log(error);
         if (retries < maxRetries) {
           retries += 1;
           message = `Retrying (attempt ${retries})`;
           todo.unshift(item);
         } else {
           if (!process.send) process.stdout.write('Reached maximum number of retry attempts.\n');
-          if (process.send) process.send({ [`${name}_error`]: e });
+          if (process.send) process.send({ type: 'error', data: error, origin, list });
           break;
         }
       }
     }
 
     if (!process.send) process.stdout.write(`\nDone: ${name}`);
-    if (process.send) process.send(`${name}_stop`);
+    if (process.send) process.send({ type: 'stop', origin, list });
   };
 }
 
-// NOTE:
-// use it.throw(reason) to handle error
-// however using it.throw(reason) stops the loop
 function run({ config, data, handlers }) {
   const gen = makeGenerator({ config, data, handlers });
   const it = gen();
