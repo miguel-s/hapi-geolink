@@ -16,8 +16,8 @@ module.exports = function sockets(io) {
     socket.on('disconnect', () => console.log(`User disconnected: ${socket.decoded_token.id}`));
 
     workers.forEach((worker) => {
-      const { origin, list, progress } = worker;
-      if (worker.active) socket.emit('start', { origin, list });
+      const { active, origin, list, progress } = worker;
+      if (active) socket.emit('start', { origin, list });
       socket.emit('progress', { origin, list, progress });
     });
 
@@ -56,6 +56,7 @@ module.exports = function sockets(io) {
                   }
                   case 'progress': {
                     const progress = m.data;
+                    worker.progress = progress;
                     io.sockets.emit('progress', { origin, list, progress });
                     break;
                   }
