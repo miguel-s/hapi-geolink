@@ -24,6 +24,7 @@ module.exports = {
       null,
       null,
       null,
+      null,
     ],
     geo_accuracy: null,
     neighborhoods: [
