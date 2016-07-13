@@ -137,14 +137,18 @@ function runner({ config, data, handlers }) {
     // FIXME:
     // if centroide has 0 unique values no records will be saved and
     // we won't know that it has already been done
-    const pClusters = database.query`
-      SELECT distinct cluster
-      FROM ${tableName}
-      WHERE 1 = 1`;
-    const pIds = database.query`
-      SELECT distinct id
-      FROM ${tableName}
-      WHERE 1 = 1`;
+    const pClusters = new database.Request()
+      .query(`
+        SELECT distinct id
+        FROM ${tableName}
+        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30
+      `);
+    const pIds = new database.Request()
+      .query(`
+        SELECT distinct id
+        FROM ${tableName}
+        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30
+      `);
 
     return Promise.all([pClusters, pIds]);
   })
