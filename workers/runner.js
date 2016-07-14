@@ -17,8 +17,11 @@ function prepareTable(name, db, cols) {
   table.create = true;
 
   cols.forEach((col) => {
-    if (col === 'id') table.columns.add(col, db.NVarChar(250), { nullable: false, primary: true });
-    else table.columns.add(col, db.NVarChar(db.MAX), { nullable: true });
+    if (col === 'id' || col === 'datetime') {
+      table.columns.add(col, db.NVarChar(250), { nullable: false, primary: true });
+    } else {
+      table.columns.add(col, db.NVarChar(db.MAX), { nullable: true });
+    }
   });
 
   return table;
