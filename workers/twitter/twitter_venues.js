@@ -41,6 +41,7 @@ Twitter.prototype.getUsers = function getUsers(params, error, success) {
 
 const origin = 'twitter';
 const list = 'venues';
+const size = 100;
 const apiConfig = {
   consumerKey: process.env.TWITTER_CONSUMER_KEY,
   consumerSecret: process.env.TWITTER_CONSUMER_SECRET,
@@ -120,7 +121,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { origin, list },
+  config: { origin, list, size },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

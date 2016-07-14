@@ -12,6 +12,7 @@ const model = require('./model_venues.js');
 
 const origin = 'foursquare';
 const list = 'venues';
+const size = 1;
 const apiConfig = {
   api: process.env.FOURSQUARE_API,
   id: process.env.FOURSQUARE_ID,
@@ -67,7 +68,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { origin, list },
+  config: { origin, list, size },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

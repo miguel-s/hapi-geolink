@@ -40,7 +40,7 @@ function handleSave(table, data) {
 }
 
 function makeGenerator({ config, data, handlers }) {
-  const { origin, list } = config;
+  const { origin, list, size } = config;
   const { input, model, todo, done } = data;
   const { handleGet, handleResponse } = handlers;
 
@@ -48,7 +48,7 @@ function makeGenerator({ config, data, handlers }) {
   const maxRetries = 3;
   let retries = 0;
   let message = 'Getting';
-  let progress = Math.floor(done.length / input.length * 100);
+  let progress = Math.floor(done.length / input.length * 100 / size);
 
   return function *gen() {
     if (process.send) process.send({ type: 'start', origin, list });
@@ -75,7 +75,7 @@ function makeGenerator({ config, data, handlers }) {
         done.push(...inserted);
         retries = 0;
         message = 'Getting';
-        const newProgress = Math.floor(done.length / input.length * 100);
+        const newProgress = Math.floor(done.length / input.length * 100 / size);
 
         if (!process.send) console.log(` -> results: ${results.length} -> OK`);
         if (newProgress > progress) {

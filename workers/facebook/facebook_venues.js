@@ -12,6 +12,7 @@ const model = require('./model_venues.js');
 
 const origin = 'facebook';
 const list = 'venues';
+const size = 1;
 const apiConfig = {
   accessToken: process.env.FACEBOOK_ACCESS_TOKEN,
   api: 'https://graph.facebook.com/v2.6',
@@ -72,7 +73,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { origin, list },
+  config: { origin, list, size },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

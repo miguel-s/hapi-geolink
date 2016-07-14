@@ -10,6 +10,7 @@ const model = require('./model_list.js');
 
 const origin = 'michelin';
 const list = 'list';
+const size = 1;
 
 // Set up input data
 
@@ -65,7 +66,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { origin, list },
+  config: { origin, list, size },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });

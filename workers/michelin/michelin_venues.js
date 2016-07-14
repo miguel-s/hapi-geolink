@@ -11,6 +11,7 @@ const model = require('./model_venues.js');
 
 const origin = 'michelin';
 const list = 'venues';
+const size = 25;
 
 // Set up input data
 
@@ -100,7 +101,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { origin, list },
+    config: { origin, list, size },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

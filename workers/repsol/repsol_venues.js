@@ -11,6 +11,7 @@ const model = require('./model_venues.js');
 
 const origin = 'repsol';
 const list = 'venues';
+const size = 1;
 
 // Set up input data
 
@@ -88,9 +89,17 @@ database.connect(dbConfig)
     // last opportunity to modify response objects
     result.id = item.id;
     result.url = item.url;
-    result.rating = response.rating.indexOf('Te recomendamos') === -1 ? response.rating.length : 'R';
-    result.address = response.address.replace(/\n/g, '').trim();
-    result.email = response.email.replace(/\n/g, '').trim();
+
+    if (response.rating) {
+      if (response.rating.indexOf('Te recomendamos') === -1) result.rating = response.rating.length;
+      else result.rating = 'R';
+    }
+    if (response.address) {
+      result.address = response.address.replace('Ver mapa', '').replace(/\n/g, '').trim();
+    }
+    if (response.email) {
+      result.email = response.email.replace(/\n/g, '').trim();
+    }
 
     result = _.merge({}, model, result, { cluster, section, datetime });
     if (done.indexOf(result.id.toString()) === -1) return [result];
@@ -102,7 +111,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { origin, list },
+    config: { origin, list, size },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

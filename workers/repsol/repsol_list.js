@@ -11,6 +11,7 @@ const model = require('./model_list.js');
 
 const origin = 'repsol';
 const list = 'list';
+const size = 12;
 
 // Set up input data
 
@@ -77,7 +78,7 @@ database.connect(dbConfig)
   // Run
 
   run({
-    config: { origin, list },
+    config: { origin, list, size },
     data: { input, model },
     handlers: { handleGet, handleResponse },
   });

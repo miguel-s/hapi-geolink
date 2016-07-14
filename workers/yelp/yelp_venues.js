@@ -12,6 +12,7 @@ const model = require('./model_venues.js');
 
 const origin = 'yelp';
 const list = 'venues';
+const size = 1;
 const apiConfig = {
   consumer_key: process.env.YELP_CONSUMER_KEY,
   consumer_secret: process.env.YELP_CONSUMER_SECRET,
@@ -65,7 +66,7 @@ function handleResponse(item, response, done) {
 // Run
 
 run({
-  config: { origin, list },
+  config: { origin, list, size },
   data: { input, model },
   handlers: { handleGet, handleResponse },
 });
