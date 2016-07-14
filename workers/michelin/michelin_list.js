@@ -10,7 +10,7 @@ const model = require('./model_list.js');
 
 const origin = 'michelin';
 const list = 'list';
-const size = 1;
+const size = 65;
 
 // Set up input data
 
