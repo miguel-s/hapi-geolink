@@ -49,6 +49,7 @@ function makeGenerator({ config, data, handlers }) {
   let retries = 0;
   let message = 'Getting';
   let progress = Math.floor(done.length / input.length * 100 / size);
+  if (process.send) process.send({ type: 'progress', data: progress, origin, list });
 
   return function *gen() {
     if (process.send) process.send({ type: 'start', origin, list });
