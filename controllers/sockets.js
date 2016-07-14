@@ -17,8 +17,10 @@ module.exports = function sockets(io) {
 
     workers.forEach((worker) => {
       const { active, origin, list, progress } = worker;
-      if (active) socket.emit('start', { origin, list });
-      socket.emit('progress', { origin, list, progress });
+      if (active) {
+        socket.emit('start', { origin, list });
+        socket.emit('progress', { origin, list, progress });
+      }
     });
 
     socket.on('start', (payload) => {
@@ -43,6 +45,7 @@ module.exports = function sockets(io) {
           worker.proc = fork(path.join(__dirname, `../workers/${origin}/${origin}_${list}.js`));
           if (worker.proc) {
             console.log(`${origin}_${list} worker started`);
+
             worker.proc.on('message', (m) => {
               if (m.origin === origin && m.list === list) {
                 switch (m.type) {
@@ -74,6 +77,7 @@ module.exports = function sockets(io) {
 
             worker.proc.on('disconnect', () => {
               worker.active = !worker.active;
+              io.sockets.emit('stop', { origin, list });
               console.log(`${origin}_${list} worker exited`);
             });
           }
