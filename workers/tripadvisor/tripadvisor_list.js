@@ -12,7 +12,7 @@ const model = require('./model_list.js');
 
 const origin = 'tripadvisor';
 const list = 'list';
-const size = 1;
+const size = 30;
 
 // Set up input data
 
