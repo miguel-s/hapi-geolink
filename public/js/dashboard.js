@@ -32,11 +32,13 @@
 
       socket.on('start', function (payload) {
         var origin = payload.origin;
+        var list = payload.list;
 
         var element = $('.' + origin);
         element.find('.update').hide();
         element.find('.stop').show();
         element.find('.progress').show();
+        element.find('input[type="radio"][value="' + list + '"]').prop('checked', true);
         element.find('input[type="radio"]').prop('disabled', true);
       });
       socket.on('stop', function (payload) {

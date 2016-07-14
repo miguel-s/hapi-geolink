@@ -31,11 +31,12 @@
       });
 
       socket.on('start', (payload) => {
-        const { origin } = payload;
+        const { origin, list } = payload;
         const element = $(`.${origin}`);
         element.find('.update').hide();
         element.find('.stop').show();
         element.find('.progress').show();
+        element.find(`input[type="radio"][value="${list}"]`).prop('checked', true);
         element.find('input[type="radio"]').prop('disabled', true);
       });
       socket.on('stop', (payload) => {
