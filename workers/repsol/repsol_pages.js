@@ -10,7 +10,7 @@ const model = require('./model_pages.js');
 
 const origin = 'repsol';
 const list = 'pages';
-const size = 1;
+const size = 215;
 
 // Set up input data
 
