@@ -90,7 +90,6 @@ module.exports = function sockets(io) {
       const worker = workers.find(w => w.origin === origin && w.list === list);
       if (worker && worker.active && worker.proc.kill) {
         worker.proc.kill();
-        io.sockets.emit('stop', { origin, list });
       }
     });
   });
