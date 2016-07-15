@@ -143,7 +143,7 @@ function runner({ config, data, handlers }) {
     // we won't know that it has already been done
     const pClusters = new database.Request()
       .query(`
-        SELECT distinct id
+        SELECT distinct cluster
         FROM ${tableName}
         WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30
       `);
