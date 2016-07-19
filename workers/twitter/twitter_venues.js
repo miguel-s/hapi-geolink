@@ -70,90 +70,90 @@ database.connect(dbConfig)
     SELECT DISTINCT [En caso que proceda escribe el nombre de cuenta de Twitter]
     FROM [ibc_seg].[DM_MANPOWER_OUTPUT]
     WHERE [En caso que proceda escribe el nombre de cuenta de Twitter] <> ''`;
+
+  return Promise.all([pFoursquare, pManpower]);
+})
+.then((values) => {
+  const foursquare = values[0];
+  const manpower = values[1];
+
   const once = JSON.parse(fs.readFileSync(path.join(__dirname, './input/11870.json')));
   const buscor = JSON.parse(fs.readFileSync(path.join(__dirname, './input/buscorestaurantes.json')));
   const manual = JSON.parse(fs.readFileSync(path.join(__dirname, './input/manual.json')));
 
-  Promise.all([pFoursquare, pManpower])
-  .then((values) => {
-    const foursquare = values[0];
-    const manpower = values[1];
+  const total = [...foursquare, ...once, ...buscor, ...manpower, ...manual];
+  const chunks = [];
+  while (total.length) {
+    chunks.push(total.splice(0, 99));
+  }
+  const input = chunks
+    .map((chunk, index) => Object.assign({ chunk }, {
+      name: `Chunk ${index}: `,
+      cluster: chunk.join(','),
+      section: null,
+    }));
 
-    const total = [...foursquare, ...once, ...buscor, ...manpower, ...manual];
-    const chunks = [];
-    while (total.length) {
-      chunks.push(total.splice(0, 99));
-    }
-    const input = chunks
-      .map((chunk, index) => Object.assign({ chunk }, {
-        name: `Chunk ${index}: `,
-        cluster: chunk.join(','),
-        section: null,
-      }));
+  // Set up handlers
 
-    // Set up handlers
+  function handleGet({ cluster }) {
+    const twitter = new Twitter(apiConfig);
 
-    function handleGet({ cluster }) {
-      const twitter = new Twitter(apiConfig);
+    return new Promise((resolve, reject) => {
+      twitter.getUsers(
+        { screen_name: cluster },
+        (err, response, body) => {
+          if (err.statusCode === 404) resolve({ statusCode: err.statusCode, body });
+          else reject({ statusCode: err.statusCode, body });
+        },
+        data => resolve({ statusCode: 200, body: JSON.parse(data) })
+      );
+    })
+    .catch(error => ({ error, source: 'handleGet' }));
+  }
 
-      return new Promise((resolve, reject) => {
-        twitter.getUsers(
-          { screen_name: cluster },
-          (err, response, body) => {
-            if (err.statusCode === 404) resolve({ statusCode: err.statusCode, body });
-            else reject({ statusCode: err.statusCode, body });
-          },
-          data => resolve({ statusCode: 200, body: JSON.parse(data) })
-        );
-      })
-      .catch(error => ({ error, source: 'handleGet' }));
-    }
+  function handleResponse(item, response, done) {
+    const { cluster, section } = item;
+    const datetime = new Date().toISOString();
 
-    function handleResponse(item, response, done) {
-      const { cluster, section } = item;
-      const datetime = new Date().toISOString();
-
-      if (response.statusCode === 200) {
-        return response.body
-          .map((row) => {
-            // last opportunity to modify response objects
-            const newRow = row;
-            newRow.status = {
-              created_at: newRow.created_at,
-              id: newRow.id,
-              id_str: newRow.id_str,
-              text: newRow.text,
-              truncated: newRow.truncated,
-              geo: newRow.geo,
-              coordinates: newRow.coordinates,
-              place: newRow.place,
-              retweet_count: newRow.retweet_count,
-              favorite_count: newRow.favorite_count,
-              favorited: newRow.favorited,
-              retweeted: newRow.retweeted,
-            };
-            delete newRow.entities;
-            return newRow;
-          })
-          .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
-          .filter(row => done.indexOf(row.id.toString()) === -1);
-      }
-
-      if (response.statusCode === 404) {
-        return [];
-      }
-
-      return { error: response, source: 'handleResponse' };
+    if (response.statusCode === 200) {
+      return response.body
+        .map((row) => {
+          // last opportunity to modify response objects
+          const newRow = row;
+          newRow.status = {
+            created_at: newRow.created_at,
+            id: newRow.id,
+            id_str: newRow.id_str,
+            text: newRow.text,
+            truncated: newRow.truncated,
+            geo: newRow.geo,
+            coordinates: newRow.coordinates,
+            place: newRow.place,
+            retweet_count: newRow.retweet_count,
+            favorite_count: newRow.favorite_count,
+            favorited: newRow.favorited,
+            retweeted: newRow.retweeted,
+          };
+          delete newRow.entities;
+          return newRow;
+        })
+        .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
+        .filter(row => done.indexOf(row.id.toString()) === -1);
     }
 
-    // Run
+    if (response.statusCode === 404) {
+      return [];
+    }
 
-    run({
-      config: { origin, list, size },
-      data: { input, model },
-      handlers: { handleGet, handleResponse },
-    });
-  })
-  .catch(err => console.log(err));
+    return { error: response, source: 'handleResponse' };
+  }
+
+  // Run
+
+  run({
+    config: { origin, list, size },
+    data: { input, model },
+    handlers: { handleGet, handleResponse },
+  });
 })
 .catch(err => console.log(err));
