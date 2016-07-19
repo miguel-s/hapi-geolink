@@ -118,7 +118,7 @@ function run({ config, data, handlers }) {
       Promise
       .resolve(ret.value)
       .then(pull)
-      .catch(error => pull({ error, source: 'runner' }));
+      .catch(error => pull({ error, source: 'run' }));
     }
   }());
 }
@@ -138,9 +138,6 @@ function runner({ config, data, handlers }) {
 
   // get progress
   .then(() => {
-    // FIXME:
-    // if centroide has 0 unique values no records will be saved and
-    // we won't know that it has already been done
     const pClusters = new database.Request()
       .query(`
         SELECT DISTINCT [cluster]
@@ -167,7 +164,7 @@ function runner({ config, data, handlers }) {
 
     run({ config, data, handlers });
   })
-  .catch(err => console.log(err));
+  .catch(error => console.log({ error, source: 'runner' }));
 }
 
 module.exports = runner;
