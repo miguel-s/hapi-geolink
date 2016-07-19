@@ -54,7 +54,9 @@ function handleResponse(item, response, done) {
         const newRow = row;
 
          // only save event ids
-        if (newRow.events && newRow.events.items) newRow.events.items = row.events.items.map(event => event.id);
+        if (newRow.events && newRow.events.items) {
+          newRow.events.items = row.events.items.map(event => event.id);
+        }
 
         return newRow;
       })

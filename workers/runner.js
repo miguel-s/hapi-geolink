@@ -143,16 +143,15 @@ function runner({ config, data, handlers }) {
     // we won't know that it has already been done
     const pClusters = new database.Request()
       .query(`
-        SELECT distinct cluster
+        SELECT DISTINCT [cluster]
         FROM ${tableName}
-        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30
-      `);
+        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30`);
+
     const pIds = new database.Request()
       .query(`
-        SELECT distinct id
+        SELECT DISTINCT [id]
         FROM ${tableName}
-        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30
-      `);
+        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30`);
 
     return Promise.all([pClusters, pIds]);
   })
