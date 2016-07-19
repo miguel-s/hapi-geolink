@@ -14,6 +14,7 @@ module.exports = {
     [null, null],
     [null, null],
     [null, null],
+    [null, null],
   ],
   phone: null,
   location: {
