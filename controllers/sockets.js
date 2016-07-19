@@ -54,7 +54,9 @@ module.exports = function sockets(io) {
                     break;
                   }
                   case 'stop': {
-                    io.sockets.emit('stop', { origin, list });
+                    if (worker && worker.active && worker.proc.kill) {
+                      worker.proc.kill();
+                    }
                     break;
                   }
                   case 'progress': {
