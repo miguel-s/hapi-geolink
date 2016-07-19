@@ -5,10 +5,11 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 module.exports = function handler(request, reply, source, error) {
+  const next = request.payload.next || '/';
   let account = {};
 
   if (request.auth.isAuthenticated) {
-    return reply.redirect('/');
+    return reply.redirect(next);
   }
 
   if (!request.payload.email || !request.payload.password) {
@@ -61,7 +62,6 @@ module.exports = function handler(request, reply, source, error) {
 
           request.cookieAuthIbc.set({ sid });
 
-          const next = request.payload.next || '/';
           if (account.scope.indexOf('admin') !== -1) return reply.redirect(next);
           return reply.redirect(next);
         });
