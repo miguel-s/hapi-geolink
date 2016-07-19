@@ -1,5 +1,6 @@
 'use strict';
 
+const database = require('mssql');
 const fs = require('fs');
 const path = require('path');
 const _ = require('lodash');
@@ -52,76 +53,107 @@ const apiConfig = {
 
 // Set up input data
 
-const foursquare = JSON.parse(fs.readFileSync(path.join(__dirname, './input/foursquare.json')));
-const once = JSON.parse(fs.readFileSync(path.join(__dirname, './input/11870.json')));
-const buscor = JSON.parse(fs.readFileSync(path.join(__dirname, './input/buscorestaurantes.json')));
-const manpower = JSON.parse(fs.readFileSync(path.join(__dirname, './input/manpower.json')));
-const manual = JSON.parse(fs.readFileSync(path.join(__dirname, './input/manual.json')));
+const dbConfig = {
+  user: process.env.CSADB_USER,
+  password: process.env.CSADB_PASSWORD,
+  server: process.env.CSADB_SERVER,
+  database: process.env.CSADB_DATABASE,
+};
 
-const total = [...foursquare, ...once, ...buscor, ...manpower, ...manual];
-const chunks = [];
-while (total.length) {
-  chunks.push(total.splice(0, 99));
-}
-const input = chunks
-  .map((chunk, index) => Object.assign({ chunk }, {
-    name: `Chunk ${index}: `,
-    cluster: chunk.join(','),
-    section: null,
-  }));
+database.connect(dbConfig)
+.then(() => {
+  const pFoursquare = database.query`
+    SELECT DISTINCT [contact.twitter]
+    FROM [ibc_seg].[DM_SOURCE_FOURSQUARE_VENUES_RAW]
+    WHERE [contact.twitter] IS NOT NULL`;
+  const pManpower = database.query`
+    SELECT DISTINCT [En caso que proceda escribe el nombre de cuenta de Twitter]
+    FROM [ibc_seg].[DM_MANPOWER_OUTPUT]
+    WHERE [En caso que proceda escribe el nombre de cuenta de Twitter] <> ''`;
+  const once = JSON.parse(fs.readFileSync(path.join(__dirname, './input/11870.json')));
+  const buscor = JSON.parse(fs.readFileSync(path.join(__dirname, './input/buscorestaurantes.json')));
+  const manual = JSON.parse(fs.readFileSync(path.join(__dirname, './input/manual.json')));
 
-// Set up handlers
+  Promise.all([pFoursquare, pManpower])
+  .then((values) => {
+    const foursquare = values[0];
+    const manpower = values[1];
 
-function handleGet({ cluster }) {
-  const twitter = new Twitter(apiConfig);
+    const total = [...foursquare, ...once, ...buscor, ...manpower, ...manual];
+    const chunks = [];
+    while (total.length) {
+      chunks.push(total.splice(0, 99));
+    }
+    const input = chunks
+      .map((chunk, index) => Object.assign({ chunk }, {
+        name: `Chunk ${index}: `,
+        cluster: chunk.join(','),
+        section: null,
+      }));
 
-  return new Promise((resolve, reject) => {
-    twitter.getUsers(
-      { screen_name: cluster },
-      (err, response, body) => reject({ statusCode: err.statusCode, body }),
-      (data) => resolve({ statusCode: 200, body: JSON.parse(data) })
-    );
-  })
-  .catch(error => ({ error, source: 'handleGet' }));
-}
+    // Set up handlers
 
-function handleResponse(item, response, done) {
-  const { cluster, section } = item;
-  const datetime = new Date().toISOString();
+    function handleGet({ cluster }) {
+      const twitter = new Twitter(apiConfig);
 
-  if (response.statusCode === 200) {
-    return response.body
-      .map((row) => {
-        // last opportunity to modify response objects
-        const newRow = row;
-        newRow.status = {
-          created_at: newRow.created_at,
-          id: newRow.id,
-          id_str: newRow.id_str,
-          text: newRow.text,
-          truncated: newRow.truncated,
-          geo: newRow.geo,
-          coordinates: newRow.coordinates,
-          place: newRow.place,
-          retweet_count: newRow.retweet_count,
-          favorite_count: newRow.favorite_count,
-          favorited: newRow.favorited,
-          retweeted: newRow.retweeted,
-        };
-        delete newRow.entities;
-        return newRow;
+      return new Promise((resolve, reject) => {
+        twitter.getUsers(
+          { screen_name: cluster },
+          (err, response, body) => {
+            if (err.statusCode === 404) resolve({ statusCode: err.statusCode, body });
+            else reject({ statusCode: err.statusCode, body });
+          },
+          data => resolve({ statusCode: 200, body: JSON.parse(data) })
+        );
       })
-      .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
-      .filter(row => done.indexOf(row.id.toString()) === -1);
-  }
+      .catch(error => ({ error, source: 'handleGet' }));
+    }
 
-  return { error: response, source: 'handleResponse' };
-}
+    function handleResponse(item, response, done) {
+      const { cluster, section } = item;
+      const datetime = new Date().toISOString();
 
-// Run
+      if (response.statusCode === 200) {
+        return response.body
+          .map((row) => {
+            // last opportunity to modify response objects
+            const newRow = row;
+            newRow.status = {
+              created_at: newRow.created_at,
+              id: newRow.id,
+              id_str: newRow.id_str,
+              text: newRow.text,
+              truncated: newRow.truncated,
+              geo: newRow.geo,
+              coordinates: newRow.coordinates,
+              place: newRow.place,
+              retweet_count: newRow.retweet_count,
+              favorite_count: newRow.favorite_count,
+              favorited: newRow.favorited,
+              retweeted: newRow.retweeted,
+            };
+            delete newRow.entities;
+            return newRow;
+          })
+          .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
+          .filter(row => done.indexOf(row.id.toString()) === -1);
+      }
 
-run({
-  config: { origin, list, size },
-  data: { input, model },
-  handlers: { handleGet, handleResponse },
-});
+      if (response.statusCode === 404) {
+        return [];
+      }
+
+      return { error: response, source: 'handleResponse' };
+    }
+
+    // Run
+
+    run({
+      config: { origin, list, size },
+      data: { input, model },
+      handlers: { handleGet, handleResponse },
+    });
+  })
+  .catch(err => console.log(err));
+})
+.catch(err => console.log(err));
