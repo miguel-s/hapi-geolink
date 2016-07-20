@@ -115,12 +115,12 @@ internals.after = (server, next) => {
     // Dashboard route
     {
       method: 'GET',
-      path: '/dashboard',
+      path: '/scrapers',
       config: {
-        description: 'Returns the dashboard page',
+        description: 'Returns the scrapers page',
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
-        handler: require('./controllers/dashboard.js'),
+        handler: require('./controllers/scrapers.js'),
       },
     },
 
