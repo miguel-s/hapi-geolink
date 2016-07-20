@@ -18,6 +18,7 @@ module.exports = {
   ],
   phone: null,
   location: {
+    cross_streets: null,
     city: null,
     display_address: [
       null,
