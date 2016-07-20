@@ -16,7 +16,7 @@ module.exports = function handler(request, reply) {
   const pFoursquare = request.server.app.minsaitdb.query`
     SELECT	COUNT(DISTINCT [id]) AS [distinct_id],
             MAX(CAST([datetime] AS [datetime])) AS [max_datetime]
-    FROM ibc_seg.DM_SOURCE_YELP_VENUES_RAW
+    FROM ibc_seg.DM_SOURCE_FOURSQUARE_VENUES_RAW
     WHERE [id] NOT LIKE '%empty%'`;
 
   const pYelp = request.server.app.minsaitdb.query`
