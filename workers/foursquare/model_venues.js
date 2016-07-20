@@ -28,6 +28,7 @@ module.exports = {
       null,
       null,
       null,
+      null,
     ],
     neighborhood: null,
   },
