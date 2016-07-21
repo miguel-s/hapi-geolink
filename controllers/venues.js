@@ -1,14 +1,16 @@
 'use strict';
 
+const fetch = require('node-fetch');
 const Boom = require('boom');
 
 module.exports = function handler(request, reply) {
-  request.server.app.minsaitdb.query`
-    SELECT  TOP 100
-            [CD_PDV] AS [id],
-            [DS_PDV] AS [name]
-    FROM ibc_seg.HC_MANPOWER_informe`
+  const url = `http://localhost:${process.env.PORT_GEOLINK}/api/v1/venues?limit=100&token=${process.env.GEOLINK_TOKEN}`;
 
-  .then((venues) => reply.view('venues', { venues }))
+  fetch(url)
+  .then(res => res.json())
+  .then(response => {
+    if (!response.statusCode) return reply.view('venues', { venues: response });
+    throw new Error(response);
+  })
   .catch(error => reply(Boom.badImplementation()));
 };
