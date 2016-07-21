@@ -1,0 +1,27 @@
+extends ./layouts/base.jade
+
+append head
+  title Geolink
+  link(rel="stylesheet" href="/css/venues.min.css")
+
+block header
+  +top-bar('fixed')
+
+block content
+  div.row.align-stretch
+    each venue in venues
+      div.small-12.medium-6.large-4.columns
+        div.container
+          div.title
+            div.name
+              h4= venue.name
+          hr
+          div.stats-container
+            each stat in Object.keys(venue)
+              div.stats
+                h5= venue[stat]
+                p= stat
+
+append scripts
+  script(src="/socket.io/socket.io.js")
+  script(src="/js/venues.min.js")

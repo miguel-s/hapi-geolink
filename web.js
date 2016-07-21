@@ -112,7 +112,19 @@ internals.after = (server, next) => {
       },
     },
 
-    // Dashboard route
+    // Venues route
+    {
+      method: 'GET',
+      path: '/venues',
+      config: {
+        description: 'Returns the venues page',
+        auth: { strategy: 'ibc-session', mode: 'try' },
+        plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
+        handler: require('./controllers/venues.js'),
+      },
+    },
+
+    // Scrapers route
     {
       method: 'GET',
       path: '/scrapers',
