@@ -99,7 +99,7 @@
     if (response.status >= 200 && response.status < 300) return response;
     const error = new Error(response.statusText);
     error.response = response;
-    throw error;
+    throw new Error(error);
   }
   function htmlMarker(name, content) {
     const { twitter, foursquare } = content;

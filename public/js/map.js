@@ -96,7 +96,7 @@ function _toConsumableArray(arr) { if (Array.isArray(arr)) { for (var i = 0, arr
     if (response.status >= 200 && response.status < 300) return response;
     var error = new Error(response.statusText);
     error.response = response;
-    throw error;
+    throw new Error(error);
   }
   function htmlMarker(name, content) {
     var twitter = content.twitter;
