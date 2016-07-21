@@ -64,7 +64,8 @@ internals.after = (server, next) => {
           query: {
             area: Joi.string().min(1).max(10).optional(),
             name: Joi.string().min(1).max(10).optional(),
-            limit: Joi.number().integer().optional(),
+            limit: Joi.number().integer().positive().optional(),
+            query: Joi.string().optional(),
             token: Joi.string().length(224).required(),
           },
         },
