@@ -30,7 +30,7 @@ internals.after = (server, next) => {
         description: 'Returns a jwt',
         auth: { strategy: 'ibc-session', mode: 'required' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
-        handler: require('./controllers/api_token.js'),
+        handler: require('../controllers/api_token.js'),
       },
     },
 
@@ -49,7 +49,7 @@ internals.after = (server, next) => {
             token: Joi.string().length(224).required(),
           },
         },
-        handler: require('./controllers/api_map.js'),
+        handler: require('../controllers/api_map.js'),
       },
     },
 
@@ -69,7 +69,7 @@ internals.after = (server, next) => {
             token: Joi.string().length(224).required(),
           },
         },
-        handler: require('./controllers/api_venues.js'),
+        handler: require('../controllers/api_venues.js'),
       },
     },
 

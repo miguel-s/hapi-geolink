@@ -5,13 +5,13 @@ const internals = {};
 exports.register = (server, options, next) => {
   server.register(
     [
-      require('./database-csa.js'),
-      require('./auth-cookie.js'),
-      require('./auth-jwt.js'),
-      require('./static.js'),
-      require('./web.js'),
-      require('./api.v1.js'),
-      require('./socketio.js'),
+      require('./plugins/database-csa.js'),
+      require('./plugins/auth-cookie.js'),
+      require('./plugins/auth-jwt.js'),
+      require('./plugins/static.js'),
+      require('./plugins/web.js'),
+      require('./plugins/api.v1.js'),
+      require('./plugins/socketio.js'),
     ],
     (err) => {
       if (err) return next(err);

@@ -21,7 +21,7 @@ internals.after = (server, next) => {
       },
     },
     relativeTo: __dirname,
-    path: 'views',
+    path: '../views',
   });
 
   // Web routing
@@ -65,10 +65,10 @@ internals.after = (server, next) => {
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         validate: {
-          payload: require('./models/user.js'),
-          failAction: require('./controllers/login.js'),
+          payload: require('../models/user.js'),
+          failAction: require('../controllers/login.js'),
         },
-        handler: require('./controllers/login.js'),
+        handler: require('../controllers/login.js'),
       },
     },
 
@@ -78,7 +78,7 @@ internals.after = (server, next) => {
       path: '/logout',
       config: {
         description: 'Logout user',
-        handler: require('./controllers/logout.js'),
+        handler: require('../controllers/logout.js'),
       },
     },
 
@@ -105,10 +105,10 @@ internals.after = (server, next) => {
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         validate: {
-          payload: require('./models/user.js'),
-          failAction: require('./controllers/signup.js'),
+          payload: require('../models/user.js'),
+          failAction: require('../controllers/signup.js'),
         },
-        handler: require('./controllers/signup.js'),
+        handler: require('../controllers/signup.js'),
       },
     },
 
@@ -136,7 +136,7 @@ internals.after = (server, next) => {
         description: 'Returns the scrapers page',
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
-        handler: require('./controllers/scrapers.js'),
+        handler: require('../controllers/scrapers.js'),
       },
     },
 
@@ -148,7 +148,7 @@ internals.after = (server, next) => {
         description: 'Returns the profile page',
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
-        handler: require('./controllers/profile.js'),
+        handler: require('../controllers/profile.js'),
       },
     },
 

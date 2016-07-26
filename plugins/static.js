@@ -27,7 +27,7 @@ internals.after = (server, next) => {
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           directory: {
-            path: path.join(__dirname, 'public/img'),
+            path: path.join(__dirname, '../public/img'),
           },
         },
       },
@@ -43,7 +43,7 @@ internals.after = (server, next) => {
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           directory: {
-            path: path.join(__dirname, 'public/js'),
+            path: path.join(__dirname, '../public/js'),
           },
         },
       },
@@ -59,7 +59,7 @@ internals.after = (server, next) => {
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           directory: {
-            path: path.join(__dirname, 'public/css'),
+            path: path.join(__dirname, '../public/css'),
           },
         },
       },
@@ -75,7 +75,7 @@ internals.after = (server, next) => {
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           directory: {
-            path: path.join(__dirname, 'public/libs'),
+            path: path.join(__dirname, '../public/libs'),
           },
         },
       },

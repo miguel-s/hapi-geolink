@@ -1,7 +1,7 @@
 'use strict';
 
 const socketio = require('socket.io');
-const sockets = require('./controllers/sockets.js');
+const sockets = require('../controllers/sockets.js');
 
 const internals = {};
 
