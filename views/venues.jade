@@ -8,32 +8,17 @@ block header
   +top-bar('fixed')
 
 block content
+  div(style="display:none").loading
+    img(src="/img/spinner.svg" alt="loading" height="50" width="50").spinner
   div.row
     div.column
       div.input-group.search
-        span.input-group-label Search
+        span.input-group-label
+          span.fa.fa-search
         input(type="text").input-group-field
-        div.input-group-button
-          button(type="submit").button Submit
   div.row.align-stretch.venues
-    each venue in venues
-      div.small-12.medium-6.large-4.columns
-        div.container
-          div.title
-            div.code
-              h5= venue.cd_pdv
-            div.name
-              h5= venue.ds_pdv
-          hr
-          div.stats-container
-            div.stats
-              h5= venue.twitter_statuses || '-'
-              p
-                span.fa.fa-twitter
-            div.stats
-              h5= venue.foursquare_usercount || '-'
-              p
-                span.fa.fa-foursquare
+  div.row
+    div.column.pagination-container
 
 append scripts
   script(src="/socket.io/socket.io.js")
