@@ -120,7 +120,11 @@ internals.after = (server, next) => {
         description: 'Returns the venues page',
         auth: { strategy: 'ibc-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
-        handler: require('./controllers/venues.js'),
+        handler: {
+          view: {
+            template: 'venues',
+          },
+        },
       },
     },
 
