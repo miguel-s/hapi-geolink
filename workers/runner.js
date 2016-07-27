@@ -69,8 +69,12 @@ function makeGenerator({ config, data, handlers }) {
         const response = yield handleGet(item);
         if (response.source) throw response;
 
-        const results = yield handleResponse(item, response, done);
+        let results = yield handleResponse(item, response, done);
         if (results.source) throw results;
+        if (results.pages) {
+          todo.unshift(...results.pages);
+          results = results.result;
+        }
 
         const table = prepareTable(tableName, database, Object.keys(flatten(model)));
         const inserted = yield handleSave(table, results);
