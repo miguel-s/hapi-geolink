@@ -1,7 +1,16 @@
 'use strict';
 
+const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
+const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
+
 module.exports = {
   entry: {
+    commons: [
+      'whatwg-fetch',
+      'jquery',
+      './src/js/foundation-workaround',
+      'foundation-sites/dist/foundation.min',
+    ],
     login: './src/js/login',
     map: './src/js/map',
     profile: './src/js/profile',
@@ -10,7 +19,7 @@ module.exports = {
   },
   output: {
     path: './public/js',
-    filename: '[name].js',
+    filename: '[name].min.js',
   },
   module: {
     loaders: [
@@ -21,4 +30,16 @@ module.exports = {
       },
     ],
   },
+  plugins: [
+    new CommonsChunkPlugin({
+      minChunks: 0,
+      filename: 'commons.min.js',
+      name: 'commons',
+    }),
+    new UglifyJsPlugin({
+      compress: {
+        warnings: false,
+      },
+    }),
+  ],
 };
