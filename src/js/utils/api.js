@@ -1,6 +1,6 @@
 'use strict';
 
-const { checkFetchStatus } = require('./utils/utils.js');
+const { checkFetchStatus } = require('./utils.js');
 
 function getToken() {
   return fetch('./api/v1/token', { credentials: 'same-origin' })
