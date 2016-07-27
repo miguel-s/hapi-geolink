@@ -27,6 +27,7 @@ const centroidesMunicipio = JSON.parse(fs.readFileSync(path.join(__dirname, './i
 
 const input = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
   .map((item) => Object.assign(item, {
+    offset: 0,
     name: `${item.latlon} | ${item.municipio} | ${item.type}`,
     cluster: `${item.latlon} | ${item.municipio} | ${item.type}`,
     section: 'food,drinks,coffee',
@@ -34,9 +35,9 @@ const input = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMuni
 
 // Set up handlers
 
-function handleGet({ latlon, section }) {
+function handleGet({ offset, latlon, section }) {
   const { api, id, secret } = apiConfig;
-  const url = `${api}?ll=${latlon}&section=${section}&openNow=0&limit=50&offset=0&client_id=${id}&client_secret=${secret}&v=20160122`;
+  const url = `${api}?ll=${latlon}&section=${section}&openNow=0&limit=50&offset=${offset}&client_id=${id}&client_secret=${secret}&v=20160122`;
   return fetch(url)
     .then(res => res.json())
     .catch(error => ({ error, source: 'handleGet' }));
@@ -47,12 +48,25 @@ function handleResponse(item, response, done) {
   const datetime = new Date().toISOString();
 
   if (response.meta.code === 200) {
+    const pages = [];
+    let numPages = 1;
+
+    if (response.response.totalResults > 50 && item.offset === 0) {
+      numPages = Math.ceil(response.response.totalResults / 50);
+
+      for (let i = 1; i < numPages; i++) {
+        const temp = Object.assign({}, item);
+        temp.offset = (i * 50) + 1;
+        pages.push(temp);
+      }
+    }
+
     const rows = response.response.groups[0].items
       .map(row => row.venue)
       .filter(row => done.indexOf(row.id.toString()) === -1);
 
     if (rows.length) {
-      return rows
+      const result = rows
         .map((row) => {
           // last opportunity to modify response objects
           const newRow = row;
@@ -65,8 +79,12 @@ function handleResponse(item, response, done) {
           return newRow;
         })
         .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }));
+
+      if (numPages > 1) return { result, pages };
+      return result;
     }
 
+    if (numPages > 1) return { result: [], pages };
     const id = `empty_centroid (${cluster})`;
     return [_.merge({}, model, { id, cluster, section, index: null, datetime })];
   }

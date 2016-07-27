@@ -24,6 +24,7 @@ const apiConfig = {
 
 const input = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides.json')))
   .map((item) => Object.assign({ latlon: item }, {
+    offset: 0,
     name: item,
     cluster: item,
     section: 'restaurants,nightlife',
@@ -31,11 +32,10 @@ const input = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroide
 
 // Set up handlers
 
-function handleGet({ latlon, section }) {
+function handleGet({ offset, latlon, section }) {
   const yelp = new Yelp(apiConfig);
-
   return yelp.search({
-    offset: 0,
+    offset,
     limit: 20,
     ll: latlon,
     category_filter: section,
@@ -50,19 +50,36 @@ function handleResponse(item, response, done) {
   const datetime = new Date().toISOString();
 
   if (!response.statusCode) {
+    const pages = [];
+    let numPages = 1;
+
+    if (response.total > 20 && item.offset === 0) {
+      numPages = Math.ceil(response.total / 20);
+
+      for (let i = 1; i < numPages; i++) {
+        const temp = Object.assign({}, item);
+        temp.offset = (i * 20) + 1;
+        pages.push(temp);
+      }
+    }
+
     const rows = response.businesses
       .filter(row => done.indexOf(row.id.toString()) === -1);
 
     if (rows.length) {
-      return rows
+      const result = rows
         .map((row) => {
           // last opportunity to modify response objects
           const newRow = row;
           return newRow;
         })
         .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }));
+
+      if (numPages > 1) return { result, pages };
+      return result;
     }
 
+    if (numPages > 1) return { result: [], pages };
     const id = `empty_centroid (${cluster})`;
     return [_.merge({}, model, { id, cluster, section, index: null, datetime })];
   }
