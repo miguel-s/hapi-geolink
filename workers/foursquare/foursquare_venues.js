@@ -12,7 +12,7 @@ const model = require('./model_venues.js');
 
 const origin = 'foursquare';
 const list = 'venues';
-const size = 1;
+const size = 5;
 const apiConfig = {
   api: process.env.FOURSQUARE_API,
   id: process.env.FOURSQUARE_ID,
