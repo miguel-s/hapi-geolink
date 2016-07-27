@@ -60,7 +60,7 @@ module.exports = function handler(request, reply, source, error) {
         request.server.app.cache.set(sid, { account }, 0, (err) => {
           if (err) return reply(err);
 
-          request.cookieAuthIbc.set({ sid });
+          request.cookieAuthGeolink.set({ sid });
 
           if (account.scope.indexOf('admin') !== -1) return reply.redirect(next);
           return reply.redirect(next);

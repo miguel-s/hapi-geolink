@@ -8,24 +8,24 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-  name: 'IbcAuthCookie',
+  name: 'GeolinkAuthCookie',
 };
 
 exports.options = internals.options = {
-  cacheOptions: { segment: 'ibc-sessions', expiresIn: 3 * 24 * 60 * 60 * 1000 },
+  cacheOptions: { segment: 'geolink-sessions', expiresIn: 3 * 24 * 60 * 60 * 1000 },
   password: process.env.COOKIE_SECRET,
-  cookie: 'ibc-sid',
+  cookie: 'geolink-sid',
   redirectTo: '/login',
   appendNext: true,
   isSecure: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'),
-  requestDecoratorName: 'cookieAuthIbc',
+  requestDecoratorName: 'cookieAuthGeolink',
 };
 
 internals.after = (server, next) => {
   const cache = server.cache(internals.options.cacheOptions);
   server.app.cache = cache;
 
-  server.auth.strategy('ibc-session', 'cookie', false, {
+  server.auth.strategy('geolink-session', 'cookie', false, {
     password: internals.options.password, // must be length 32 hapi v13 requirement.
     cookie: internals.options.cookie,
     redirectTo: internals.options.redirectTo,

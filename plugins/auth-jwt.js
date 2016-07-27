@@ -8,7 +8,7 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-  name: 'IbcAuthJwt',
+  name: 'GeolinkAuthJwt',
 };
 
 exports.options = internals.options = {
@@ -16,7 +16,7 @@ exports.options = internals.options = {
 };
 
 internals.after = (server, next) => {
-  server.auth.strategy('ibc-token', 'jwt', false, {
+  server.auth.strategy('geolink-token', 'jwt', false, {
     key: internals.options.key,
     verifyOptions: { algorithms: ['HS256'] },  // only allow HS256 algorithm
     validateFunc: (decoded, request, callback) => {

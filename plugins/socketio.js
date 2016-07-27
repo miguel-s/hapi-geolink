@@ -13,5 +13,5 @@ exports.register = (server, options, next) => {
 };
 
 exports.register.attributes = {
-  name: 'SocketioCsa',
+  name: 'Socketio',
 };

@@ -6,12 +6,12 @@ const Boom = require('boom');
 const internals = {};
 
 exports.register = (server, options, next) => {
-  server.dependency(['IbcAuthJwt'], internals.after);
+  server.dependency(['GeolinkAuthJwt'], internals.after);
   return next();
 };
 
 exports.register.attributes = {
-  name: 'IbcApi',
+  name: 'GeolinkApi',
 };
 
 exports.options = internals.options = {
@@ -28,7 +28,7 @@ internals.after = (server, next) => {
       path: `${internals.options.prefix}/token`,
       config: {
         description: 'Returns a jwt',
-        auth: { strategy: 'ibc-session', mode: 'required' },
+        auth: { strategy: 'geolink-session', mode: 'required' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: require('../controllers/api_token.js'),
       },
@@ -40,7 +40,7 @@ internals.after = (server, next) => {
       path: `${internals.options.prefix}/map`,
       config: {
         description: 'Returns a topojson object with map and demographic data',
-        auth: { strategy: 'ibc-token', mode: 'required' },
+        auth: { strategy: 'geolink-token', mode: 'required' },
         validate: {
           query: {
             area: Joi.string().min(1).max(10).required(),
@@ -59,7 +59,7 @@ internals.after = (server, next) => {
       path: `${internals.options.prefix}/venues`,
       config: {
         description: 'Returns a json object with venue data',
-        auth: { strategy: 'ibc-token', mode: 'required' },
+        auth: { strategy: 'geolink-token', mode: 'required' },
         validate: {
           query: {
             area: Joi.string().min(1).max(10).optional(),

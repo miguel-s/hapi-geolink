@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 module.exports = function handler(request, reply, source, error) {
   let account = {};
 
-  if (!request.server.app.settings.ibc.allowSignup) {
+  if (!request.server.app.settings.geolink.allowSignup) {
     return reply.view('signup', {
       message: 'Signup not allowed',
       email: request.payload.email,
@@ -74,7 +74,7 @@ module.exports = function handler(request, reply, source, error) {
               const sid = String(aguid());
               request.server.app.cache.set(sid, { account }, 0, (err) => {
                 if (err) return reply(err);
-                request.cookieAuthIbc.set({ sid });
+                request.cookieAuthGeolink.set({ sid });
                 return reply.redirect('/');
               });
             }

@@ -3,12 +3,12 @@
 const internals = {};
 
 exports.register = (server, options, next) => {
-  server.dependency(['vision', 'IbcAuthCookie'], internals.after);
+  server.dependency(['vision', 'GeolinkAuthCookie'], internals.after);
   return next();
 };
 
 exports.register.attributes = {
-  name: 'IbcWeb',
+  name: 'GeolinkWeb',
 };
 
 internals.after = (server, next) => {
@@ -32,7 +32,7 @@ internals.after = (server, next) => {
       path: '/',
       config: {
         description: 'Returns the index page',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: {
           view: {
@@ -48,7 +48,7 @@ internals.after = (server, next) => {
       path: '/login',
       config: {
         description: 'Returns a login form',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           view: {
@@ -62,7 +62,7 @@ internals.after = (server, next) => {
       path: '/login',
       config: {
         description: 'Returns a login form',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         validate: {
           payload: require('../models/user.js'),
@@ -88,7 +88,7 @@ internals.after = (server, next) => {
       path: '/signup',
       config: {
         description: 'Returns a sinup form',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         handler: {
           view: {
@@ -102,7 +102,7 @@ internals.after = (server, next) => {
       path: '/signup',
       config: {
         description: 'Returns a sinup form',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: false } },
         validate: {
           payload: require('../models/user.js'),
@@ -118,7 +118,7 @@ internals.after = (server, next) => {
       path: '/venues',
       config: {
         description: 'Returns the venues page',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: {
           view: {
@@ -134,7 +134,7 @@ internals.after = (server, next) => {
       path: '/scrapers',
       config: {
         description: 'Returns the scrapers page',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: require('../controllers/scrapers.js'),
       },
@@ -146,7 +146,7 @@ internals.after = (server, next) => {
       path: '/profile',
       config: {
         description: 'Returns the profile page',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: require('../controllers/profile.js'),
       },
@@ -158,7 +158,7 @@ internals.after = (server, next) => {
       path: '/cookies',
       config: {
         description: 'Returns the cookies policy page',
-        auth: { strategy: 'ibc-session', mode: 'try' },
+        auth: { strategy: 'geolink-session', mode: 'try' },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: {
           view: {
@@ -174,7 +174,7 @@ internals.after = (server, next) => {
       path: '/admin',
       config: {
         description: 'Returns the admin control panel',
-        auth: { strategy: 'ibc-session', mode: 'try', scope: ['admin'] },
+        auth: { strategy: 'geolink-session', mode: 'try', scope: ['admin'] },
         plugins: { 'hapi-auth-cookie': { redirectTo: '/login' } },
         handler: {
           view: {
