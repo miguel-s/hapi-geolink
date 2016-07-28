@@ -12,7 +12,7 @@ module.exports = {
       'foundation-sites/dist/foundation.min',
     ],
     login: './src/js/login',
-    map: './src/js/map',
+    index: './src/js/index',
     profile: './src/js/profile',
     scrapers: './src/js/scrapers',
     venues: './src/js/venues',
