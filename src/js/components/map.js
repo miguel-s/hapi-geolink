@@ -1,9 +1,8 @@
 'use strict';
 
+const L = require('leaflet');
 const topojson = require('topojson');
 const { getColor } = require('../utils/utils.js');
-
-const L = window.L;
 
 // add topojson support
 // Copyright (c) 2013 Ryan Clark

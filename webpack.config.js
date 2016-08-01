@@ -8,7 +8,6 @@ module.exports = {
     commons: [
       'whatwg-fetch',
       'jquery',
-      './src/js/foundation-workaround',
       'foundation-sites/dist/foundation.min',
     ],
     login: './src/js/login',
@@ -28,7 +27,14 @@ module.exports = {
         exclude: /node_modules/,
         loader: 'babel',
       },
+      {
+        test: require.resolve('jquery'),
+        loader: 'expose?$!expose?jQuery',
+      },
     ],
+  },
+  externals: {
+    leaflet: 'L',
   },
   plugins: [
     new CommonsChunkPlugin({
