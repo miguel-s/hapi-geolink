@@ -1,10 +1,10 @@
 'use strict';
 
-const $ = require('jquery');
+import $ from 'jquery';
 
-const { getToken, getVenues } = require('./utils/api.js');
-const venueCard = require('./components/venue-card.js');
-const pagination = require('./components/pagination.js');
+import { getToken, getVenues } from './utils/api.js';
+import venueCard from './components/venue-card.js';
+import pagination from './components/pagination.js';
 
 // init foundation
 $(document).foundation();

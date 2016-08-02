@@ -1,10 +1,10 @@
 'use strict';
 
-const $ = require('jquery');
+import $ from 'jquery';
 
-const { getToken, getVenues, getMap } = require('./utils/api.js');
-const { capitalize } = require('./utils/utils.js');
-const map = require('./components/map.js');
+import { getToken, getVenues, getMap } from './utils/api.js';
+import { capitalize } from './utils/utils.js';
+import map from './components/map.js';
 
 // init
 $(document).foundation();

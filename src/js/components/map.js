@@ -1,8 +1,8 @@
 'use strict';
 
-const L = require('leaflet');
-const topojson = require('topojson');
-const { getColor } = require('../utils/utils.js');
+import L from 'leaflet';
+import topojson from 'topojson';
+import { getColor } from '../utils/utils.js';
 
 // add topojson support
 // Copyright (c) 2013 Ryan Clark
