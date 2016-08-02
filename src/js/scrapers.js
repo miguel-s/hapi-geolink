@@ -1,7 +1,7 @@
 'use strict';
 
 import $ from 'jquery';
-const io = window.io;
+import io from 'socketio';
 
 // init foundation
 $(document).foundation();

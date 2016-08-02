@@ -35,6 +35,7 @@ module.exports = {
   },
   externals: {
     leaflet: 'L',
+    socketio: 'io',
   },
   plugins: [
     new CommonsChunkPlugin({
