@@ -17,6 +17,7 @@ exports.options = internals.options = {
   cookie: 'geolink-sid',
   redirectTo: '/login',
   appendNext: true,
+  isHttpOnly: true,
   isSecure: (process.env.NODE_ENV === 'production' || process.env.NODE_ENV === 'staging'),
   requestDecoratorName: 'cookieAuthGeolink',
 };
