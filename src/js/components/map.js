@@ -9,7 +9,7 @@ import { getColor } from '../utils/utils.js';
 L.TopoJSON = L.GeoJSON.extend({
   addData(jsonData) {
     if (jsonData.type === 'Topology') {
-      for (const key in jsonData.objects) {
+      for (const key of jsonData.objects) {
         const geojson = topojson.feature(jsonData, jsonData.objects[key]);
         L.GeoJSON.prototype.addData.call(this, geojson);
       }
