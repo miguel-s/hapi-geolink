@@ -1,10 +1,10 @@
 'use strict';
 
-function capitalize(str) {
+export function capitalize(str) {
   return `${str[0].toUpperCase()}${str.slice(1)}`;
 }
 
-function getColor(d) {
+export function getColor(d) {
   return d > 1000 ? '#800026' :
          d > 500  ? '#BD0026' :
          d > 200  ? '#E31A1C' :
@@ -15,15 +15,9 @@ function getColor(d) {
                     '#FFEDA0';
 }
 
-function checkFetchStatus(response) {
+export function checkFetchStatus(response) {
   if (response.status >= 200 && response.status < 300) return response;
   const error = new Error(response.statusText);
   error.response = response;
   throw new Error(error);
 }
-
-module.exports = {
-  capitalize,
-  getColor,
-  checkFetchStatus,
-};

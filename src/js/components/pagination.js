@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function pagination(length, index) {
+export default function pagination(length, index) {
   const num = Math.ceil(length / 99);
 
   const previous = `

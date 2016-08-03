@@ -4,11 +4,11 @@ import $ from 'jquery';
 
 import { getToken, getVenues, getMap } from './utils/api.js';
 import { capitalize } from './utils/utils.js';
-import map from './components/map.js';
+import mapFactory from './components/map.js';
 
 // init
 $(document).foundation();
-map.init('map');
+const map = mapFactory().init('map');
 const api = getToken();
 const venues = [];
 const queries = [];

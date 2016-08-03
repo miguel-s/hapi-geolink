@@ -1,6 +1,6 @@
 'use strict';
 
-module.exports = function venueCard(venue) {
+export default function venueCard(venue) {
   return `
     <div class="small-12 medium-6 large-4 columns">
       <div class="container">
