@@ -27,6 +27,7 @@ html, body
     width: auto;
     margin: 0 1.0em;
   .select
+    position: relative;
     display: flex;
     justify-content: space-around;
     & button
@@ -48,11 +49,13 @@ html, body
         border-bottom: 1px solid #d06e5c;
         box-shadow: 0 1px 0 0 #d06e5c;
   .control
+    position: relative;
     display: none;
     background: white !important;
     box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
     border: 1px solid #ddd;
     padding: 1.0em 1.0em 0 1.0em;
+    margin-bottom: 16px;
     max-height: 60vh;
     overflow-y: auto;
     &.active
@@ -63,6 +66,16 @@ html, body
       display: block;
     .enabled
       background: #ddd;
+  .layers
+    position: relative;
+    background: white !important;
+    box-shadow: 0 3px 3px 0 rgba(0, 0, 0, 0.15);
+    border: 1px solid #ddd;
+    padding: 1.0em 1.0em 0 1.0em;
+    label
+      font-size: .75em;
+      color: #999 !important;
+      font-weight: bold;
   form
     flex: 1;
     display: flex;
