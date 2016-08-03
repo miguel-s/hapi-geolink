@@ -8,7 +8,8 @@ import mapFactory from './components/map.js';
 
 // init
 $(document).foundation();
-const map = mapFactory().init('map');
+const map = mapFactory();
+map.init('map');
 const api = getToken();
 const venues = [];
 const queries = [];
