@@ -44,6 +44,28 @@ module.exports = {
       },
       primary: true,
     },
+    {
+      id: null,
+      name: null,
+      pluralName: null,
+      shortName: null,
+      icon: {
+        prefix: null,
+        suffix: null,
+      },
+      primary: true,
+    },
+    {
+      id: null,
+      name: null,
+      pluralName: null,
+      shortName: null,
+      icon: {
+        prefix: null,
+        suffix: null,
+      },
+      primary: true,
+    },
   ],
   verified: null,
   stats: {
