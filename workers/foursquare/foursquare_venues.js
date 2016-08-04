@@ -56,7 +56,7 @@ function handleResponse(item, response, done) {
 
       for (let i = 1; i < numPages; i++) {
         const temp = Object.assign({}, item);
-        temp.offset = (i * 50) + 1;
+        temp.offset = i * 50;
         pages.push(temp);
       }
     }

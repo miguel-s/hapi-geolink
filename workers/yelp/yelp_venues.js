@@ -73,7 +73,7 @@ database.connect(dbConfig)
 
         for (let i = 1; i < numPages; i++) {
           const temp = Object.assign({}, item);
-          temp.offset = (i * 20) + 1;
+          temp.offset = i * 20;
           pages.push(temp);
         }
       }
