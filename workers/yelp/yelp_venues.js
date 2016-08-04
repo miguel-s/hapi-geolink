@@ -57,7 +57,10 @@ database.connect(dbConfig)
       radius_filter: 150,
       sort: 1,
     })
-    .catch(error => ({ error, source: 'handleGet' }));
+    .catch((error) => {
+      if (error.statusCode === 400) return error;
+      return { error, source: 'handleGet' };
+    });
   }
 
   function handleResponse(item, response, done) {
@@ -95,6 +98,11 @@ database.connect(dbConfig)
       }
 
       if (numPages > 1) return { result: [], pages };
+      const id = `empty_centroid (${cluster})`;
+      return [_.merge({}, model, { id, cluster, section, index: null, datetime })];
+    }
+
+    if (response.statusCode === 400) {
       const id = `empty_centroid (${cluster})`;
       return [_.merge({}, model, { id, cluster, section, index: null, datetime })];
     }
