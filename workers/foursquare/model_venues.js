@@ -32,7 +32,11 @@ module.exports = {
     ],
     neighborhood: null,
   },
-  categories: [],
+  categories: [
+    null,
+    null,
+    null,
+  ],
   verified: null,
   stats: {
     checkinsCount: null,
