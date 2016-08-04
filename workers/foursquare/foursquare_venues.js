@@ -92,11 +92,6 @@ function handleResponse(item, response, done) {
             newRow.events.items = row.events.items.map(event => event.id);
           }
 
-          // only save category name
-          if (newRow.categories.length) {
-            newRow.categories = newRow.categories.map(c => c.name);
-          }
-
           return newRow;
         })
         .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }));

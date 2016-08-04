@@ -33,9 +33,17 @@ module.exports = {
     neighborhood: null,
   },
   categories: [
-    null,
-    null,
-    null,
+    {
+      id: null,
+      name: null,
+      pluralName: null,
+      shortName: null,
+      icon: {
+        prefix: null,
+        suffix: null,
+      },
+      primary: true,
+    },
   ],
   verified: null,
   stats: {
