@@ -51,10 +51,10 @@ function makeGenerator({ config, data, handlers }) {
   const maxRetries = 3;
   let retries = 0;
   let message = 'Getting';
-  let progress = Math.floor(done.length / input.length * 100 / size);
+  let progress = Math.floor(((done.length / input.length) * 100) / size);
   if (process.send) process.send({ type: 'progress', data: progress, origin, list });
 
-  return function *gen() {
+  return function* gen() {
     if (process.send) process.send({ type: 'start', origin, list });
     if (!process.send) {
       console.log(`Start: ${origin}_${list}`);
@@ -83,7 +83,7 @@ function makeGenerator({ config, data, handlers }) {
         done.push(...inserted);
         retries = 0;
         message = 'Getting';
-        const newProgress = Math.floor(done.length / input.length * 100 / size);
+        const newProgress = Math.floor(((done.length / input.length) * 100) / size);
 
         if (!process.send) console.log(` -> results: ${results.length} -> OK`);
         if (newProgress > progress) {
@@ -108,7 +108,7 @@ function makeGenerator({ config, data, handlers }) {
     }
 
     if (process.send) process.send({ type: 'stop', origin, list });
-    if (!process.send) console.log(`Done: ${name}`);
+    if (!process.send) console.log(`Done: ${origin}_${list}`);
   };
 }
 
