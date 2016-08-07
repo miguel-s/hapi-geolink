@@ -28,22 +28,22 @@ const centroidesMunicipio = JSON.parse(fs.readFileSync(path.join(__dirname, './i
 const food = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
   .map((item) => Object.assign(item, {
     offset: 0,
-    name: `${item.latlon} | ${item.municipio} | ${item.type}`,
-    cluster: `${item.latlon} | ${item.municipio} | ${item.type}`,
+    name: `${item.latlon} | ${item.municipio} | ${item.type} | food`,
+    cluster: `${item.latlon} | ${item.municipio} | ${item.type} | food`,
     section: 'food',
   }));
 const drinks = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
   .map((item) => Object.assign(item, {
     offset: 0,
-    name: `${item.latlon} | ${item.municipio} | ${item.type}`,
-    cluster: `${item.latlon} | ${item.municipio} | ${item.type}`,
+    name: `${item.latlon} | ${item.municipio} | ${item.type} | drinks`,
+    cluster: `${item.latlon} | ${item.municipio} | ${item.type} | drinks`,
     section: 'drinks',
   }));
 const coffee = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
   .map((item) => Object.assign(item, {
     offset: 0,
-    name: `${item.latlon} | ${item.municipio} | ${item.type}`,
-    cluster: `${item.latlon} | ${item.municipio} | ${item.type}`,
+    name: `${item.latlon} | ${item.municipio} | ${item.type} | coffee`,
+    cluster: `${item.latlon} | ${item.municipio} | ${item.type} | coffee`,
     section: 'coffee',
   }));
 
