@@ -24,30 +24,32 @@ const apiConfig = {
 const centroidesCodCensal = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_cod_censal.json')));
 const centroidesCodPostal = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_cod_postal.json')));
 const centroidesMunicipio = JSON.parse(fs.readFileSync(path.join(__dirname, './input/centroides_municipio.json')));
+const centroids = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio];
 
-const food = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
-  .map((item) => Object.assign(item, {
+const food = centroids
+  .map((item) => Object.assign({}, item, {
     offset: 0,
     name: `${item.latlon} | ${item.municipio} | ${item.type} | food`,
     cluster: `${item.latlon} | ${item.municipio} | ${item.type} | food`,
     section: 'food',
   }));
-const drinks = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
-  .map((item) => Object.assign(item, {
+const drinks = centroids
+  .map((item) => Object.assign({}, item, {
     offset: 0,
     name: `${item.latlon} | ${item.municipio} | ${item.type} | drinks`,
     cluster: `${item.latlon} | ${item.municipio} | ${item.type} | drinks`,
     section: 'drinks',
   }));
-const coffee = [...centroidesCodCensal, ...centroidesCodPostal, ...centroidesMunicipio]
-  .map((item) => Object.assign(item, {
+const coffee = centroids
+  .map((item) => Object.assign({}, item, {
     offset: 0,
     name: `${item.latlon} | ${item.municipio} | ${item.type} | coffee`,
     cluster: `${item.latlon} | ${item.municipio} | ${item.type} | coffee`,
     section: 'coffee',
   }));
 
-const input = [...food, ...drinks, ...coffee];
+const input = [...food];
+console.log(input[0].cluster)
 
 // Set up handlers
 
