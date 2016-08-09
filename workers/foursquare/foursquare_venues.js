@@ -48,8 +48,7 @@ const coffee = centroids
     section: 'coffee',
   }));
 
-const input = [...food];
-console.log(input[0].cluster)
+const input = [...food, ...drinks, ...coffee];
 
 // Set up handlers
 
