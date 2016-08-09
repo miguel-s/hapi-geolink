@@ -12,6 +12,7 @@ exports.register = (server, options, next) => {
       require('./plugins/web.js'),
       require('./plugins/api.v1.js'),
       require('./plugins/socketio.js'),
+      require('./plugins/db-admin.js'),
     ],
     (err) => {
       if (err) return next(err);
