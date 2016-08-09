@@ -16,6 +16,13 @@ module.exports = {
     crossStreet: null,
     lat: null,
     lng: null,
+    labeledLatLngs: [
+      {
+        label: null,
+        lat: null,
+        lng: null,
+      },
+    ],
     distance: null,
     postalCode: null,
     cc: null,
