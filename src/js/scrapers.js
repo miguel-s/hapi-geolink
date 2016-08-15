@@ -23,6 +23,8 @@ fetch('./api/v1/token', { credentials: 'same-origin' })
       e.preventDefault();
       const origin = $(e.currentTarget).data('origin');
       const list = $(e.currentTarget).data('list');
+      $(e.currentTarget).hide();
+      $(e.currentTarget).siblings('.spinner').show();
       socket.emit('start', { origin, list });
     });
     $('.stop').on('click', (e) => {
@@ -36,6 +38,7 @@ fetch('./api/v1/token', { credentials: 'same-origin' })
       const { origin, list } = payload;
       const element = $(`.${origin}`);
       element.find('.update').hide();
+      element.find('.spinner').hide();
       element.find('.stop').show();
       element.find('.progress').show();
       element.find(`input[type="radio"][value="${list}"]`).prop('checked', true);
@@ -45,6 +48,16 @@ fetch('./api/v1/token', { credentials: 'same-origin' })
       const { origin } = payload;
       const element = $(`.${origin}`);
       element.find('.update').show();
+      element.find('.spinner').hide();
+      element.find('.stop').hide();
+      element.find('.progress').hide();
+      element.find('input[type="radio"]').prop('disabled', false);
+    });
+    socket.on('error', (payload) => {
+      const { origin, error } = payload;
+      const element = $(`.${origin}`);
+      element.find('.update').show();
+      element.find('.spinner').hide();
       element.find('.stop').hide();
       element.find('.progress').hide();
       element.find('input[type="radio"]').prop('disabled', false);
