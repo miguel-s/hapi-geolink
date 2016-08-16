@@ -34,6 +34,16 @@ fetch('./api/v1/token', { credentials: 'same-origin' })
       socket.emit('stop', { origin, list });
     });
 
+    socket.on('launching', (payload) => {
+      const { origin, list } = payload;
+      const element = $(`.${origin}`);
+      element.find('.update').hide();
+      element.find('.spinner').show();
+      element.find('.stop').hide();
+      element.find('.progress').hide();
+      element.find(`input[type="radio"][value="${list}"]`).prop('checked', true);
+      element.find('input[type="radio"]').prop('disabled', true);
+    });
     socket.on('start', (payload) => {
       const { origin, list } = payload;
       const element = $(`.${origin}`);
