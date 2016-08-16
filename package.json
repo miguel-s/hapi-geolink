@@ -13,6 +13,9 @@
     "css:rename": "renamer \"public/css/*\" --find \".css\" --replace \".min.css\"",
     "css:autoprefix": "postcss -r public/css/* -u autoprefixer",
     "build:css": "npm run css:clean && npm run css:compile && npm run css:rename && npm run css:autoprefix",
+    "assets:clean": "rm -rf public/img/*",
+    "assets:copy": "cp src/img/* public/img",
+    "build:assets": "npm run assets:clean && npm run assets:copy",
     "build": "npm run build:js && npm run build:css"
   },
   "author": "Miguel Serrano",
