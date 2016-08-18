@@ -1,5 +1,37 @@
 extends ./layouts/base.jade
 
+mixin card(name, icon, acro, lists)
+  div(class=name).container
+    div.title
+      div.cover
+      div.logo
+        span(class=icon).fa
+      div.name
+        h4 #{name[0].toUpperCase() + name.slice(1)}
+    hr
+    div.stats-container
+      div.stats
+        h5 #{sources[name].distinct_id || 0}
+        p Venues
+      div.stats
+        h5 #{sources[name].max_datetime ? Math.floor((new Date().getTime() - sources[name].max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
+        p Last update
+    if lists
+      div.select
+        div.radio-group.tiny
+          each list, index in lists
+            div.radio-button
+              input(type="radio" name=name id="#{acro}-#{list}" value="#{list}" checked=(index === lists.length - 1))
+              label(for="#{acro}-#{list}") #{list[0].toUpperCase() + list.slice(1)}
+    div.controls
+      div.spinner
+        img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
+      button(data-origin=name data-list="venues").button.small.update Update
+      button(data-origin=name data-list="venues").button.small.stop Stop
+      div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
+        span.progress-meter
+          p.progress-meter-text 0%
+
 append head
   title Geolink
   link(rel="stylesheet" href="/css/scrapers.min.css")
@@ -10,203 +42,19 @@ block header
 block content
   div.row.align-stretch
     div.small-12.medium-6.large-4.columns
-      div.container.twitter
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-twitter
-          div.name
-            h4 Twitter
-        hr
-        div.stats-container
-          div.stats
-            h5 #{twitter.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{twitter.max_datetime ? Math.floor((new Date().getTime() - twitter.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="twitter" data-list="venues").button.small.update Update
-          button(data-origin="twitter" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('twitter', 'fa-twitter')
     div.small-12.medium-6.large-4.columns
-      div.container.facebook
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-facebook
-          div.name
-            h4 Facebook
-        hr
-        div.stats-container
-          div.stats
-            h5 #{facebook.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{facebook.max_datetime ? Math.floor((new Date().getTime() - facebook.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="facebook" data-list="venues").button.small.update Update
-          button(data-origin="facebook" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('facebook', 'fa-facebook')
     div.small-12.medium-6.large-4.columns
-      div.container.foursquare
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-foursquare
-          div.name
-            h4 Foursquare
-        hr
-        div.stats-container
-          div.stats
-            h5 #{foursquare.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{foursquare.max_datetime ? Math.floor((new Date().getTime() - foursquare.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="foursquare" data-list="venues").button.small.update Update
-          button(data-origin="foursquare" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('foursquare', 'fa-foursquare')
     div.small-12.medium-6.large-4.columns
-      div.container.yelp
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-yelp
-          div.name
-            h4 Yelp
-        hr
-        div.stats-container
-          div.stats
-            h5 #{yelp.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{yelp.max_datetime ? Math.floor((new Date().getTime() - yelp.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="yelp" data-list="venues").button.small.update Update
-          button(data-origin="yelp" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('yelp', 'fa-yelp')
     div.small-12.medium-6.large-4.columns
-      div.container.tripadvisor
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-tripadvisor
-          div.name
-            h4 Tripadvisor
-        hr
-        div.stats-container
-          div.stats
-            h5 #{tripadvisor.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{tripadvisor.max_datetime ? Math.floor((new Date().getTime() - tripadvisor.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.select
-          div.radio-group.tiny
-            div.radio-button
-              input(type="radio" name="tripadvisor" id="ta-pages" value="pages")
-              label(for="ta-pages") Pages
-            div.radio-button
-              input(type="radio" name="tripadvisor" id="ta-list" value="list")
-              label(for="ta-list") List
-            div.radio-button
-              input(type="radio" name="tripadvisor" id="ta-venues" value="venues" checked)
-              label(for="ta-venues") Venues
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="tripadvisor" data-list="venues").button.small.update Update
-          button(data-origin="tripadvisor" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('tripadvisor', 'fa-tripadvisor', 'ta', ['pages', 'list', 'venues'])
     div.small-12.medium-6.large-4.columns
-      div.container.michelin
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-cutlery
-          div.name
-            h4 Michelin
-        hr
-        div.stats-container
-          div.stats
-            h5 #{michelin.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{michelin.max_datetime ? Math.floor((new Date().getTime() - michelin.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.select
-          div.radio-group.tiny
-            div.radio-button
-              input(type="radio" name="michelin" id="mi-list" value="list")
-              label(for="mi-list") List
-            div.radio-button
-              input(type="radio" name="michelin" id="mi-venues" value="venues" checked)
-              label(for="mi-venues") Venues
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="michelin" data-list="venues").button.small.update Update
-          button(data-origin="michelin" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('michelin', 'fa-cutlery', 'mi', ['list', 'venues'])
     div.small-12.medium-6.large-4.columns
-      div.container.repsol
-        div.title
-          div.cover
-          div.logo
-            span.fa.fa-cutlery
-          div.name
-            h4 Repsol
-        hr
-        div.stats-container
-          div.stats
-            h5 #{repsol.distinct_id || 0}
-            p Venues
-          div.stats
-            h5 #{repsol.max_datetime ? Math.floor((new Date().getTime() - repsol.max_datetime.getTime()) / (1000 * 3600 * 24)) : '-'}
-            p Last update
-        div.select
-          div.radio-group.tiny
-            div.radio-button
-              input(type="radio" name="repsol" id="re-pages" value="pages")
-              label(for="re-pages") Pages
-            div.radio-button
-              input(type="radio" name="repsol" id="re-list" value="list")
-              label(for="re-list") List
-            div.radio-button
-              input(type="radio" name="repsol" id="re-venues" value="venues" checked)
-              label(for="re-venues") Venues
-        div.controls
-          div.spinner
-            img(src="/img/spinner-white.svg" alt="loading" height="20" width="20")
-          button(data-origin="repsol" data-list="venues").button.small.update Update
-          button(data-origin="repsol" data-list="venues").button.small.stop Stop
-          div.progress.align-center(role="progressbar" tabindex="0" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" aria-valuetext="0 percent")
-            span.progress-meter
-              p.progress-meter-text 0%
+      +card('repsol', 'fa-cutlery', 're', ['pages', 'list', 'venues'])
 
 append scripts
   script(src="/socket.io/socket.io.js")
