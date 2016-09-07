@@ -21,6 +21,7 @@ const dbConfig = {
   server: process.env.CSADB_SERVER,
   database: process.env.CSADB_DATABASE,
 };
+
 database.connect(dbConfig)
 .then(() => database.query`
   SELECT *
