@@ -81,8 +81,7 @@ database.connect(dbConfig)
         }
       }
 
-      const rows = response.businesses
-        .filter(row => done.indexOf(row.id.toString()) === -1);
+      const rows = response.businesses.filter(row => done.indexOf(row.id.toString()) === -1);
 
       if (rows.length) {
         const result = rows
