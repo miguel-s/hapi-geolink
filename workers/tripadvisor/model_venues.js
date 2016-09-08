@@ -12,7 +12,7 @@ module.exports = {
   },
   telephone: null,
   ranking: null,
-  ratingAverage: null,
+  rating: null,
   ratingVisitors: {
     excellent: null,
     veryGood: null,

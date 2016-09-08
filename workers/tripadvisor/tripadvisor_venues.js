@@ -51,7 +51,7 @@ database.connect(dbConfig)
           },
           telephone: '.phoneNumber',
           ranking: ['.slim_ranking'],
-          ratingAverage: '.heading_ratings img@content',
+          rating: '.heading_ratings img@content',
           ratingVisitors: {
             excellent: '.visitorRating .barChart li:nth-child(1) .valueCount.fr.part',
             veryGood: '.visitorRating .barChart li:nth-child(2) .valueCount.fr.part',
