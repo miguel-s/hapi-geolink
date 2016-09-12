@@ -20,6 +20,7 @@ const dbConfig = {
   password: process.env.CSADB_PASSWORD,
   server: process.env.CSADB_SERVER,
   database: process.env.CSADB_DATABASE,
+  requestTimeout: 60000,
 };
 
 database.connect(dbConfig)
