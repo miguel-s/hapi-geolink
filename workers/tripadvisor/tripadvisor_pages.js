@@ -47,7 +47,7 @@ function handleGet({ id, url }) {
 }
 
 function handleResponse(item, response, done) {
-  const { cluster, section } = item;
+  const { name, cluster, section } = item;
   const datetime = new Date().toISOString();
 
   return response
@@ -59,7 +59,7 @@ function handleResponse(item, response, done) {
 
       return newRow;
     })
-    .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
+    .map((row, index) => _.merge({}, model, row, { city: name, cluster, section, index, datetime }))
     .filter(row => done.indexOf(row.id.toString()) === -1);
 
   // return { error: response.meta, source: 'handleResponse' };

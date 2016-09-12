@@ -61,7 +61,7 @@ database.connect(dbConfig)
   }
 
   function handleResponse(item, response, done) {
-    const { cluster, section } = item;
+    const { city, cluster, section } = item;
     const datetime = new Date().toISOString();
 
     return response
@@ -76,7 +76,7 @@ database.connect(dbConfig)
 
         return newRow;
       })
-      .map((row, index) => _.merge({}, model, row, { cluster, section, index, datetime }))
+      .map((row, index) => _.merge({}, model, row, { city, cluster, section, index, datetime }))
       .filter(row => done.indexOf(row.id.toString()) === -1)
       .filter((row, index, array) => array.slice(0, index).map(row => row.id).indexOf(row.id) === -1);
 
