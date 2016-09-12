@@ -28,7 +28,7 @@ database.connect(dbConfig)
   FROM ibc_seg.DM_SOURCE_TRIPADVISOR_LIST_RAW`)
 .then((rows) => {
   const input = rows
-    .map((item) => Object.assign(item, {
+    .map((item) => Object.assign({}, item, {
       name: `${item.city} - ${item.name}`,
       cluster: item.id,
       section: null,
@@ -128,4 +128,3 @@ database.connect(dbConfig)
   });
 })
 .catch(err => console.log(err));
-

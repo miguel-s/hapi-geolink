@@ -28,7 +28,7 @@ database.connect(dbConfig)
   FROM ibc_seg.DM_SOURCE_REPSOL_LIST_RAW`)
 .then((rows) => {
   const input = rows
-    .map((item) => Object.assign(item, {
+    .map((item) => Object.assign({}, item, {
       name: item.id,
       cluster: item.id,
       section: null,

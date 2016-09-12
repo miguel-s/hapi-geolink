@@ -29,7 +29,7 @@ database.connect(dbConfig)
   ORDER BY CAST(cluster AS INT)`)
 .then((rows) => {
   const input = rows
-    .map((item) => Object.assign(item, {
+    .map((item) => Object.assign({}, item, {
       name: `Page: ${item.id}`,
       cluster: item.id,
       section: null,

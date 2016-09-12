@@ -17,7 +17,7 @@ const size = 1;
 // Set up input data
 
 const input = JSON.parse(fs.readFileSync(path.join(__dirname, './input/cities.json')))
-  .map((item) => Object.assign(item, {
+  .map((item) => Object.assign({}, item, {
     name: item.name,
     cluster: item.id,
     section: null,
