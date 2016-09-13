@@ -109,6 +109,7 @@ function makeGenerator({ config, data, handlers }) {
 
     if (process.send) process.send({ type: 'stop', origin, list });
     if (!process.send) console.log(`Done: ${origin}_${list}`);
+    connection.close();
   };
 }
 
