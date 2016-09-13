@@ -25,7 +25,7 @@ const dbConfig = {
 
 database.connect(dbConfig)
 .then(() => database.query`
-  SELECT *
+  SELECT [id], [url], [city], [cuisine], [price]
   FROM ibc_seg.DM_SOURCE_TRIPADVISOR_LIST_RAW`)
 .then((rows) => {
   const input = rows
