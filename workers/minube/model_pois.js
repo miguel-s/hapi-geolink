@@ -10,6 +10,7 @@ module.exports = {
   // numFotos: null,
   numOpinions: null,
   telephone: null,
+  city: null,
   address: null,
   lat: null,
   lon: null,
