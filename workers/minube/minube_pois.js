@@ -76,16 +76,18 @@ database.connect(dbConfig)
     result.city = item.city;
     result.saved = item.saved;
 
-    if (result.numOpinions) {
+    if (response.numOpinions) {
       result.numOpinions = response.numOpinions
         .slice(0, response.numOpinions.indexOf('opiniones') - 1)
         .trim();
     }
 
-    if (result.latlon) {
+    if (response.latlon) {
       const latlon = result.latlon.split(',');
-      result.lat = latlon[1];
-      result.lon = latlon[2].replace(');', '');
+      if (latlon.length >= 3) {
+        result.lat = latlon[1];
+        result.lon = latlon[2].replace(');', '');
+      }
     }
 
     result = _.merge({}, model, result, { cluster, section, datetime });
