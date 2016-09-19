@@ -39,7 +39,12 @@ module.exports = function handler(request, reply) {
     SELECT	'repsol' AS [source],
             COUNT(DISTINCT [id]) AS [distinct_id],
             MAX(CAST([datetime] AS [datetime])) AS [max_datetime]
-    FROM ibc_seg.DM_SOURCE_Repsol_VENUES_RAW`
+    FROM ibc_seg.DM_SOURCE_REPSOL_VENUES_RAW
+    UNION ALL
+    SELECT      'minube' AS [source],
+                COUNT(DISTINCT [id]) AS [distinct_id],
+                MAX(CAST([datetime] AS [datetime])) AS [max_datetime]
+    FROM ibc_seg.DM_SOURCE_MINUBE_POIS_RAW`
   .then((rows) => reply.view('scrapers', {
     sources: rows.reduce((prev, curr) => Object.assign({}, prev, { [curr.source]: curr }), {}),
   }))
