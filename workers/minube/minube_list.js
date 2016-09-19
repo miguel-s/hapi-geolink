@@ -68,9 +68,9 @@ database.connect(dbConfig)
         // last opportunity to modify response objects
         const newRow = row;
 
-        newRow.name = row.name.trim();
-        newRow.city = row.city.trim();
-        newRow.saved = row.saved.replace('lo guardaron', '').trim();
+        newRow.name = row.name ? row.name.trim() : null;
+        newRow.city = row.city ? row.city.trim() : null;
+        newRow.saved = row.saved ? row.saved.replace('lo guardaron', '').trim() : null;
 
         return newRow;
       })
