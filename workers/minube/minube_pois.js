@@ -43,7 +43,7 @@ database.connect(dbConfig)
     return new Promise((resolve, reject) => {
       const scrape = x(url, 'body',
         {
-          name: '.text-s',
+          name: '.text_title',
           rating: '.mnormal:nth-child(3)',
           numRatings: '.mnormal:nth-child(5)',
           // numFotos: '.num_pictures', -> data gets loaded async, not possible to parse
@@ -71,14 +71,14 @@ database.connect(dbConfig)
 
     // last opportunity to modify response objects
     result.id = item.id;
-    result.name = item.name;
     result.url = item.url;
     result.city = item.city;
     result.saved = item.saved;
 
     if (response.numOpinions) {
       result.numOpinions = response.numOpinions
-        .slice(0, response.numOpinions.indexOf('opiniones') - 1)
+        .slice(0, response.numOpinions.indexOf('opiniones'))
+        .slice(0, response.numOpinions.indexOf('opinión'))
         .trim();
     }
 
