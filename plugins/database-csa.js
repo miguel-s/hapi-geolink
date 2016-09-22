@@ -9,6 +9,7 @@ exports.options = internals.options = {
   password: process.env.CSADB_PASSWORD,
   server: process.env.CSADB_SERVER,
   database: process.env.CSADB_DATABASE,
+  connectionTimeout: process.env.CSADB_CONNECTION_TIMEOUT,
   requestTimeout: process.env.CSADB_REQUEST_TIMEOUT,
 };
 
