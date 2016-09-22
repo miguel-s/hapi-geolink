@@ -13,6 +13,7 @@ module.exports = function handler(request, reply) {
             COUNT(DISTINCT [id]) AS [distinct_id],
             MAX(CAST([datetime] AS [datetime])) AS [max_datetime]
     FROM ibc_seg.DM_SOURCE_FACEBOOK_VENUES_RAW
+    WHERE [err_code] IS NULL
     UNION ALL
     SELECT	'foursquare' AS [source],
             COUNT(DISTINCT [id]) AS [distinct_id],
