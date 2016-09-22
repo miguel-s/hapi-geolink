@@ -143,17 +143,19 @@ function runner({ config, data, handlers }) {
 
   // get progress
   .then(() => {
+    const datetime = new Date().toISOString();
+
     const pClusters = new database.Request()
       .query(`
         SELECT DISTINCT [cluster]
         FROM ${tableName}
-        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30`);
+        WHERE DATEDIFF(day, [datetime], '${datetime}') <= ${process.env.SCRAPER_FREQUENCY_DAYS}`);
 
     const pIds = new database.Request()
       .query(`
         SELECT DISTINCT [id]
         FROM ${tableName}
-        WHERE DATEDIFF(day, [datetime], '${new Date().toISOString()}') < 30`);
+        WHERE DATEDIFF(day, [datetime], '${datetime}') <= ${process.env.SCRAPER_FREQUENCY_DAYS}`);
 
     return Promise.all([pClusters, pIds]);
   })
