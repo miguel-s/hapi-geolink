@@ -4,6 +4,7 @@ const CommonsChunkPlugin = require('webpack/lib/optimize/CommonsChunkPlugin');
 const UglifyJsPlugin = require('webpack/lib/optimize/UglifyJsPlugin');
 
 module.exports = {
+  devtool: 'source-map',
   entry: {
     commons: [
       'whatwg-fetch',
