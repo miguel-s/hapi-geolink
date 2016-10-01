@@ -5,6 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
+    "init": "mkdir public && cd public && mkdir js css img libs && cd ..",
     "js:clean": "rm -rf public/js/*",
     "js:compile": "webpack -p",
     "build:js": "npm run js:clean && npm run js:compile",
@@ -14,9 +15,12 @@
     "css:autoprefix": "postcss -r public/css/* -u autoprefixer",
     "build:css": "npm run css:clean && npm run css:compile && npm run css:rename && npm run css:autoprefix",
     "assets:clean": "rm -rf public/img/*",
-    "assets:copy": "cp src/img/* public/img",
+    "assets:copy": "cp -a src/img/* public/img | true",
     "build:assets": "npm run assets:clean && npm run assets:copy",
-    "build": "npm run build:js && npm run build:css"
+    "libs:clean": "rm -rf public/libs/*",
+    "libs:copy": "cp -a src/libs/* public/libs | true",
+    "build:libs": "npm run libs:clean && npm run libs:copy",
+    "build": "npm run build:js && npm run build:css && npm run build:assets && npm run build:libs"
   },
   "author": "Miguel Serrano",
   "license": "ISC",
