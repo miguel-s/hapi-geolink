@@ -6,7 +6,7 @@ const bcrypt = require('bcryptjs');
 module.exports = function handler(request, reply, source, error) {
   let account = {};
 
-  if (!request.server.app.settings.geolink.allowSignup) {
+  if (process.env.ALLOW_SIGNUP_GEOLINK === 'false') {
     return reply.view('signup', {
       message: 'Signup not allowed',
       email: request.payload.email,
