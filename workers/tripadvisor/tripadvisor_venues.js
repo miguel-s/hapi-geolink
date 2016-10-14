@@ -93,7 +93,7 @@ database.connect(dbConfig)
     result.cuisine = item.cuisine;
     result.price = item.price;
 
-    result.numReviews = response.numReviews ? response.numReviews.replace('(', '').replace(')', '').trim() : null;
+    result.numReviews = response.numReviews ? response.numReviews.replace('(', '').replace(')', '').replace('.', '').trim() : null;
     result.QAs = response.QAs ? response.QAs.replace('(', '').replace('(', '').trim() : null;
     result.ranking = response.ranking ? response.ranking.join().replace(/\n/g, '').trim() : null;
     result.opening = {
