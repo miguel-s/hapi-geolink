@@ -16,7 +16,7 @@ const size = 1;
 const apiConfig = {
   accessToken: process.env.FACEBOOK_ACCESS_TOKEN,
   api: 'https://graph.facebook.com/v2.6',
-  fields: ['id', 'name', 'fan_count'],
+  fields: ['id', 'name', 'username', 'fan_count'],
   format: 'json',
 };
 

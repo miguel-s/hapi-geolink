@@ -3,6 +3,7 @@
 module.exports = {
   id: null,
   name: null,
+  username: null,
   fan_count: null,
   err_code: null,
   err_message: null,
