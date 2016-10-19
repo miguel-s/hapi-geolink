@@ -78,9 +78,6 @@ database.connect(dbConfig)
   const foursquare = values[0].map(row => row['contact.twitter']);
   const manpower = values[1].map(row => row.idTwitter);
 
-  console.log(foursquare);
-  console.log(manpower);
-
   const once = JSON.parse(fs.readFileSync(path.join(__dirname, './input/11870.json')));
   const buscor = JSON.parse(fs.readFileSync(path.join(__dirname, './input/buscorestaurantes.json')));
   const manual = JSON.parse(fs.readFileSync(path.join(__dirname, './input/manual.json')));
