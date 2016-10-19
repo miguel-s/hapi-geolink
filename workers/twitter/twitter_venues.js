@@ -65,18 +65,21 @@ database.connect(dbConfig)
 .then(() => {
   const pFoursquare = database.query`
     SELECT DISTINCT [contact.twitter]
-    FROM [ibc_seg].[DM_SOURCE_FOURSQUARE_VENUES_RAW]
+    FROM [ibc_seg].[V_SOURCE_FOURSQUARE]
     WHERE [contact.twitter] IS NOT NULL`;
   const pManpower = database.query`
-    SELECT DISTINCT [En caso que proceda escribe el nombre de cuenta de Twitter]
-    FROM [ibc_seg].[DM_MANPOWER_OUTPUT]
-    WHERE [En caso que proceda escribe el nombre de cuenta de Twitter] <> ''`;
+    SELECT DISTINCT [idTwitter]
+    FROM [ibc_seg].[V_SOURCE_TWITTER_MANPOWER]
+    WHERE [idTwitter] <> ''`;
 
   return Promise.all([pFoursquare, pManpower]);
 })
 .then((values) => {
-  const foursquare = values[0];
-  const manpower = values[1];
+  const foursquare = values[0].map(row => row['contact.twitter']);
+  const manpower = values[1].map(row => row.idTwitter);
+
+  console.log(foursquare);
+  console.log(manpower);
 
   const once = JSON.parse(fs.readFileSync(path.join(__dirname, './input/11870.json')));
   const buscor = JSON.parse(fs.readFileSync(path.join(__dirname, './input/buscorestaurantes.json')));
