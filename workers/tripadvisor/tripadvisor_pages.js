@@ -16,16 +16,27 @@ const size = 1;
 
 // Set up input data
 
-const input = JSON.parse(fs.readFileSync(path.join(__dirname, './input/cities.json')))
-  .map((item) => Object.assign({}, item, {
+const cities = JSON.parse(fs.readFileSync(path.join(__dirname, './input/cities.json')));
+const restaurants = cities
+  .map(item => Object.assign({}, item, {
     name: item.name,
     cluster: item.id,
     section: null,
+    type: 'restaurants',
   }));
+const nightlife = cities
+  .map(item => Object.assign({}, item, {
+    name: item.name,
+    cluster: item.id,
+    section: null,
+    url: `https://www.tripadvisor.es/Attractions-g${item.id}-Activities-c20-${item.name.replace(' ', '_')}.html`,
+    type: 'nightlife',
+  }));
+const input = [...restaurants, ...nightlife];
 
 // Set up handlers
 
-function handleGet({ id, url }) {
+function handleGet({ id, name, url, type }) {
   const x = xray();
 
   return new Promise((resolve, reject) => {
@@ -37,7 +48,11 @@ function handleGet({ id, url }) {
         const urls = [];
         const pages = parseInt(arr[arr.length - 1], 10);
         for (let i = 0; i < pages; i++) {
-          urls.push(`https://www.tripadvisor.es/RestaurantSearch?geo=${id}&o=a${i * 30}&itags=10591&sortOrder=popularity`);
+          if (type === 'restaurants') {
+            urls.push(`https://www.tripadvisor.es/RestaurantSearch?geo=${id}&o=a${i * 30}&itags=10591&sortOrder=popularity`);
+          } else if (type === 'nightlife') {
+            urls.push(`https://www.tripadvisor.es/Attractions-g${id}-oa${i * 30}-Activities-c20-${name.replace(' ', '_')}.html`);
+          }
         }
         resolve(urls);
       }

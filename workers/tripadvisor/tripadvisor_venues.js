@@ -26,7 +26,11 @@ const dbConfig = {
 database.connect(dbConfig)
 .then(() => database.query`
   SELECT [id], [url], [name], [city], [cuisine], [price]
-  FROM ibc_seg.DM_SOURCE_TRIPADVISOR_LIST_RAW`)
+  FROM (
+    SELECT  *,
+            ROW_NUMBER() OVER (PARTITION BY [id] ORDER BY [id], [datetime] DESC) AS [rank_time]
+    FROM [ibc_seg].[DM_SOURCE_TRIPADVISOR_LIST_RAW] ) AS A
+  WHERE [rank_time] = 1`)
 .then((rows) => {
   const input = rows
     .map((item) => Object.assign({}, item, {
