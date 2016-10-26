@@ -41,20 +41,33 @@ database.connect(dbConfig)
 
   // Set up handlers
 
-  function handleGet({ url }) {
+  function handleGet({ cluster, url }) {
     const x = xray();
 
     return new Promise((resolve, reject) => {
-      const scrape = x(url, '#EATERY_SEARCH_RESULTS div.listing',
-        [{
-          id: '@id',
-          url: '.property_title@href',
-          name: '.property_title',
-          rank: '.popIndex',
-          price: '.price_range',
-          cuisine: ['.cuisine'],
-        }]
-      );
+      let scrape;
+
+      if (cluster.indexOf('restaurants') !== -1) {
+        scrape = x(url, '#EATERY_SEARCH_RESULTS div.listing',
+          [{
+            id: '@id',
+            url: '.property_title@href',
+            name: '.property_title',
+            rank: '.popIndex',
+            price: '.price_range',
+            cuisine: ['.cuisine'],
+          }]
+        );
+      } else {
+        scrape = x(url, '.attraction_list div.entry',
+          [{
+            id: '@id',
+            url: '.property_title a@href',
+            name: '.property_title',
+            rank: '.popRanking',
+          }]
+        );
+      }
 
       scrape((err, arr) => {
         if (err) reject(err);
@@ -81,6 +94,7 @@ database.connect(dbConfig)
         return newRow;
       })
       .map((row, index) => _.merge({}, model, row, { city, cluster, section, index, datetime }))
+      .filter(row => row.id)
       .filter(row => done.indexOf(row.id.toString()) === -1)
       .filter((row, index, array) => array.slice(0, index).map(row => row.id).indexOf(row.id) === -1);
 
