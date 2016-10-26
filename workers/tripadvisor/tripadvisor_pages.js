@@ -19,20 +19,23 @@ const size = 1;
 const cities = JSON.parse(fs.readFileSync(path.join(__dirname, './input/cities.json')));
 const restaurants = cities
   .map(item => Object.assign({}, item, {
-    name: item.name,
-    cluster: item.id,
+    name: item.name.replace('Restaurantes de ', ''),
+    cluster: `${item.id}-restaurants`,
     section: null,
     type: 'restaurants',
   }));
 const nightlife = cities
   .map(item => Object.assign({}, item, {
-    name: item.name,
-    cluster: item.id,
+    name: item.name.replace('Restaurantes de ', ''),
+    cluster: `${item.id}-nightlife`,
     section: null,
-    url: `https://www.tripadvisor.es/Attractions-g${item.id}-Activities-c20-${item.name.replace(' ', '_')}.html`,
+    url: `https://www.tripadvisor.es/Attractions-g${item.id}-Activities-c20-${item.name.replace(/ /g, '_')}.html`,
     type: 'nightlife',
   }));
-const input = [...restaurants, ...nightlife];
+const input = [
+  ...restaurants,
+  ...nightlife,
+];
 
 // Set up handlers
 
@@ -46,12 +49,12 @@ function handleGet({ id, name, url, type }) {
       if (err) reject(err);
       else {
         const urls = [];
-        const pages = parseInt(arr[arr.length - 1], 10);
+        const pages = parseInt(arr[arr.length - 1], 10) || 1;
         for (let i = 0; i < pages; i++) {
           if (type === 'restaurants') {
             urls.push(`https://www.tripadvisor.es/RestaurantSearch?geo=${id}&o=a${i * 30}&itags=10591&sortOrder=popularity`);
           } else if (type === 'nightlife') {
-            urls.push(`https://www.tripadvisor.es/Attractions-g${id}-oa${i * 30}-Activities-c20-${name.replace(' ', '_')}.html`);
+            urls.push(`https://www.tripadvisor.es/Attractions-g${id}-oa${i * 30}-Activities-c20-${name.replace(/ /g, '_')}.html`);
           }
         }
         resolve(urls);
@@ -70,7 +73,7 @@ function handleResponse(item, response, done) {
       // last opportunity to modify response objects
       const newRow = { url: row };
 
-      newRow.id = row.replace('https://www.tripadvisor.es/RestaurantSearch?', '');
+      newRow.id = row.replace('https://www.tripadvisor.es/', '');
 
       return newRow;
     })
